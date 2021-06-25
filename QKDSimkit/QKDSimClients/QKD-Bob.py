@@ -8,10 +8,11 @@ Created on Wed May 12 21:57:13 2021
 import os
 import sys
 import time
+import hashlib
 from receiver import receiver
 from qexceptions import qsocketerror
 
-channelIP = "192.168.1.2"
+channelIP = "192.168.1.79"
 channelPort = 5005
 
 # clean up
@@ -19,6 +20,18 @@ _ = os.system('cls')
 
 # Bob starts listening to the quantum channel
 bob = receiver()
+
+try:
+    bob.connect_to_channel(channelIP, channelPort)
+    print("Sending authentication token")
+    if not bob.authenticate(hashlib.sha256(b"token").hexdigest()):
+        print("Invalid token")
+        sys.exit()
+    bob.reset_socket()
+
+except Exception:
+    print("Authentication Error")
+    sys.exit()
 
 try:
     # connect to channel

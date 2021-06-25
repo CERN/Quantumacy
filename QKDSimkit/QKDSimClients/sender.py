@@ -1,5 +1,6 @@
 import socket
 import ast
+import time
 from models import photon
 from utils import validate
 from qexceptions import qsocketerror, qobjecterror
@@ -19,6 +20,7 @@ class sender(object):
         self.other_sub_key = []
         self.decision = 0
         self.other_decision = 0
+        self.tokens = []
 
     def create_photon_pulse(self):
         self.photon_pulse = []
@@ -157,3 +159,24 @@ class sender(object):
     def reset_socket(self):
         self.socket.close()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def authenticate(self):
+        try:
+            print("listening to classical channel for auth token...")
+            while True:
+                data = self.socket.recv(self.buffer_size)
+                message = data.decode()
+                payload = message.split(":")
+                if self.ownMessage(payload[0]):
+                    continue
+                if payload[2] in self.tokens:
+                    self.socket.send("Success".encode())
+                    time.sleep(1)
+                    return True
+                else:
+                    self.socket.send("Fail, wrong token")
+                    return False
+        except socket.error:
+            raise qsocketerror("not connected to any channel")
+    def get_key(self):
+        return self.shared_key[(len(self.shared_key)//2):]

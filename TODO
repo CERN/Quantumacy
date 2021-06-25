@@ -1,0 +1,8 @@
+# TODO: hardcode -> configurazione,
+# TODO: servizio linux (channel)
+# TODO: race condition
+authentication (done)
+# TODO: logging
+# TODO: debugging
+# TODO: 89% threshold and other unideal
+running on a single machine (done)

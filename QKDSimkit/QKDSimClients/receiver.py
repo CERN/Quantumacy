@@ -187,3 +187,17 @@ class receiver(object):
     def reset_socket(self):
         self.socket.close()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def authenticate(self, token: str):
+        try:
+            message = "token:"+token
+            self.socket.send(message.encode())
+            data = self.socket.recv(self.buffer_size)
+            result = data.decode().split(":")[1]
+            print(result)
+            if result == "Success":
+                return True
+            else:
+                return False
+        except socket.error:
+            raise qsocketerror("not connected to any channel")

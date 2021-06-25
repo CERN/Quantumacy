@@ -1,4 +1,5 @@
 import socket
+import sys
 from threading import Thread
 from qexceptions import qsocketerror
 
@@ -12,7 +13,6 @@ class public_channel(object):  # insecure public classical/quantum channel
         self.ip_list = []  # blacklist already created connections
         self.conn_list = []
         self.full_data = []
-
     def initiate_channel(self, *port):
         if len(port) > 0:
             self.port = str(port[0])
@@ -28,10 +28,9 @@ class public_channel(object):  # insecure public classical/quantum channel
 
         while True:
             conn, addr = self.socket.accept()  # initiate new serving thread for every new connection:
-
             if conn not in self.conn_list:
-                print("{0} has connected.".format(addr[0]))
-                self.ip_list.append(addr[0])
+                print("{0} has connected.".format(addr))
+                self.ip_list.append(addr)
                 self.conn_list.append(conn)
                 _thread = Thread(target=self.initiate_connection, args=(conn, addr))
                 _thread.daemon = True
@@ -40,6 +39,7 @@ class public_channel(object):  # insecure public classical/quantum channel
                 print(self.ip_list)
 
     def initiate_connection(self, conn, addr):
+
         while True:
             try:
                 data = conn.recv(self.buffer_size)
@@ -52,17 +52,18 @@ class public_channel(object):  # insecure public classical/quantum channel
             if not message:
                 break
             else:
-                fwdMessage = "{0}: {1}".format(addr[0], message)
+                fwdMessage = "{0}:{1}".format(addr, message)
                 print(fwdMessage)
                 for clients in self.conn_list:
                     try:
-                        clients.sendall(fwdMessage.encode())
+                        if clients.getpeername() != addr:
+                            clients.sendall(fwdMessage.encode())
                     except OSError:
                         # old connections?
                         print("Ünknown connection, ignoring...")
 
         conn.close()
         self.conn_list.remove(conn)
-        self.ip_list.remove(addr[0])
+        self.ip_list.remove(addr)
 
-        print(addr[0] + " has disconnected")
+        print(str(addr) + " has disconnected")

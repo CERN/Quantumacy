@@ -11,19 +11,29 @@ import time
 from sender import sender
 from qexceptions import qsocketerror, qobjecterror
 
-channelIP = "192.168.1.2"
+channelIP = "192.168.1.79"
 channelPort = 5005
-
+DEBUG = True
 # clean up
 _ = os.system('cls')
 
 # Alice connects to the quantum channel
 alice = sender()
 
+if DEBUG:
+    alice.tokens.append('3c469e9d6c5875d37a43f353d4f88e61fcf812c66eee3457465a40b0da4153e0')
+
+try:
+    alice.connect_to_channel(channelIP, channelPort)
+    while not alice.authenticate():
+        True
+    alice.reset_socket()
+except Exception:
+    print("Failed to authenticate Bob")
+
 try:
     # connect to quantum channel
     alice.connect_to_channel(channelIP, channelPort)
-
     # create and send a photon pulse through the quantum channel
     photon_pulse = alice.create_photon_pulse()
 
@@ -32,7 +42,7 @@ try:
 except qsocketerror as err:
     print("An error occurred while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
     sys.exit()
-except: 
+except:
     print("An error occurred. Disconnecting.")
     sys.exit()
 
@@ -43,9 +53,9 @@ try:
 except qsocketerror as err:
     print("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
     sys.exit()
-except Exception as err: 
+except Exception as err:
     print("An error occurred (" + str(err) + "). Disconnecting.")
-    sys.exit()    
+    sys.exit()
 
 # exchange basis
 try:
@@ -62,7 +72,7 @@ try:
 except qsocketerror as err:
     print("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
     sys.exit()
-except Exception as err: 
+except Exception as err:
     print("An error occurred (" + str(err) + "). Disconnecting.")
     sys.exit()
 
@@ -93,11 +103,12 @@ try:
 except qsocketerror as err:
     print("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
     sys.exit()
-except Exception as err: 
+except Exception as err:
     print("An error occurred (" + str(err) + "). Disconnecting.")
     sys.exit()
 
 if (alice.decision == alice.other_decision):
     print("Success!")
+    print(alice.get_key())
 else:
     print("Failed!")
