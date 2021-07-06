@@ -1,35 +1,59 @@
 import socket
 import ast
+from node import Node
 from models import photon
-from utils import validate
 from qexceptions import qsocketerror, qobjecterror
+
 
 # TODO: make multithreaded classical receiver & sender
 
-class receiver(object):
+class receiver(Node):
     def __init__(self):
-        self.min_shared = 20  # safe option
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.buffer_size = 4096
-        self.photon_pulse = []
-        self.basis = []
+        super().__init__()
         self.polarization_vector = []
-        self.other_basis = []
-        self.reconciled_key = []
-        self.shared_key = []
-        self.sub_shared_key = []
-        self.other_sub_key = []
-        self.decision = 0
-        self.other_decision = 0
+        self.token = ''
+        self.sent_acks = []
+        self.sent_messages = {}
+
+    '''
+    def authenticate(self, token: str):
+        try:
+            message = "token:" + token
+            self.socket.send(message.encode())
+            data = self.socket.recv(self.buffer_size)
+            result = data.decode().split(":")[1]
+            print(result)
+            if result == "Success":
+                return True
+            else:
+                return False
+        except socket.error:
+            raise qsocketerror("not connected to any channel")
+    '''
+
+    def authenticate(self) -> bool:
+        try:
+            print("Sending authentication token")
+            self.send("token", self.token)
+            result = self.recv("result")
+            print(result)
+            if result == "Success":
+                return True
+            else:
+                return False
+        except ConnectionError:
+            raise qsocketerror("Authentication error")
+
 
     def measure_photon_pulse(self):
         for p in range(len(self.polarization_vector)):
             self.photon_pulse.append(photon())
             self.photon_pulse[p].polarization = self.photon_pulse[p].measure(int(self.polarization_vector[p]))
             self.photon_pulse[p].bit = self.photon_pulse[p].set_bit_from_measurement()
-        
+
         self.basis = [p.basis for p in self.photon_pulse]
 
+    '''
     def listen_quantum(self):
         try:
             print("listening to quantum channel for photon pulse...")
@@ -44,31 +68,21 @@ class receiver(object):
                     break
         except socket.error:
             raise qsocketerror("not connected to any channel")
+    '''
 
-    def listen_for_basis(self):
+    def listen_quantum(self):
         try:
-            print("listening to classical channel for basis...")
+            print("listening to quantum channel for photon pulse...")
             while True:
-                data = self.socket.recv(self.buffer_size)
-                message = data.decode()
-                basis = message.split(":")
-                if self.ownMessage(basis[0]):
-                    continue
-                if "basis" in message and len(basis) == 3:
-                    print("Received basis...")
-                    print(message)
-                    try:
-                        literal = ast.literal_eval(basis[2])
-                    except ValueError:
-                        pass
-                    else:
-                        if len(literal) > 0:
-                            self.other_basis = literal
-                            self.reconciled_key = literal
-                            break
+                message = self.recv('qpulse')
+                print("Received photon pulse...")
+                print(message)
+                self.polarization_vector = message.split("~")[:-1]
+                break
         except socket.error:
             raise qsocketerror("not connected to any channel")
 
+    '''
     def listen_for_rec_key(self):
         try:
             print("listening to classical channel for public key...")
@@ -90,7 +104,28 @@ class receiver(object):
                         break
         except socket.error:
             raise qsocketerror("not connected to any channel")
+    '''
 
+    '''
+    def listen_for_rec_key(self):
+        try:
+            print("listening to classical channel for public key...")
+            while True:
+                message = self.recv('rec_key')
+                print("Received public key...")
+                print(message)
+                try:
+                    literal = ast.literal_eval(message)
+                except ValueError:
+                    pass
+                else:
+                    self.reconciled_key = literal
+                    break
+        except socket.error:
+            raise qsocketerror("not connected to any channel")
+    '''
+
+    '''
     def listen_for_key(self):
         try:
             print("listening to classical channel for public key...")
@@ -112,7 +147,9 @@ class receiver(object):
                         break
         except socket.error:
             raise qsocketerror("not connected to any channel")
+    '''
 
+    '''
     def listen_for_decision(self):
         try:
             print("listening to classical channel for decision...")
@@ -134,70 +171,52 @@ class receiver(object):
                         break
         except socket.error:
             raise qsocketerror("not connected to any channel")
-
-    def send_classical_bits(self, header, bits):
-        string = header + ":" + repr(bits)
-        try:
-            self.socket.send(string.encode())
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
-
-    def create_photon_pulse(self, pulse_size):
-        photon_pulse = []
-        for i in range(1, pulse_size):
-            photon_pulse.append(photon())
-        return photon_pulse
-
-    def ownMessage(self, addr):
-        hostname = socket.gethostname()
-        local_ip = socket.gethostbyname(hostname)
-        if (local_ip == addr):
-            return True
-
-        return False
-        
-    def validate(self, min_shared_percent = 0.89):
-        self.decision = validate(self.sub_shared_key, self.other_sub_key, min_shared_percent)
-        return self.decision
-
-    def create_keys(self):
-        self.create_shared_key()
-        self.create_sub_shared_key()
-
-    def create_shared_key(self):
-        for i in range(len(self.photon_pulse)):
-            if self.reconciled_key[i] != "":
-                self.shared_key.append(self.photon_pulse[i].bit)
-
-    def create_sub_shared_key(self):
-        self.sub_shared_key = self.shared_key[:(len(self.shared_key)//2)]
-
+    '''
+    #no usage found
+    '''
     def verify(self):
         if len(self.shared_key) == 0 or len(self.sub_shared_key) == 0:
             raise qobjecterror("key is not defined")
         else:
             pass
+    '''
 
-    def connect_to_channel(self, address, port):
+    def recv(self, header: str) -> str:
         try:
-            self.socket.connect((address, port))
-        except socket.error:
-            raise qsocketerror("unable to connect")
+            while True:
+                data = self.socket.recv(self.buffer_size)
+                message = data.decode().split(":")
+                label = message[1]
+                if label != header and label in self.sent_acks:
+                    self.socket.send((label + ":ack:").encode())
+                    continue
+                elif label != header and label in self.sent_messages:
+                    self.socket.send((label + ":" + self.sent_messages[label] + ':').encode())
+                    continue
+                self.socket.send((header + ":ack:").encode())
+                self.sent_acks.append(label)
+                print("Received: " + header + ":" + message[2])
+                return message[2]
+        except ConnectionError:
+            print("Bob failed to receive")
 
-    def reset_socket(self):
-        self.socket.close()
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    def authenticate(self, token: str):
+    def send(self, header: str, message: str):
         try:
-            message = "token:"+token
-            self.socket.send(message.encode())
-            data = self.socket.recv(self.buffer_size)
-            result = data.decode().split(":")[1]
-            print(result)
-            if result == "Success":
+            while True:
+                data = self.socket.recv(self.buffer_size)
+                request = data.decode().split(':')
+                label = request[1]
+                if label != header and label in self.sent_acks:
+                    self.socket.send((label + ':ack:').encode())
+                    print("Sent: " + header + ':ack:')
+                    continue
+                elif label != header and label in self.sent_messages:
+                    self.socket.send((label + ':' + self.sent_messages[label] + ':').encode())
+                    print("Sent: " + header + ':' + self.sent_messages[label] + ':')
+                    continue
+                self.socket.send((header + ':' + message + ':').encode())
+                print("Sent: " + header + ':' + message)
+                self.sent_messages[header] = message
                 return True
-            else:
-                return False
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
+        except ConnectionError:
+            print("Bob failed to send")

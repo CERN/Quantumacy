@@ -1,0 +1,6 @@
+{
+  "channel":
+          {"host": "192.168.1.79", "port": 5005, "buffer_size": 100000},
+  "node":
+          {"photon_pulse_size": 1000, "min_shared": 20, "buffer_size": 100000, "timeout_in_seconds": 1, "attempts": 25}
+}

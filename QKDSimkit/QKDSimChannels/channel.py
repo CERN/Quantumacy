@@ -2,17 +2,18 @@ import socket
 import sys
 from threading import Thread
 from qexceptions import qsocketerror
+import json
+
 
 class public_channel(object):  # insecure public classical/quantum channel
     def __init__(self):
-        self.host = socket.gethostbyname(socket.gethostname())
-        self.port = 5005
-        self.buffer_size = 4096  # can be minimized for efficiency
+        self.__dict__ = json.load(open('../config.json',))['channel']
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # reusable socket
         self.ip_list = []  # blacklist already created connections
         self.conn_list = []
         self.full_data = []
+
     def initiate_channel(self, *port):
         if len(port) > 0:
             self.port = str(port[0])

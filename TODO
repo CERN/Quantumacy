@@ -1,8 +1,10 @@
-# TODO: hardcode -> configurazione,
-# TODO: servizio linux (channel)
-# TODO: race condition
+hardcode -> configuration (done, expect updates)
+# TODO: service linux (channel)
+race condition (done?)
 authentication (done)
 # TODO: logging
 # TODO: debugging
 # TODO: 89% threshold and other unideal
+# TODO: File transfer over AES
+# TODO: API for Alice and Bob
 running on a single machine (done)
