@@ -1,0 +1,1 @@
+{"user0": {"pwd": "12345", "home": "/mnt/c/Users/sgabb/repos/Quantumacy/QKDSimkit/data/user0", "perm": "rw", "operms": {}, "msg_login": "Login successful.", "msg_quit": "Goodbye."}, "admin": {"pwd": "admin", "home": "/mnt/c/Users/sgabb/repos/Quantumacy/QKDSimkit/data/admin", "perm": "elradfmwMT", "operms": {}, "msg_login": "Login successful.", "msg_quit": "Goodbye."}}
