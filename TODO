@@ -5,6 +5,11 @@ authentication (done)
 # TODO: logging
 # TODO: debugging
 # TODO: 89% threshold and other unideal
-# TODO: File transfer over AES
+File transfer over AES (done on linux)
+    handling big messages (done)
+managing multiple users/connections (still needs to be tested)
+    obfuscate passwords
+    sql(?)
+# TODO: client has to retrieve data from server
 # TODO: API for Alice and Bob
 running on a single machine (done)

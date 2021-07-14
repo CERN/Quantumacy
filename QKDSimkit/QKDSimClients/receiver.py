@@ -185,7 +185,7 @@ class receiver(Node):
         try:
             while True:
                 data = self.socket.recv(self.buffer_size)
-                message = data.decode().split(":")
+                message = data.decode().split(':')
                 label = message[1]
                 if label != header and label in self.sent_acks:
                     self.socket.send((label + ":ack:").encode())

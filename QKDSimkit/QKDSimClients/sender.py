@@ -211,7 +211,7 @@ class sender(Node):
                     if message[1] == header:
                         print('Received: ' + header + ':' + message[2] + ':')
                         return message[2]
-            raise Exception
+            raise ConnectionError
         except ConnectionError:
             print('Alice failed to receive')
 

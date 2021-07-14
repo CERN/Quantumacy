@@ -13,7 +13,7 @@ from sender import sender
 from qexceptions import qsocketerror, qobjecterror
 
 
-def code():
+def import_key():
     s = json.load(open('../config.json', ))['channel']
     channelIP = s['host']
     channelPort = s['port']
@@ -106,4 +106,10 @@ def code():
     else:
         print("Failed!")
 
+    alice.reset_socket()
+
     return alice.key
+
+
+if __name__ == '__main__':
+    code()

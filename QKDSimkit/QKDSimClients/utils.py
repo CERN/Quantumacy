@@ -1,3 +1,4 @@
+
 def validate(shared_key, other_shared_key, min_shared_percent):
     if len(shared_key) > 0 and len(shared_key) == len(other_shared_key):
         i = 0
@@ -15,3 +16,4 @@ def validate(shared_key, other_shared_key, min_shared_percent):
     else:
         print("Error")
         return -1
+

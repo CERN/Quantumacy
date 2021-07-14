@@ -14,8 +14,8 @@ from receiver import receiver
 from qexceptions import qsocketerror
 
 
-def code():
-    s = json.load(open('../config.json',))['channel']
+def import_key():
+    s = json.load(open('../config.json', ))['channel']
     channelIP = s['host']
     channelPort = s['port']
 
@@ -107,4 +107,10 @@ def code():
     else:
         print("Failed!")
 
+    bob.reset_socket()
+
     return bob.key
+
+
+if __name__ == '__main__':
+    code()
