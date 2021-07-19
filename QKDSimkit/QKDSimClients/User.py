@@ -1,74 +1,108 @@
-import time
 import os
 import json
-from Crypto.Cipher import AES
+import sys
+from utils import encrypt_file, decrypt_file
 from QKD_Bob import import_key
 from ftplib import FTP
 
 
-def startClient(username, password, path):
-    try:
-        print('Connecting to Server: ')
-        ftp = FTP('127.0.0.1')
-    except ConnectionError as e:
-        print('FTP error:\n' + str(e))
+class Client(object):
+    def __init__(self, username, password):
+        self.dest_path = ''
+        self.file_list = []
+        s = json.load(open('../config.json', ))['Server']
+        try:
+            print('Connecting to Server: ')
+            self.ftp = FTP(s['host'])
+        except Exception as e:
+            print('FTP error:\n' + str(e))
+            sys.exit()
 
-    ftp.set_debuglevel(1)
+        self.ftp.set_debuglevel(1)
 
-    try:
-        ftp.login(username, password)
-    except Exception as e:
-        print('Wrong username or password:\n' + str(e))
+        try:
+            self.ftp.login(username, password)
+        except Exception as e:
+            print('Wrong username or password:\n' + str(e))
+            sys.exit()
 
-    print("logged")
+        print("logged")
 
-    try:
-        bits = import_key()
-        key = [int("".join(map(str, bits[i:i + 8])), 2) for i in range(0, len(bits), 8)][:16]
-        key = bytearray(key)
-        print("Key:" + str(key))
-    except Exception as e:
-        print('Failed to retrieve symmetric key:\n' + str(e))
+        try:
+            bits = import_key()
+            self.key = [int("".join(map(str, bits[i:i + 8])), 2) for i in range(0, len(bits), 8)]
+            self.key = bytearray(self.key)[:32]
+            print(len(self.key))
+            print("Key:" + str(self.key))
+        except Exception as e:
+            print('Failed to retrieve symmetric key:\n' + str(e))
+            sys.exit()
 
-    try:
-        for file in os.listdir(path):
-            try:
-                print("Encrypting " + file)
-                encrypt_file(key, path + file, path + 'tmp')
-            except Exception as e:
-                print('encryption failed:\n' + str(e))
-            localfile = open(path + 'tmp', "rb")
-            try:
-                print("[!] File Transfer in Progress....")
-                result = ftp.storbinary("STOR " + file, localfile)
-            except Exception as e:
-                print('Transfer failed:\n' + str(e))
-            else:
+    def send(self, source_path):
+        try:
+            for file in os.listdir(source_path):
+                try:
+                    print("Encrypting " + file)
+                    encrypt_file(self.key, source_path + file)
+                except Exception as e:
+                    print('encryption failed:\n' + str(e))
+                    sys.exit()
+
+                localfile = open(source_path + file + '.enc', "rb")
+
+                try:
+                    print("[!] File Transfer in Progress....")
+                    print()
+                    result = self.ftp.storbinary("STOR " + file + '.enc', localfile)
+
+                    os.remove(source_path + file + '.enc')
+                except Exception as e:
+                    print('Transfer failed:\n' + str(e))
+                    sys.exit()
+
+                else:
+                    print(str(result))
+        except Exception as e:
+            print("Failed to retrieve file to send:\n" + str(e))
+            sys.exit()
+
+    def retrieve(self, file, dest_path):
+        try:
+            print("[!] File Transfer in Progress....")
+            with open(dest_path + file + '.enc', 'wb') as out_file:
+                result = self.ftp.retrbinary("RETR " + file, out_file.write)
                 print(str(result))
-    except Exception as e:
-        print("Failed to retrieve file to send:\n" + str(e))
+        except Exception as e:
+            print('Transfer failed:\n' + str(e))
+            sys.exit()
 
-    try:
-        os.remove(path + 'tmp')
-        ftp.quit()
-    except Exception as e:
-        print('Failed to terminate communication:\n' + str(e))
+        try:
+            decrypt_file(self.key, dest_path + file + '.enc')
+            os.remove(dest_path + file + '.enc')
+        except Exception as e:
+            print('Decryption failed:\n' + str(e))
+            sys.exit()
 
+    def callback_retrieve_list(self, line):
+        file = line.rsplit(' ', 1)[1]
+        self.file_list.append(file)
 
-def encrypt_file(key, in_filename, out_filename):
-    try:
-        with open(in_filename, 'rb') as infile:
-            chunk = infile.read()
-            try:
-                cipher = AES.new(key, AES.MODE_EAX)
-                ciphertext, tag = cipher.encrypt_and_digest(chunk)
-            except Exception as e:
-                print("key or value error: \n" + str(e))
-            with open(out_filename, 'wb') as file_out:
-                [file_out.write(x) for x in (cipher.nonce, tag, ciphertext)]
-                file_out.close()
-    except Exception as e:
-        print('IO error during encryption: \n' + str(e))
+    def retrieve_all(self, dest_path):
+        self.dest_path = dest_path
+        self.ftp.retrlines("LIST ", self.callback_retrieve_list)
+        for file in self.file_list:
+            self.retrieve(file, self.dest_path)
 
 
-startClient('user0', '12345', '../data/source/')
+    def close(self):
+        self.ftp.quit()
+
+
+if __name__ == '__main__':
+    c = Client('user0', '12345')
+    c.send('../data/client_img/')
+    c.retrieve_all('../data/client_img/')
+    #c.retrieve('file1.jpeg', '../data/client_img/')
+    c.close()
+else:
+    c = Client(sys.argv[1], sys.argv[2])

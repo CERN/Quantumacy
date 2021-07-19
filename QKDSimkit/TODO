@@ -1,5 +1,5 @@
 hardcode -> configuration (done, expect updates)
-# TODO: service linux (channel)
+# TODO: service linux (channel) (done on wsl with some tricks: not to be considered done)
 race condition (done?)
 authentication (done)
 # TODO: logging
@@ -10,6 +10,6 @@ File transfer over AES (done on linux)
 managing multiple users/connections (still needs to be tested)
     obfuscate passwords
     sql(?)
-# TODO: client has to retrieve data from server
+client has to retrieve data from server (done)
 # TODO: API for Alice and Bob
 running on a single machine (done)

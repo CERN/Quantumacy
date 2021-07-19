@@ -21,6 +21,7 @@ class Node(object):
         self.other_decision = 0
         self.not_shared_key = []
         self.key = []
+        self.fragments = []
 
     def connect_to_channel(self, address, port):
         try:
@@ -37,7 +38,6 @@ class Node(object):
         local_ip = socket.gethostbyname(hostname)
         if (local_ip == addr):
             return True
-
         return False
 
     def send_classical_bits(self, header, bits):
@@ -76,44 +76,7 @@ class Node(object):
                     break
         except socket.error:
             raise qsocketerror("not connected to any channel")
-
-    '''
-    def listen_for_key(self, key_owner: str):
-        try:
-            print("listening to classical channel for public key...")
-            while True:
-                message = self.recv(key_owner + '-key')
-                print("Received public key...")
-                print(message)
-                try:
-                    literal = ast.literal_eval(message)
-                except ValueError:
-                    pass
-                else:
-                    self.other_sub_key = literal
-                    break
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
-    '''
-
-    '''
-    def listen_for_decision(self, decider: str):
-        try:
-            print("listening to classical channel for decision...")
-            while True:
-                message = self.recv(decider + '-decision')
-                print("Received decision...")
-                print(message)
-                try:
-                    literal = ast.literal_eval(message)
-                except ValueError:
-                    pass
-                else:
-                    self.other_decision = literal
-                    break
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
-    '''
+            sys.exit()
 
     def validate(self, min_shared_percent=0.89):
         self.decision = validate(self.sub_shared_key, self.other_sub_key, min_shared_percent)
@@ -122,42 +85,10 @@ class Node(object):
     def send(self):
         print("send(): Override me")
 
-    def receive(self):
+    def recv(self):
         print("receive(): Override me")
 
-    '''
-    def recv_safe(self, expected: str) -> str:
-        try:
-            while True:
-                data = self.socket.recv(self.buffer_size)
-                message = data.decode().split(":")
-                label = message[1]
-                ack = label+":ack"
-                if label != expected and label in self.sent_acks:
-                    self.socket.send(ack.encode())
-                    continue
-                elif label != expected and label not in self.sent_acks:
-                    raise Exception
-                self.socket.send(ack.encode())
-                self.sent_acks.append(label)
-                return message[2]
-        except Exception:
-            print("failed to receive safely")
-    '''
-
-    '''
-    def send_safe(self, header: str, message: str) -> bool:
-        try:
-            for i in range(self.attempts):
-                data = (header + ':' + message).encode()
-                self.socket.send(data)
-                ready = select.select([self.socket], [], [], self.timeout_in_seconds)
-                if ready[0]:
-                    data = self.socket.recv(self.buffer_size)
-                    message = data.decode().split(':')
-                    if message[1] == header:
-                        if message[2] == 'ack':
-                            return True
-        except Exception:
-            print()
-    '''
+    def split_message(self, data):
+        for i in range(0, len(data), self.buffer_size):
+            yield self.fragments[i:i + self.buffer_size]
+        return self.fragments

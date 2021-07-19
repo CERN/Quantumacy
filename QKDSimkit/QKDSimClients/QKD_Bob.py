@@ -9,7 +9,7 @@ import os
 import sys
 import json
 import hashlib
-import time
+import logging
 from receiver import receiver
 from qexceptions import qsocketerror
 
@@ -23,7 +23,7 @@ def import_key():
     _ = os.system('cls')
     # Bob starts listening to the quantum channel
     bob = receiver()
-
+    '''
     try:
         bob.connect_to_channel(channelIP, channelPort)
         setattr(bob, "token", hashlib.sha256(b"token").hexdigest())
@@ -34,7 +34,7 @@ def import_key():
     except Exception:
         print("Authentication Error")
         sys.exit()
-
+    '''
     try:
         # connect to channel
         bob.connect_to_channel(channelIP, channelPort)
@@ -113,4 +113,4 @@ def import_key():
 
 
 if __name__ == '__main__':
-    code()
+    import_key()

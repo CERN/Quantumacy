@@ -8,21 +8,22 @@ Created on Wed May 12 21:57:13 2021
 import os
 import sys
 import json
-import time
+import logging
 from sender import sender
 from qexceptions import qsocketerror, qobjecterror
 
 
 def import_key():
-    s = json.load(open('../config.json', ))['channel']
-    channelIP = s['host']
-    channelPort = s['port']
+    c = json.load(open('../config.json', ))['channel']
+    channelIP = c['host']
+    channelPort = c['port']
     DEBUG = True
     # clean up
     _ = os.system('cls')
 
     # Alice connects to the quantum channel
     alice = sender()
+    '''
     if DEBUG:
         alice.tokens.append('3c469e9d6c5875d37a43f353d4f88e61fcf812c66eee3457465a40b0da4153e0')
 
@@ -31,9 +32,9 @@ def import_key():
         while not alice.authenticate():
             True
         alice.reset_socket()
-    except Exception:
-        print("Failed to authenticate Bob")
-
+    except Exception as e:
+        print("Failed to authenticate Bob:\n" + str(e))
+    '''
     try:
         # connect to quantum channel
         alice.connect_to_channel(channelIP, channelPort)
@@ -107,9 +108,9 @@ def import_key():
         print("Failed!")
 
     alice.reset_socket()
-
+    print(str(len(alice.key)))
     return alice.key
 
 
 if __name__ == '__main__':
-    code()
+    import_key()

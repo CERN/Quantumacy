@@ -1,5 +1,6 @@
 import socket
 import ast
+import sys
 from node import Node
 from models import photon
 from qexceptions import qsocketerror, qobjecterror
@@ -14,23 +15,7 @@ class receiver(Node):
         self.token = ''
         self.sent_acks = []
         self.sent_messages = {}
-
     '''
-    def authenticate(self, token: str):
-        try:
-            message = "token:" + token
-            self.socket.send(message.encode())
-            data = self.socket.recv(self.buffer_size)
-            result = data.decode().split(":")[1]
-            print(result)
-            if result == "Success":
-                return True
-            else:
-                return False
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
-    '''
-
     def authenticate(self) -> bool:
         try:
             print("Sending authentication token")
@@ -43,32 +28,14 @@ class receiver(Node):
                 return False
         except ConnectionError:
             raise qsocketerror("Authentication error")
-
-
+            sys.exit()
+    '''
     def measure_photon_pulse(self):
         for p in range(len(self.polarization_vector)):
             self.photon_pulse.append(photon())
             self.photon_pulse[p].polarization = self.photon_pulse[p].measure(int(self.polarization_vector[p]))
             self.photon_pulse[p].bit = self.photon_pulse[p].set_bit_from_measurement()
-
         self.basis = [p.basis for p in self.photon_pulse]
-
-    '''
-    def listen_quantum(self):
-        try:
-            print("listening to quantum channel for photon pulse...")
-            while True:
-                data = self.socket.recv(self.buffer_size)
-                message = data.decode()
-                pulse = message.split(":")
-                if "qpulse" in message and len(pulse) == 3:
-                    print("Received photon pulse...")
-                    print(message)
-                    self.polarization_vector = pulse[2].split("~")[:-1]
-                    break
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
-    '''
 
     def listen_quantum(self):
         try:
@@ -81,105 +48,7 @@ class receiver(Node):
                 break
         except socket.error:
             raise qsocketerror("not connected to any channel")
-
-    '''
-    def listen_for_rec_key(self):
-        try:
-            print("listening to classical channel for public key...")
-            while True:
-                data = self.socket.recv(self.buffer_size)
-                message = data.decode()
-                payload = message.split(":")
-                if self.ownMessage(payload[0]):
-                    continue
-                if "rec_key" in message and len(payload) == 3:
-                    print("Received public key...")
-                    print(message)
-                    try:
-                        literal = ast.literal_eval(payload[2])
-                    except ValueError:
-                        pass
-                    else:
-                        self.reconciled_key = literal
-                        break
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
-    '''
-
-    '''
-    def listen_for_rec_key(self):
-        try:
-            print("listening to classical channel for public key...")
-            while True:
-                message = self.recv('rec_key')
-                print("Received public key...")
-                print(message)
-                try:
-                    literal = ast.literal_eval(message)
-                except ValueError:
-                    pass
-                else:
-                    self.reconciled_key = literal
-                    break
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
-    '''
-
-    '''
-    def listen_for_key(self):
-        try:
-            print("listening to classical channel for public key...")
-            while True:
-                data = self.socket.recv(self.buffer_size)
-                message = data.decode()
-                payload = message.split(":")
-                if self.ownMessage(payload[0]):
-                    continue
-                if "key" in message and len(payload) == 3:
-                    print("Received public key...")
-                    print(message)
-                    try:
-                        literal = ast.literal_eval(payload[2])
-                    except ValueError:
-                        pass
-                    else:
-                        self.other_sub_key = literal
-                        break
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
-    '''
-
-    '''
-    def listen_for_decision(self):
-        try:
-            print("listening to classical channel for decision...")
-            while True:
-                data = self.socket.recv(self.buffer_size)
-                message = data.decode()
-                payload = message.split(":")
-                if self.ownMessage(payload[0]):
-                    continue
-                if "decision" in message and len(payload) == 3:
-                    print("Received public key...")
-                    print(message)
-                    try:
-                        literal = ast.literal_eval(payload[2])
-                    except ValueError:
-                        pass
-                    else:
-                        self.other_decision = literal
-                        break
-        except socket.error:
-            raise qsocketerror("not connected to any channel")
-    '''
-    #no usage found
-    '''
-    def verify(self):
-        if len(self.shared_key) == 0 or len(self.sub_shared_key) == 0:
-            raise qobjecterror("key is not defined")
-        else:
-            pass
-    '''
+            sys.exit()
 
     def recv(self, header: str) -> str:
         try:
@@ -199,6 +68,7 @@ class receiver(Node):
                 return message[2]
         except ConnectionError:
             print("Bob failed to receive")
+            sys.exit()
 
     def send(self, header: str, message: str):
         try:
@@ -220,3 +90,4 @@ class receiver(Node):
                 return True
         except ConnectionError:
             print("Bob failed to send")
+            sys.exit()
