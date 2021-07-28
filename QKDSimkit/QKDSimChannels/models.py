@@ -1,6 +1,7 @@
 import random
 
-class photon(object):
+
+class Photon(object):
     def __init__(self):
         self.bit = self.create_random_bit()
         self.basis = self.select_random_basis()
@@ -24,10 +25,25 @@ class photon(object):
 
         return self.polarization
 
-    def measure(self, eigenstate):
-        if (eigenstate == "RL"):
-            return random.choice([0, 90])
-        elif (eigenstate == "DG"):
-            return random.choice([45, 135])
-        else:
-            return self.polarization
+    def measure(self, polarization):
+        if (self.basis == "RL"):
+            if polarization in [0, 90]:
+                return polarization
+            else:
+                return random.choice([0, 90])
+        elif (self.basis == "DG"):
+            if polarization in [45, 135]:
+                return polarization
+            else:
+                return random.choice([45, 135])
+
+    def set_bit_from_measurement(self):  # Set bits according to settings of polarization and basis.
+        if (self.basis == "RL" and self.polarization == 0):
+            return 0
+        elif (self.basis == "RL" and self.polarization == 90):
+            return 1
+        elif (self.basis == "DG" and self.polarization == 45):
+            return 0
+        elif (self.basis == "DG" and self.polarization == 135):
+            return 1
+        return self.bit

@@ -14,8 +14,9 @@ from receiver import receiver
 from qexceptions import qsocketerror
 
 
-def import_key():
+def import_key(count=0):
     s = json.load(open('../config.json', ))['channel']
+
     channelIP = s['host']
     channelPort = s['port']
 
@@ -23,18 +24,11 @@ def import_key():
     _ = os.system('cls')
     # Bob starts listening to the quantum channel
     bob = receiver()
-    '''
-    try:
-        bob.connect_to_channel(channelIP, channelPort)
-        setattr(bob, "token", hashlib.sha256(b"token").hexdigest())
-        if not bob.authenticate():
-            print("Invalid token")
-            sys.exit()
-        bob.reset_socket()
-    except Exception:
-        print("Authentication Error")
-        sys.exit()
-    '''
+
+    if count >= bob.max_repetitions:
+        print("Error: too many attempts to find a shared key")
+        return -1
+
     try:
         # connect to channel
         bob.connect_to_channel(channelIP, channelPort)
@@ -82,12 +76,12 @@ def import_key():
     try:
         # listen for Alice's sub key
         bob.listen_for('alice', 'other_sub_key')
+
         # send the public sub key
         bob.send('bob-other_sub_key', repr(bob.sub_shared_key))
-        if bob.validate():
-            decision = 1
-        else:
-            decision = 0
+
+        bob.decision = bob.validate()
+
         # listen for Alice's sub key
         bob.listen_for('alice', 'other_decision')
 
@@ -101,16 +95,19 @@ def import_key():
         print("An error occurred (" + str(err) + "). Disconnecting.")
         sys.exit()
 
-    if (bob.decision == bob.other_decision):
-        bob.importkey()
-        print("Success!")
-    else:
-        print("Failed!")
-
     bob.reset_socket()
+
+    if bob.decision == bob.other_decision and bob.decision == 1:
+        bob.get_key()
+        print("Success!")
+    elif bob.decision == bob.other_decision and bob.decision == 0:
+        return import_key(count + 1)
+    else:
+        print("Failed! Noise or eavesdropper detected")
+        return -1
 
     return bob.key
 
 
 if __name__ == '__main__':
-    import_key()
+    print(import_key())

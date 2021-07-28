@@ -1,7 +1,7 @@
 import sys
 from Crypto.Cipher import AES
 
-def validate(shared_key, other_shared_key, min_shared_percent):
+def validate(shared_key, other_shared_key):
     if len(shared_key) > 0 and len(shared_key) == len(other_shared_key):
         i = 0
         count = 0
@@ -10,11 +10,7 @@ def validate(shared_key, other_shared_key, min_shared_percent):
             if shared_key[i] == other_shared_key[i]:
                 count += 1
             i += 1
-        if count >= min_shared_percent*len(shared_key):
-            decision = 1
-        else:
-            decision = 0
-        return decision    
+        return count/len(shared_key)
     else:
         print("Error")
         return -1
@@ -31,7 +27,7 @@ def decrypt_file(key, filename: str):
             file_out.close()
     except Exception as e:
         print("failed to decrypt:\n" + str(e))
-
+        sys.exit()
 
 def encrypt_file(key, in_filename):
     try:
@@ -42,6 +38,7 @@ def encrypt_file(key, in_filename):
                 ciphertext, tag = cipher.encrypt_and_digest(chunk)
             except Exception as e:
                 print("key or value error: \n" + str(e))
+                sys.exit()
             with open(in_filename + '.enc', 'wb') as file_out:
                 [file_out.write(x) for x in (cipher.nonce, tag, ciphertext)]
                 file_out.close()

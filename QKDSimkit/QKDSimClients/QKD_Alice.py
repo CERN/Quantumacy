@@ -13,28 +13,21 @@ from sender import sender
 from qexceptions import qsocketerror, qobjecterror
 
 
-def import_key():
+def import_key(count=0):
     c = json.load(open('../config.json', ))['channel']
     channelIP = c['host']
     channelPort = c['port']
-    DEBUG = True
+
     # clean up
     _ = os.system('cls')
 
     # Alice connects to the quantum channel
     alice = sender()
-    '''
-    if DEBUG:
-        alice.tokens.append('3c469e9d6c5875d37a43f353d4f88e61fcf812c66eee3457465a40b0da4153e0')
 
-    try:
-        alice.connect_to_channel(channelIP, channelPort)
-        while not alice.authenticate():
-            True
-        alice.reset_socket()
-    except Exception as e:
-        print("Failed to authenticate Bob:\n" + str(e))
-    '''
+    if count >= alice.max_repetitions:
+        print("Error: too many attempts to find a shared key")
+        return -1
+
     try:
         # connect to quantum channel
         alice.connect_to_channel(channelIP, channelPort)
@@ -45,8 +38,8 @@ def import_key():
     except qsocketerror as err:
         print("An error occurred while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
         sys.exit()
-    except:
-        print("An error occurred. Disconnecting.")
+    except Exception as e:
+        print("An error occurred. Disconnecting.\n" + str(e))
         sys.exit()
 
     # connect to classic channel
@@ -86,12 +79,10 @@ def import_key():
         # listen for Bob's public sub key
         alice.listen_for('bob', 'other_sub_key')
 
-        if alice.validate():
-            decision = 1
-        else:
-            decision = 0
+        alice.decision = alice.validate()
+
         # send decision
-        alice.send('alice-other_decision', repr(decision))
+        alice.send('alice-other_decision', repr(alice.decision))
         # listen for Alice's sub key
         alice.listen_for('bob', 'other_decision')
     except qsocketerror as err:
@@ -101,16 +92,18 @@ def import_key():
         print("An error occurred (" + str(err) + "). Disconnecting.")
         sys.exit()
 
-    if alice.decision == alice.other_decision:
-        alice.importkey()
-        print("Success!")
-    else:
-        print("Failed!")
-
     alice.reset_socket()
-    print(str(len(alice.key)))
+
+    if alice.decision == alice.other_decision and alice.decision == 1:
+        alice.get_key()
+        print("Success!")
+    elif alice.decision == alice.other_decision and alice.decision == 0:
+        return import_key(count + 1)
+    else:
+        print("Failed! Noise or eavesdropper detected")
+        return -1
     return alice.key
 
 
 if __name__ == '__main__':
-    import_key()
+    print(import_key())

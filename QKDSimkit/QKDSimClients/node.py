@@ -59,7 +59,7 @@ class Node(object):
     def create_sub_shared_key(self):
         self.sub_shared_key = self.shared_key[:(len(self.shared_key)//2)]
 
-    def importkey(self):
+    def get_key(self):
         self.key = self.shared_key[(len(self.shared_key)//2):]
 
     def listen_for(self, sender: str, attr: str):
@@ -76,19 +76,19 @@ class Node(object):
                     break
         except socket.error:
             raise qsocketerror("not connected to any channel")
-            sys.exit()
 
-    def validate(self, min_shared_percent=0.89):
-        self.decision = validate(self.sub_shared_key, self.other_sub_key, min_shared_percent)
-        return self.decision
+    def validate(self):
+        percent = validate(self.sub_shared_key, self.other_sub_key)
+        print('Correct bits percentage: ' + str(percent))
+        if percent == 1:
+            return 1
+        if self.min_shared_percent <= percent < 1:
+            return 0
+        if percent < self.min_shared_percent:
+            return -1
 
     def send(self):
         print("send(): Override me")
 
     def recv(self):
         print("receive(): Override me")
-
-    def split_message(self, data):
-        for i in range(0, len(data), self.buffer_size):
-            yield self.fragments[i:i + self.buffer_size]
-        return self.fragments

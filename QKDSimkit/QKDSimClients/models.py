@@ -1,6 +1,7 @@
 import random
 
-class photon(object):
+
+class Photon(object):
     def __init__(self):
         self.bit = self.create_random_bit()
         self.basis = self.select_random_basis()

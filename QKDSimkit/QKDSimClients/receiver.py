@@ -2,7 +2,7 @@ import socket
 import ast
 import sys
 from node import Node
-from models import photon
+from models import Photon
 from qexceptions import qsocketerror, qobjecterror
 
 
@@ -15,24 +15,10 @@ class receiver(Node):
         self.token = ''
         self.sent_acks = []
         self.sent_messages = {}
-    '''
-    def authenticate(self) -> bool:
-        try:
-            print("Sending authentication token")
-            self.send("token", self.token)
-            result = self.recv("result")
-            print(result)
-            if result == "Success":
-                return True
-            else:
-                return False
-        except ConnectionError:
-            raise qsocketerror("Authentication error")
-            sys.exit()
-    '''
+
     def measure_photon_pulse(self):
         for p in range(len(self.polarization_vector)):
-            self.photon_pulse.append(photon())
+            self.photon_pulse.append(Photon())
             self.photon_pulse[p].polarization = self.photon_pulse[p].measure(int(self.polarization_vector[p]))
             self.photon_pulse[p].bit = self.photon_pulse[p].set_bit_from_measurement()
         self.basis = [p.basis for p in self.photon_pulse]
@@ -48,7 +34,6 @@ class receiver(Node):
                 break
         except socket.error:
             raise qsocketerror("not connected to any channel")
-            sys.exit()
 
     def recv(self, header: str) -> str:
         try:

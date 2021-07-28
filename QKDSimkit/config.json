@@ -1,7 +1,9 @@
 {
   "channel":
-          {"host": "127.0.0.1", "port": 5005, "buffer_size": 8192},
+          {"host": "127.0.0.1", "port": 5005, "buffer_size": 8192, "noise": 0, "eve":  false},
   "node":
-          {"photon_pulse_size": 1200, "min_shared": 20, "buffer_size": 8192, "timeout_in_seconds": 1, "attempts": 5},
-  "Server": {"host": "127.0.0.1", "port": 21, "max_cons": "10"}
+          {"photon_pulse_size": 1200, "min_shared": 20, "buffer_size": 8192, "timeout_in_seconds": 1,
+            "connection_attempts": 5, "max_repetitions": 1, "min_shared_percent":  0.89},
+  "Server":
+          {"host": "127.0.0.1", "port": 21, "max_cons": "10"}
 }

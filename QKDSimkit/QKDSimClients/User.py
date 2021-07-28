@@ -100,9 +100,11 @@ class Client(object):
 
 if __name__ == '__main__':
     c = Client('user0', '12345')
-    c.send('../data/client_img/')
-    c.retrieve_all('../data/client_img/')
-    #c.retrieve('file1.jpeg', '../data/client_img/')
+    c.send('../data/client0_img/')
+    for f in os.listdir('../data/client0_img'):
+        os.remove(os.path.join('../data/client0_img', f))
+    c.retrieve_all('../data/client0_img/')
+    #c.retrieve('file1.jpeg', '../data/client0_img/')
     c.close()
 else:
     c = Client(sys.argv[1], sys.argv[2])

@@ -2,6 +2,9 @@ import socket
 import sys
 from threading import Thread
 from qexceptions import qsocketerror
+from channel_features import eavesdropper
+from channel_features import random_errors
+
 import json
 
 
@@ -45,10 +48,16 @@ class public_channel(object):  # insecure public classical/quantum channel
             try:
                 data = conn.recv(self.buffer_size)
                 message = data.decode()
+                if message.split(':')[0] == 'qpulse' and message.split(':')[1] != 'ack':
+                    if self.eve:
+                        message = eavesdropper(str(message).split(':', 1)[1])
+                    if self.noise > 0:
+                        message = random_errors(str(message).split(':', 1)[1], self.noise)
             except ConnectionResetError:
                 break
             except ConnectionAbortedError:
                 break
+
 
             if not message:
                 break
