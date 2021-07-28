@@ -54,7 +54,7 @@ class Server(object):
             handler = MyHandler  # select the created custom FTP handler
             handler.authorizer = authorizer  # assign the authorizer to the handler
             handler.banner = "Server Ready.."  # server banner is returned when the client calls a getWelcomeMessage() call
-            address = ('', 21)
+            address = (s['host'], s['port'])
             server = FTPServer(address, handler)
             server.max_cons = 10
             server.serve_forever()  # start the server
