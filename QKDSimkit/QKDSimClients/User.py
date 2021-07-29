@@ -13,7 +13,8 @@ class Client(object):
         s = json.load(open('../config.json', ))['Server']
         try:
             print('Connecting to Server: ')
-            self.ftp = FTP(s['host'])
+            self.ftp = FTP()
+            self.ftp.connect(s['host'], s['port'])
         except Exception as e:
             print('FTP error:\n' + str(e))
             sys.exit()
@@ -32,8 +33,6 @@ class Client(object):
             bits = import_key()
             self.key = [int("".join(map(str, bits[i:i + 8])), 2) for i in range(0, len(bits), 8)]
             self.key = bytearray(self.key)[:32]
-            print(len(self.key))
-            print("Key:" + str(self.key))
         except Exception as e:
             print('Failed to retrieve symmetric key:\n' + str(e))
             sys.exit()
@@ -41,6 +40,7 @@ class Client(object):
     def send(self, source_path):
         try:
             for file in os.listdir(source_path):
+                print(file)
                 try:
                     print("Encrypting " + file)
                     encrypt_file(self.key, source_path + file)
@@ -52,18 +52,17 @@ class Client(object):
 
                 try:
                     print("[!] File Transfer in Progress....")
-                    print()
                     result = self.ftp.storbinary("STOR " + file + '.enc', localfile)
 
                     os.remove(source_path + file + '.enc')
                 except Exception as e:
                     print('Transfer failed:\n' + str(e))
+                    os.remove(source_path + file + '.enc')
                     sys.exit()
-
                 else:
                     print(str(result))
         except Exception as e:
-            print("Failed to retrieve file to send:\n" + str(e))
+            print("Failed to send:\n" + str(e))
             sys.exit()
 
     def retrieve(self, file, dest_path):
@@ -84,7 +83,7 @@ class Client(object):
             sys.exit()
 
     def callback_retrieve_list(self, line):
-        file = line.rsplit(' ', 1)[1]
+        file = str(line.split(' ', 12)[12])
         self.file_list.append(file)
 
     def retrieve_all(self, dest_path):

@@ -18,15 +18,16 @@ class MyHandler(FTPHandler):  # FTP server handler
         decrypt_file(self.key, filename)
         os.remove(filename)
 
+    def on_incomplete_file_received(self, file):
+        os.remove(file)
+
     def on_login(self, user):
         try:
             bits = import_key()
             self.key = [int("".join(map(str, bits[i:i + 8])), 2) for i in range(0, len(bits), 8)]
             self.key = bytearray(self.key)[:32]
-            print(len(self.key))
         except Exception as e:
-            print('Failed to retrieve key:\n' + str(e))
-            sys.exit()
+            print('Failed to retrieve symmetrical key:\n' + str(e))
 
     def on_login_failed(self, username, password):
         print(username + " failed to login")
@@ -54,14 +55,13 @@ class Server(object):
             handler = MyHandler  # select the created custom FTP handler
             handler.authorizer = authorizer  # assign the authorizer to the handler
             handler.banner = "Server Ready.."  # server banner is returned when the client calls a getWelcomeMessage() call
-            address = (s['host'], s['port'])
+            address = ('', s['port'])
             server = FTPServer(address, handler)
             server.max_cons = 10
             server.serve_forever()  # start the server
         except Exception as e:
             print("Server failed to start:\n" + str(e))
             sys.exit()
-
 
     def add_user(user, password, auth):
         with open('../data/users.json', 'r') as users:

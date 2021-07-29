@@ -1,4 +1,5 @@
 import sys
+import os
 from Crypto.Cipher import AES
 
 def validate(shared_key, other_shared_key):
@@ -27,6 +28,10 @@ def decrypt_file(key, filename: str):
             file_out.close()
     except Exception as e:
         print("failed to decrypt:\n" + str(e))
+        try:
+            os.remove(filename)
+        except FileNotFoundError:
+            pass
         sys.exit()
 
 def encrypt_file(key, in_filename):
@@ -44,4 +49,8 @@ def encrypt_file(key, in_filename):
                 file_out.close()
     except Exception as e:
         print('IO error during encryption: \n' + str(e))
+        try:
+            os.remove(in_filename + '.enc')
+        except FileNotFoundError:
+            pass
         sys.exit()
