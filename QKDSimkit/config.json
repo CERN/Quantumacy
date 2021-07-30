@@ -1,6 +1,6 @@
 {
   "channel":
-          {"host": "127.0.0.1", "port": 5005, "buffer_size": 8192, "noise": 0.0, "eve":  false},
+          {"host": "", "port": 5005, "buffer_size": 8192, "noise": 0.1, "eve":  false},
   "node":
           {"photon_pulse_size": 1200, "min_shared": 20, "buffer_size": 8192, "timeout_in_seconds": 1,
             "connection_attempts": 5, "max_repetitions": 1000, "min_shared_percent":  0.89},

@@ -48,6 +48,9 @@ class Client(object):
                     print('encryption failed:\n' + str(e))
                     sys.exit()
 
+                for files in os.listdir(source_path):
+                    print(files)
+
                 localfile = open(source_path + file + '.enc', "rb")
 
                 try:
@@ -70,7 +73,6 @@ class Client(object):
             print("[!] File Transfer in Progress....")
             with open(dest_path + file + '.enc', 'wb') as out_file:
                 result = self.ftp.retrbinary("RETR " + file, out_file.write)
-                print(str(result))
         except Exception as e:
             print('Transfer failed:\n' + str(e))
             sys.exit()
@@ -83,14 +85,19 @@ class Client(object):
             sys.exit()
 
     def callback_retrieve_list(self, line):
-        file = str(line.split(' ', 12)[12])
+        file = str(line.rsplit(' ', 1)[1])
         self.file_list.append(file)
 
     def retrieve_all(self, dest_path):
-        self.dest_path = dest_path
-        self.ftp.retrlines("LIST ", self.callback_retrieve_list)
-        for file in self.file_list:
-            self.retrieve(file, self.dest_path)
+        try:
+            self.dest_path = dest_path
+            self.ftp.retrlines("LIST ", self.callback_retrieve_list)
+            for file in self.file_list:
+                self.retrieve(file, self.dest_path)
+        except Exception as e:
+            print("Failed to list directory\n" + str(e))
+            sys.exit()
+
 
 
     def close(self):
@@ -98,12 +105,10 @@ class Client(object):
 
 
 if __name__ == '__main__':
-    c = Client('user0', '12345')
-    c.send('../data/client0_img/')
+    c = Client('admin', 'admin')
+    #c.send('../data/client0_img/')
     for f in os.listdir('../data/client0_img'):
         os.remove(os.path.join('../data/client0_img', f))
     c.retrieve_all('../data/client0_img/')
     #c.retrieve('file1.jpeg', '../data/client0_img/')
     c.close()
-else:
-    c = Client(sys.argv[1], sys.argv[2])

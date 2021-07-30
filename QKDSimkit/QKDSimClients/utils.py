@@ -31,6 +31,7 @@ def decrypt_file(key, filename: str):
         try:
             os.remove(filename)
         except FileNotFoundError:
+            print('File not found')
             pass
         sys.exit()
 
@@ -52,5 +53,6 @@ def encrypt_file(key, in_filename):
         try:
             os.remove(in_filename + '.enc')
         except FileNotFoundError:
+            print('File not found')
             pass
         sys.exit()

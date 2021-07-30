@@ -12,11 +12,14 @@ from pyftpdlib.authorizers import DummyAuthorizer
 logging.basicConfig(level=logging.DEBUG)
 
 
-class MyHandler(FTPHandler):  # FTP server handler
-    def on_file_received(self, filename):  # Once the file is received by the server, trigger this event
-        print('Decrypting: ' + filename)
-        decrypt_file(self.key, filename)
-        os.remove(filename)
+class MyHandler(FTPHandler):
+    def on_file_received(self, filename):
+        try:
+            print('Decrypting: ' + filename)
+            decrypt_file(self.key, filename)
+            os.remove(filename)
+        except Exception as e:
+            print('Failed to handle received file\n' + str(e))
 
     def on_incomplete_file_received(self, file):
         os.remove(file)
@@ -33,12 +36,14 @@ class MyHandler(FTPHandler):  # FTP server handler
         print(username + " failed to login")
 
     def ftp_RETR(self, file):
-        print('Encrypting ' + file)
-        encrypt_file(self.key, file)
-        print(os.listdir())
-        super().ftp_RETR(file + '.enc')
-        os.remove(file + '.enc')
-
+        try:
+            print('Encrypting ' + file)
+            encrypt_file(self.key, file)
+            print(os.listdir())
+            super().ftp_RETR(file + '.enc')
+            os.remove(file + '.enc')
+        except Exception as e:
+            print("Failed to answer RETR\n" + str(e))
 
 class Server(object):
     def startServer(self):
@@ -64,14 +69,17 @@ class Server(object):
             sys.exit()
 
     def add_user(user, password, auth):
-        with open('../data/users.json', 'r') as users:
-            auth.user_table = json.load(users)
-            users.close()
-        os.mkdir('../data/' + user)
-        auth.add_user(user, password, '../data/' + user, perm='rwl')
-        with open('../data/users.json', 'w') as users:
-            json.dump(auth.user_table, users)
-            users.close()
+        try:
+            with open('../data/users.json', 'r') as users:
+                auth.user_table = json.load(users)
+                users.close()
+            os.mkdir('../data/' + user)
+            auth.add_user(user, password, '../data/' + user, perm='rwl')
+            with open('../data/users.json', 'w') as users:
+                json.dump(auth.user_table, users)
+                users.close()
+        except Exception as e:
+            print('Failed to add user:\n' + str(e))
 
 
 s = Server()
