@@ -23,7 +23,6 @@ def import_key():
     # clean up
     _ = os.system('cls')
     # Bob starts listening to the quantum channel
-    bob = receiver()
 
     for count in range(0, 1000):
         bob = receiver()

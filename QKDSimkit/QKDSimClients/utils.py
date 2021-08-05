@@ -2,22 +2,37 @@ import sys
 import os
 from Crypto.Cipher import AES
 
-def validate(shared_key, other_shared_key):
+
+def validate(shared_key: list, other_shared_key: list) -> int:
+    """It compares two keys to find differences
+
+    Args:
+        shared_key (str): first key
+        other_shared_key (str): second key
+    Returns:
+        percent of equal elements in the two keys
+    """
     if len(shared_key) > 0 and len(shared_key) == len(other_shared_key):
         i = 0
         count = 0
-        decision = 0
         while i < len(shared_key):
             if shared_key[i] == other_shared_key[i]:
                 count += 1
             i += 1
-        return count/len(shared_key)
+        return count / len(shared_key)
     else:
         print("Error")
         return -1
 
 
-def decrypt_file(key, filename: str):
+def decrypt_file(key: bytearray, filename: str):
+    """It creates a new decrypted file using AES, the decrypted file will be in the same directory and it will have the
+    original name except for the final '.enc'
+
+    Args:
+        key (bytearray): key to decrypt the file encrypted with AES, it has to be 128, 192, or 256 bits long
+        filename (str): absolute name of the file to dencrypt
+    """
     try:
         with open(filename, 'rb') as file_in:
             nonce, tag, ciphertext = [file_in.read(x) for x in (16, 16, -1)]
@@ -35,23 +50,27 @@ def decrypt_file(key, filename: str):
             pass
         sys.exit()
 
-def encrypt_file(key, in_filename):
+
+def encrypt_file(key: bytearray, filename: str):
+    """It creates a new encrypted file using AES, the encrypted file will be in the same directory and it will have the
+    original name followed by'.enc' at the end
+
+    Args:
+        key (bytearray): key to decrypt the file encrypted with AES, it has to be 128, 192, or 256 bits long
+        filename (str): absolute name of the file to encrypt
+    """
     try:
-        with open(in_filename, 'rb') as infile:
+        with open(filename, 'rb') as infile:
             chunk = infile.read()
-            try:
-                cipher = AES.new(key, AES.MODE_EAX)
-                ciphertext, tag = cipher.encrypt_and_digest(chunk)
-            except Exception as e:
-                print("key or value error: \n" + str(e))
-                sys.exit()
-            with open(in_filename + '.enc', 'wb') as file_out:
-                [file_out.write(x) for x in (cipher.nonce, tag, ciphertext)]
-                file_out.close()
+            cipher = AES.new(key, AES.MODE_EAX)
+            ciphertext, tag = cipher.encrypt_and_digest(chunk)
+        with open(filename + '.enc', 'wb') as file_out:
+            [file_out.write(x) for x in (cipher.nonce, tag, ciphertext)]
+            file_out.close()
     except Exception as e:
         print('IO error during encryption: \n' + str(e))
         try:
-            os.remove(in_filename + '.enc')
+            os.remove(filename + '.enc')
         except FileNotFoundError:
             print('File not found')
             pass
