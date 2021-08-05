@@ -48,8 +48,7 @@ def decrypt_file(key: bytearray, filename: str):
         except FileNotFoundError:
             print('File not found')
             pass
-        sys.exit()
-
+        raise Exception
 
 def encrypt_file(key: bytearray, filename: str):
     """It creates a new encrypted file using AES, the encrypted file will be in the same directory and it will have the
@@ -74,4 +73,4 @@ def encrypt_file(key: bytearray, filename: str):
         except FileNotFoundError:
             print('File not found')
             pass
-        sys.exit()
+        raise Exception

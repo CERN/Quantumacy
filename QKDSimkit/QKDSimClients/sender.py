@@ -10,10 +10,10 @@ from threading import Thread
 
 
 class sender(Node):
-    """"""
+    """Sender class, it expands Node, it contains methods to communicate a receiver node, the general idea is that this
+    node dictate the communication and the receiver can just answer"""
     def __init__(self):
         super().__init__()
-        self.tokens = []
 
     def create_photon_pulse(self) -> list:
         """Create a list of photons given a size

@@ -6,9 +6,10 @@ from models import Photon
 from qexceptions import qsocketerror, qobjecterror
 
 
-# TODO: make multithreaded classical receiver & sender
-
 class receiver(Node):
+    """Receiver class, it expands node, it contains methods to communicate a sender node, it can't take action but it
+    has to wait for the sender node for sending data, it can answer to a request with a message or to a message with an
+    acknowledgement"""
     def __init__(self):
         super().__init__()
         self.polarization_vector = []
