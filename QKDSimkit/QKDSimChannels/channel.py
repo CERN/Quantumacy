@@ -18,6 +18,7 @@ class public_channel(object):  # insecure public classical/quantum channel
         self.full_data = []
 
     def initiate_channel(self, *port):
+        """Start channel"""
         if len(port) > 0:
             self.port = str(port[0])
 
@@ -43,7 +44,7 @@ class public_channel(object):  # insecure public classical/quantum channel
                 print(self.ip_list)
 
     def initiate_connection(self, conn, addr):
-
+        """Listen for messages and broadcast them"""
         while True:
             try:
                 data = conn.recv(self.buffer_size)

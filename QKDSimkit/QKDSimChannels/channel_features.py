@@ -4,6 +4,12 @@ from models import Photon
 
 
 def eavesdropper(photon_stream: str) -> str:
+    """Method to simulate an eavesdropper in a quantum channel
+    Args:
+        photon_stream (str): message containing polarizations
+    Returns:
+        message with new (eavesdropped) polarizations
+    """
     try:
         photon_pulse = []
         new_message = 'qpulse:'
@@ -20,6 +26,13 @@ def eavesdropper(photon_stream: str) -> str:
         sys.exit()
 
 def random_errors(photon_stream: str, rate: float) -> str:
+    """Method to simulate random errors in a quantum channel
+    Args:
+        photon_stream (str): message containing polarizations
+        rate (float): decimal number from 0 to 1, it sets the error rate
+    Returns:
+        message with errors
+    """
     try:
         polarization_vector = photon_stream.split("~")[:-1]
         new_message = 'qpulse:'

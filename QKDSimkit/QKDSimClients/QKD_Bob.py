@@ -22,7 +22,6 @@ def import_key():
 
     # clean up
     _ = os.system('cls')
-    # Bob starts listening to the quantum channel
 
     for count in range(0, 1000):
         bob = receiver()
@@ -98,13 +97,17 @@ def import_key():
 
         bob.reset_socket()
 
+        # choose what to do
         if bob.decision == bob.other_decision and bob.decision == 1:
+            # return a correct key
             bob.get_key()
             print("Success!")
             return bob.key
         elif bob.decision == bob.other_decision and bob.decision == 0:
+            # retry
             continue
         else:
+            # exit
             print("Failed! Noise or eavesdropper detected")
             return -1
     print("Error: too many attempts to find a shared key")

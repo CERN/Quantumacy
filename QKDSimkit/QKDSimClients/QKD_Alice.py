@@ -21,8 +21,6 @@ def import_key():
     # clean up
     _ = os.system('cls')
 
-    # Alice connects to the quantum channel
-
     for count in range(0, 1000):
         alice = sender()
         try:
@@ -91,13 +89,17 @@ def import_key():
 
         alice.reset_socket()
 
+        # choose what to do
         if alice.decision == alice.other_decision and alice.decision == 1:
+            #return a correct key
             alice.get_key()
             print("Success!")
             return alice.key
         elif alice.decision == alice.other_decision and alice.decision == 0:
+            # retry
             continue
         else:
+            # exit
             print("Failed! Noise or eavesdropper detected")
             return -1
     print("Error: too many attempts to find a shared key")
