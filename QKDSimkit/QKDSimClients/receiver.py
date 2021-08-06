@@ -2,6 +2,7 @@ import socket
 import select
 import sys
 import re
+import logging
 from node import Node
 from models import Photon
 from qexceptions import qsocketerror, qobjecterror
@@ -37,11 +38,10 @@ class receiver(Node):
          it behaves like a wrapper for recv for photon pulses
         """
         try:
-            print("listening to quantum channel for photon pulse...")
+            logging.info("listening to quantum channel for photon pulse...")
             while True:
                 message = self.recv('qpulse')
-                print("Received photon pulse...")
-                print(message)
+                logging.info("Received photon pulse..." + message)
                 self.polarization_vector = message.split("~")[:-1]
                 break
         except socket.error:
@@ -79,10 +79,10 @@ class receiver(Node):
                     continue
                 self.socket.send((header + ":ack:").encode())
                 self.sent_acks.append(label)
-                print("Received: " + header + ":" + mess_list[1])
+                logging.info("Received: " + header + ":" + mess_list[1])
                 return mess_list[1]
         except ConnectionError:
-            print("Bob failed to receive")
+            logging.error("Bob failed to receive")
             sys.exit()
 
     def send(self, header: str, message: str):
@@ -110,9 +110,9 @@ class receiver(Node):
                     print("Sent: " + header + ':' + self.sent_messages[label] + ':')
                     continue
                 self.socket.send((header + ':' + message + ':').encode())
-                print("Sent: " + header + ':' + message)
+                logging.info("Sent: " + header + ':' + message)
                 self.sent_messages[header] = message
                 return True
         except ConnectionError:
-            print("Bob failed to send")
+            logging.error("Bob failed to send")
             sys.exit()

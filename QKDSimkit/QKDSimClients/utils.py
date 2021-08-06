@@ -1,9 +1,9 @@
-import sys
+import logging
 import os
 from Crypto.Cipher import AES
 
 
-def validate(shared_key: list, other_shared_key: list) -> int:
+def validate(shared_key: list, other_shared_key: list) -> float:
     """It compares two keys to find differences
 
     Args:
@@ -21,7 +21,7 @@ def validate(shared_key: list, other_shared_key: list) -> int:
             i += 1
         return count / len(shared_key)
     else:
-        print("Error")
+        logging.error("Error")
         return -1
 
 
@@ -42,11 +42,11 @@ def decrypt_file(key: bytearray, filename: str):
             file_out.write(data)
             file_out.close()
     except Exception as e:
-        print("failed to decrypt:\n" + str(e))
+        logging.error("failed to decrypt:\n" + str(e))
         try:
             os.remove(filename)
         except FileNotFoundError:
-            print('File not found')
+            logging.warning('File not found')
             pass
         raise Exception
 
@@ -67,10 +67,10 @@ def encrypt_file(key: bytearray, filename: str):
             [file_out.write(x) for x in (cipher.nonce, tag, ciphertext)]
             file_out.close()
     except Exception as e:
-        print('IO error during encryption: \n' + str(e))
+        logging.error('IO error during encryption: \n' + str(e))
         try:
             os.remove(filename + '.enc')
         except FileNotFoundError:
-            print('File not found')
+            logging.warning('File not found')
             pass
         raise Exception

@@ -1,5 +1,6 @@
 import random
 import sys
+import logging
 from models import Photon
 
 
@@ -19,10 +20,9 @@ def eavesdropper(photon_stream: str) -> str:
             photon_pulse[p].polarization = photon_pulse[p].measure(int(polarization_vector[p]))
             photon_pulse[p].bit = photon_pulse[p].set_bit_from_measurement()
             new_message += str(photon_pulse[p].polarization) + '~'
-        print(new_message)
         return new_message
     except Exception as e:
-        print('Eavesdropper error:\n' + str(e))
+        logging.error('Eavesdropper error:\n' + str(e))
         sys.exit()
 
 def random_errors(photon_stream: str, rate: float) -> str:
@@ -41,11 +41,11 @@ def random_errors(photon_stream: str, rate: float) -> str:
             if random.randint(1, 100) <= rate*100:
                 polarization = random.randint(0, 3) * 45
                 new_message += str(polarization) + '~'
-                count +=1
+                count += 1
             else:
                 new_message += str(p) + '~'
-        print('Errors: ' + str(count))
+        logging.info('Errors: ' + str(count))
         return new_message
     except Exception as e:
-        print("Failed to add errors in photon stream:\n" + str(e))
+        logging.error("Failed to add errors in photon stream:\n" + str(e))
         sys.exit()

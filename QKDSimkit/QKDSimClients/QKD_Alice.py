@@ -19,7 +19,7 @@ def import_key():
     channelPort = c['port']
 
     # clean up
-    _ = os.system('cls')
+    _ = os.system('clear')
 
     for count in range(0, 1000):
         alice = sender()
@@ -31,10 +31,10 @@ def import_key():
             alice.send_photon_pulse(photon_pulse)
 
         except qsocketerror as err:
-            print("An error occurred while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as e:
-            print("An error occurred. Disconnecting.\n" + str(e))
+            logging.error("An error occurred. Disconnecting.\n" + str(e))
             sys.exit()
 
         # connect to classic channel
@@ -42,10 +42,10 @@ def import_key():
             alice.reset_socket()
             alice.connect_to_channel(channelIP, channelPort)
         except qsocketerror as err:
-            print("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
-            print("An error occurred (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
             sys.exit()
 
         # exchange basis
@@ -58,10 +58,10 @@ def import_key():
             alice.send('alice-reconciled_key', repr(alice.reconciled_key))
 
         except qsocketerror as err:
-            print("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
-            print("An error occurred (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
             sys.exit()
 
         # create key and public sub key
@@ -81,10 +81,10 @@ def import_key():
             # listen for Alice's sub key
             alice.listen_for('bob', 'other_decision')
         except qsocketerror as err:
-            print("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
-            print("An error occurred (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
             sys.exit()
 
         alice.reset_socket()
@@ -93,18 +93,20 @@ def import_key():
         if alice.decision == alice.other_decision and alice.decision == 1:
             #return a correct key
             alice.get_key()
-            print("Success!")
+            logging.info("Success!")
             return alice.key
         elif alice.decision == alice.other_decision and alice.decision == 0:
             # retry
+            logging.info("Failed to match key, trying again")
             continue
         else:
             # exit
-            print("Failed! Noise or eavesdropper detected")
+            logging.warning("Failed! Noise or eavesdropper detected")
             return -1
-    print("Error: too many attempts to find a shared key")
+    logging.warning("Error: too many attempts to find a shared key")
     return -1
 
 
 if __name__ == '__main__':
+    print(len(import_key()))
     print(import_key())

@@ -1,6 +1,6 @@
 import socket
 import ast
-import re
+import logging
 import json
 from qexceptions import qsocketerror, qobjecterror
 from utils import validate
@@ -45,7 +45,7 @@ class Node(object):
             self.socket.close()
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except Exception as e:
-            print("Failed to reset socket:\n" + str(e))
+            logging.info("Failed to reset socket:\n" + str(e))
             raise ConnectionError
 
     def ownMessage(self, addr: str) -> bool:
@@ -86,7 +86,7 @@ class Node(object):
             attr (str): name of the attribute that will store the content of the received message
             """
         try:
-            print("Listening to classical channel for " + attr)
+            logging.info("Listening to classical channel for " + attr)
             while True:
                 message = self.recv(sender + '-' + attr)
                 try:
@@ -106,7 +106,7 @@ class Node(object):
                 0: error rate is below a given percent
                 -1: error rate too high"""
         percent = validate(self.sub_shared_key, self.other_sub_key)
-        print('Correct bits percentage: ' + str(percent))
+        logging.info('Correct bits percentage: ' + str(percent))
         if percent == 1:
             return 1
         if self.min_shared_percent <= percent < 1:

@@ -1,10 +1,11 @@
 import socket
 import select
 import sys
+import re
+import logging
 from node import Node
 from models import Photon
 from qexceptions import qsocketerror, qobjecterror
-import re
 
 
 class sender(Node):
@@ -67,7 +68,7 @@ class sender(Node):
             for i in range(self.connection_attempts):
                 data = (header + ':' + message + ':')
                 self.socket.send(data.encode())
-                print('Sent: ' + data)
+                logging.info('Sent: ' + data)
                 ready = select.select([self.socket], [], [], self.timeout_in_seconds)
                 if ready[0]:
                     data = self.socket.recv(self.buffer_size)
@@ -76,7 +77,7 @@ class sender(Node):
                         return True
             raise ConnectionError
         except ConnectionError as e:
-            print('Alice failed to send:\n' + str(e))
+            logging.warning('Alice failed to send:\n' + str(e))
             sys.exit()
 
     def recv(self, header: str):
@@ -101,11 +102,11 @@ class sender(Node):
                         if message.count(':') >= 2:  # checking if payload started and finished
                             mess_list = message.split(':')
                             if mess_list[0] == header:
-                                print('Received: ' + header + ':' + mess_list[1] + ':')
+                                logging.info('Received: ' + header + ':' + mess_list[1] + ':')
                                 return mess_list[1]
                     else:
                         break
             raise Exception
         except Exception as CE:
-            print('Alice failed to receive: \n' + str(CE))
+            logging.error('Alice failed to receive: \n' + str(CE))
             sys.exit()

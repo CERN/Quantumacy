@@ -9,7 +9,7 @@ import os
 from channel import public_channel
 
 # clean up
-_ = os.system('cls')
+_ = os.system('clear')
 
 # instantiate a receiver channel
 theChannel = public_channel()

@@ -21,13 +21,10 @@ def import_key():
     channelPort = s['port']
 
     # clean up
-    _ = os.system('cls')
+    _ = os.system('clear')
 
     for count in range(0, 1000):
         bob = receiver()
-        if count >= bob.max_repetitions:
-            print("Error: too many attempts to find a shared key")
-            return -1
 
         try:
             # connect to channel
@@ -37,10 +34,10 @@ def import_key():
             bob.measure_photon_pulse()
 
         except qsocketerror as err:
-            print("An error occurred while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
-            print("An error occurred (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
             sys.exit()
 
         # now connect to classic channel
@@ -49,10 +46,10 @@ def import_key():
             bob.reset_socket()
             bob.connect_to_channel(channelIP, channelPort)
         except qsocketerror as err:
-            print("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
-            print("An error occurred (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
             sys.exit()
 
         # exchange basis
@@ -63,10 +60,10 @@ def import_key():
             bob.listen_for('alice', 'reconciled_key')
 
         except qsocketerror as err:
-            print("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
-            print("An error occurred (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
             sys.exit()
 
         # create key and public sub key
@@ -89,10 +86,10 @@ def import_key():
             bob.send('bob-other_decision', repr(bob.decision))
 
         except qsocketerror as err:
-            print("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
-            print("An error occurred (" + str(err) + "). Disconnecting.")
+            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
             sys.exit()
 
         bob.reset_socket()
@@ -101,18 +98,21 @@ def import_key():
         if bob.decision == bob.other_decision and bob.decision == 1:
             # return a correct key
             bob.get_key()
-            print("Success!")
+            logging.info("Success!")
             return bob.key
         elif bob.decision == bob.other_decision and bob.decision == 0:
             # retry
+            logging.info("Failed to match key, trying again")
             continue
         else:
             # exit
-            print("Failed! Noise or eavesdropper detected")
+            logging.warning("Failed! Noise or eavesdropper detected")
             return -1
-    print("Error: too many attempts to find a shared key")
+    logging.warning("Error: too many attempts to find a shared key")
     return -1
 
 
 if __name__ == '__main__':
+    print(len(import_key()))
     print(import_key())
+
