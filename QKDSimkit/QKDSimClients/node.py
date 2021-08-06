@@ -1,7 +1,6 @@
 import socket
 import ast
-import time
-import select
+import re
 import json
 from qexceptions import qsocketerror, qobjecterror
 from utils import validate
@@ -24,6 +23,8 @@ class Node(object):
         self.not_shared_key = []
         self.key = []
         self.fragments = []
+        self.regex = r'\((.)*\):'
+
 
     def connect_to_channel(self, address: str, port: int):
         """It starts the connection with the channel

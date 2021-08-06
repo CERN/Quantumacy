@@ -1,6 +1,7 @@
 import socket
-import ast
+import select
 import sys
+import re
 from node import Node
 from models import Photon
 from qexceptions import qsocketerror, qobjecterror
@@ -59,10 +60,17 @@ class receiver(Node):
             message (str): the payload of the received data, the header and some other infos are not returned
         """
         try:
-            while True:
-                data = self.socket.recv(self.buffer_size)
-                message = data.decode().split(':')
-                label = message[1]
+            while True: # loop for different messages
+                message = ''
+                while True: # loop for different parts of the same message (len > buff_size)
+                    ready = select.select([self.socket], [], [], self.timeout_in_seconds)
+                    if ready[0]:
+                        data_recv = self.socket.recv(self.buffer_size).decode()
+                        message += re.sub(self.regex, '', data_recv)  # removing ('xxx.xxx.xxx.xxx', xxxxx):
+                        if message.count(':') >= 2:  # checking if payload started and finished
+                            mess_list = message.split(':')[:2]
+                            break
+                label = mess_list[0]
                 if label != header and label in self.sent_acks:
                     self.socket.send((label + ":ack:").encode())
                     continue
@@ -71,8 +79,8 @@ class receiver(Node):
                     continue
                 self.socket.send((header + ":ack:").encode())
                 self.sent_acks.append(label)
-                print("Received: " + header + ":" + message[2])
-                return message[2]
+                print("Received: " + header + ":" + mess_list[1])
+                return mess_list[1]
         except ConnectionError:
             print("Bob failed to receive")
             sys.exit()

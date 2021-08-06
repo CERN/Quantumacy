@@ -1,12 +1,10 @@
 import socket
-import ast
-import time
 import select
 import sys
 from node import Node
 from models import Photon
 from qexceptions import qsocketerror, qobjecterror
-from threading import Thread
+import re
 
 
 class sender(Node):
@@ -65,6 +63,7 @@ class sender(Node):
             message (str): string to be sent
         """
         try:
+
             for i in range(self.connection_attempts):
                 data = (header + ':' + message + ':')
                 self.socket.send(data.encode())
@@ -91,16 +90,22 @@ class sender(Node):
         """
         try:
             for i in range(self.connection_attempts):
-                data = (header + ':request:').encode()
-                self.socket.send(data)
-                ready = select.select([self.socket], [], [], self.timeout_in_seconds)
-                if ready[0]:
-                    data = self.socket.recv(self.buffer_size)
-                    message = data.decode().split(':')
-                    if message[1] == header:
-                        print('Received: ' + header + ':' + message[2] + ':')
-                        return message[2]
-            raise ConnectionError
-        except ConnectionError as CE:
+                message = ''
+                data_send = (header + ':request:').encode()
+                self.socket.send(data_send)
+                while 1:
+                    ready = select.select([self.socket], [], [], self.timeout_in_seconds)
+                    if ready[0]:
+                        data_recv = self.socket.recv(self.buffer_size).decode()
+                        message += re.sub(self.regex, '', data_recv) #removing ('xxx.xxx.xxx.xxx', xxxx):
+                        if message.count(':') >= 2:  # checking if payload started and finished
+                            mess_list = message.split(':')
+                            if mess_list[0] == header:
+                                print('Received: ' + header + ':' + mess_list[1] + ':')
+                                return mess_list[1]
+                    else:
+                        break
+            raise Exception
+        except Exception as CE:
             print('Alice failed to receive: \n' + str(CE))
             sys.exit()

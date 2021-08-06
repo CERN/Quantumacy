@@ -1,5 +1,5 @@
 import socket
-import sys
+import logging
 from threading import Thread
 from qexceptions import qsocketerror
 from channel_features import eavesdropper
