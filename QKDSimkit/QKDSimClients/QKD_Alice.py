@@ -9,11 +9,15 @@ import os
 import sys
 import json
 import logging
+from fastapi import FastAPI
 from sender import sender
 from qexceptions import qsocketerror, qobjecterror
+from pydantic import BaseModel
+
+logging.basicConfig(level=logging.ERROR)
 
 
-def import_key():
+def import_key(ID: str, token: str, size: int = 512):
     c = json.load(open('../config.json', ))['channel']
     channelIP = c['host']
     channelPort = c['port']
@@ -22,7 +26,7 @@ def import_key():
     _ = os.system('clear')
 
     for count in range(0, 1000):
-        alice = sender()
+        alice = sender(ID, token, size)
         try:
             # connect to quantum channel
             alice.connect_to_channel(channelIP, channelPort)
@@ -31,7 +35,8 @@ def import_key():
             alice.send_photon_pulse(photon_pulse)
 
         except qsocketerror as err:
-            logging.error("An error occurred while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
+            logging.error(
+                "An error occurred while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as e:
             logging.error("An error occurred. Disconnecting.\n" + str(e))
@@ -42,7 +47,8 @@ def import_key():
             alice.reset_socket()
             alice.connect_to_channel(channelIP, channelPort)
         except qsocketerror as err:
-            logging.error("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
+            logging.error(
+                "An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
             logging.error("An error occurred (" + str(err) + "). Disconnecting.")
@@ -58,7 +64,8 @@ def import_key():
             alice.send('alice-reconciled_key', repr(alice.reconciled_key))
 
         except qsocketerror as err:
-            logging.error("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
+            logging.error(
+                "An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
             logging.error("An error occurred (" + str(err) + "). Disconnecting.")
@@ -81,7 +88,8 @@ def import_key():
             # listen for Alice's sub key
             alice.listen_for('bob', 'other_decision')
         except qsocketerror as err:
-            logging.error("An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
+            logging.error(
+                "An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
             sys.exit()
         except Exception as err:
             logging.error("An error occurred (" + str(err) + "). Disconnecting.")
@@ -91,10 +99,10 @@ def import_key():
 
         # choose what to do
         if alice.decision == alice.other_decision and alice.decision == 1:
-            #return a correct key
+            # return a correct key
             alice.get_key()
             logging.info("Success!")
-            return alice.key
+            return alice.key[:size]
         elif alice.decision == alice.other_decision and alice.decision == 0:
             # retry
             logging.info("Failed to match key, trying again")
@@ -107,6 +115,48 @@ def import_key():
     return -1
 
 
+def request_handler(request: dict):
+    keys = []
+    if 'extension_mandatory' in request:
+        logging.error('Error 400: "not all extension_mandatory parameters are supported')
+        return 400
+    if 'extension_optional' in request:
+        logging.error('Error 400: "not all extension_optional parameters are supported')
+        return 400
+    for i in range(0, request['number']):
+        keys.append({"key_ID": i, "key": import_key(request['size'])})
+    return keys
+
+
 if __name__ == '__main__':
-    print(len(import_key()))
-    print(import_key())
+    import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
+
+app = FastAPI()
+
+
+class qkdParams(BaseModel):
+    number: int = 1
+    size: int = 1024
+
+
+@app.get("/test")
+async def root(number: int = 1, size: int = 1024):
+    answer = {}
+    keys = []
+    for i in range(0, number):
+        key = import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=size)
+        keys.append({"key_ID": 1, "key": key})
+    answer["keys"] = keys
+    return answer
+
+
+# @app.get("/api/v1/keys/QKD_Alice/enc_keys")
+@app.post("/test")
+async def root(qkdParams: qkdParams):
+    answer = {}
+    keys = []
+    for i in range(0, qkdParams.number):
+        key = import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=qkdParams.size)
+        keys.append({"key_ID": 1, "key": key})
+    answer["keys"] = keys
+    return answer

@@ -5,14 +5,18 @@ import re
 import logging
 from node import Node
 from models import Photon
+from cryptography.fernet import Fernet
 from qexceptions import qsocketerror, qobjecterror
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 class sender(Node):
     """Sender class, it expands Node, it contains methods to communicate a receiver node, the general idea is that this
     node dictate the communication and the receiver can just answer"""
-    def __init__(self):
-        super().__init__()
+
+    def __init__(self, ID, token, size: int):
+        super().__init__(ID, token, size)
 
     def create_photon_pulse(self) -> list:
         """Create a list of photons given a size
@@ -64,18 +68,20 @@ class sender(Node):
             message (str): string to be sent
         """
         try:
-
+            data = self.encrypt_not_qpulse(header, message)
             for i in range(self.connection_attempts):
-                data = (header + ':' + message + ':')
                 self.socket.send(data.encode())
-                logging.info('Sent: ' + data)
+                logging.info('Sent: ' + header + ':' + message)
                 ready = select.select([self.socket], [], [], self.timeout_in_seconds)
                 if ready[0]:
-                    data = self.socket.recv(self.buffer_size)
-                    received = data.decode().split(':')
+                    recv = self.socket.recv(self.buffer_size)
+                    received = recv.decode().split(':')
                     if received[1] == header and received[2] == 'ack':
                         return True
             raise ConnectionError
+        except Exception as err:
+            logging.error('Alice failed to send {0}:\n{1}'.format(header, str(err)))
+            sys.exit()
         except ConnectionError as e:
             logging.warning('Alice failed to send:\n' + str(e))
             sys.exit()
@@ -98,12 +104,13 @@ class sender(Node):
                     ready = select.select([self.socket], [], [], self.timeout_in_seconds)
                     if ready[0]:
                         data_recv = self.socket.recv(self.buffer_size).decode()
-                        message += re.sub(self.regex, '', data_recv) #removing ('xxx.xxx.xxx.xxx', xxxx):
+                        message += re.sub(self.regex, '', data_recv)  # removing ('xxx.xxx.xxx.xxx', xxxx):
                         if message.count(':') >= 2:  # checking if payload started and finished
                             mess_list = message.split(':')
                             if mess_list[0] == header:
-                                logging.info('Received: ' + header + ':' + mess_list[1] + ':')
-                                return mess_list[1]
+                                dec_message = self.decrypt_not_qpulse(mess_list[0], mess_list[1])
+                                logging.info("Received: " + header + ":" + dec_message)
+                                return dec_message
                     else:
                         break
             raise Exception

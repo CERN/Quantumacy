@@ -2,15 +2,18 @@ import socket
 import ast
 import logging
 import json
-from qexceptions import qsocketerror, qobjecterror
+from cryptography.fernet import Fernet
 from utils import validate
+from qexceptions import qsocketerror, qobjecterror
 
 class Node(object):
     """Father class for receiver and sender
     """
-    def __init__(self):
+    def __init__(self, ID, token, size):
         self.__dict__ = json.load(open('../config.json',))['node']
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.ID = ID
+        self.token = token
         self.photon_pulse = []
         self.basis = []
         self.other_basis = []
@@ -24,7 +27,7 @@ class Node(object):
         self.key = []
         self.fragments = []
         self.regex = r'\((.)*\):'
-
+        self.photon_pulse_size = size*5
 
     def connect_to_channel(self, address: str, port: int):
         """It starts the connection with the channel
@@ -91,7 +94,8 @@ class Node(object):
                 message = self.recv(sender + '-' + attr)
                 try:
                     literal = ast.literal_eval(message)
-                except ValueError:
+                except ValueError as VE:
+                    logging.error("Value Error: " + str(VE))
                     pass
                 else:
                     setattr(self, attr, literal)
@@ -113,6 +117,22 @@ class Node(object):
             return 0
         if percent < self.min_shared_percent:
             return -1
+
+    def encrypt_not_qpulse(self, header: str, message: str):
+        if header != 'qpulse':
+            cipher = Fernet(self.token)
+            enc_message = cipher.encrypt(message.encode())
+            return header + ':' + enc_message.decode() + ':'
+        else:
+            return header + ':' + message + ':'
+
+    def decrypt_not_qpulse(self, header: str, message: str):
+        if header != 'qpulse':
+            cipher = Fernet(self.token)
+            message = cipher.decrypt(bytes(message.encode()))
+            return message.decode()
+        else:
+            return message
 
     def send(self):
         """abstract method"""

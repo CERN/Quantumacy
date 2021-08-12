@@ -5,17 +5,18 @@ import re
 import logging
 from node import Node
 from models import Photon
+from cryptography.fernet import Fernet
 from qexceptions import qsocketerror, qobjecterror
 
+logging.basicConfig(level=logging.DEBUG)
 
 class receiver(Node):
     """Receiver class, it expands node, it contains methods to communicate a sender node, it can't take action but it
     has to wait for the sender node for sending data, it can answer to a request with a message or to a message with an
     acknowledgement"""
-    def __init__(self):
-        super().__init__()
+    def __init__(self, ID, token, size):
+        super().__init__(ID, token, size)
         self.polarization_vector = []
-        self.token = ''
         self.sent_acks = []
         self.sent_messages = {}
 
@@ -41,7 +42,6 @@ class receiver(Node):
             logging.info("listening to quantum channel for photon pulse...")
             while True:
                 message = self.recv('qpulse')
-                logging.info("Received photon pulse..." + message)
                 self.polarization_vector = message.split("~")[:-1]
                 break
         except socket.error:
@@ -60,9 +60,9 @@ class receiver(Node):
             message (str): the payload of the received data, the header and some other infos are not returned
         """
         try:
-            while True: # loop for different messages
+            for i in range(self.connection_attempts):  # loop for different messages
                 message = ''
-                while True: # loop for different parts of the same message (len > buff_size)
+                while True:  # loop for different parts of the same message (len > buff_size)
                     ready = select.select([self.socket], [], [], self.timeout_in_seconds)
                     if ready[0]:
                         data_recv = self.socket.recv(self.buffer_size).decode()
@@ -79,8 +79,12 @@ class receiver(Node):
                     continue
                 self.socket.send((header + ":ack:").encode())
                 self.sent_acks.append(label)
-                logging.info("Received: " + header + ":" + mess_list[1])
-                return mess_list[1]
+                dec_message = self.decrypt_not_qpulse(label, mess_list[1])
+                logging.info("Received: " + label + ":" + dec_message)
+                return dec_message
+        except Exception as err:
+            logging.error('Bob failed to receive {0}:\n{1}'.format(header, str(err)))
+            sys.exit()
         except ConnectionError:
             logging.error("Bob failed to receive")
             sys.exit()
@@ -97,22 +101,25 @@ class receiver(Node):
             message (str): message
         """
         try:
-            while True:
-                data = self.socket.recv(self.buffer_size)
+            for i in range(self.connection_attempts):
+                ready = select.select([self.socket], [], [], self.timeout_in_seconds)
+                if ready[0]:
+                    data = self.socket.recv(self.buffer_size)
                 request = data.decode().split(':')
                 label = request[1]
                 if label != header and label in self.sent_acks:
                     self.socket.send((label + ':ack:').encode())
-                    print("Sent: " + header + ':ack:')
+                    logging.info("Sent: " + header + ':ack:')
                     continue
                 elif label != header and label in self.sent_messages:
                     self.socket.send((label + ':' + self.sent_messages[label] + ':').encode())
-                    print("Sent: " + header + ':' + self.sent_messages[label] + ':')
+                    logging.info("Sent: " + header + ':' + self.sent_messages[label] + ':')
                     continue
-                self.socket.send((header + ':' + message + ':').encode())
-                logging.info("Sent: " + header + ':' + message)
-                self.sent_messages[header] = message
+                data = self.encrypt_not_qpulse(header, message)
+                self.socket.send(data.encode())
+                logging.info('Sent: ' + header + ':' + message)
+                self.sent_messages[header] = data
                 return True
-        except ConnectionError:
-            logging.error("Bob failed to send")
+        except ConnectionError as ce:
+            logging.error('Bob failed to send {0}:\n{1}'.format(header, str(ce)))
             sys.exit()
