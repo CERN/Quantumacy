@@ -61,27 +61,28 @@ class receiver(Node):
         """
         try:
             for i in range(self.connection_attempts):  # loop for different messages
-                message = ''
-                while True:  # loop for different parts of the same message (len > buff_size)
-                    ready = select.select([self.socket], [], [], self.timeout_in_seconds)
-                    if ready[0]:
-                        data_recv = self.socket.recv(self.buffer_size).decode()
-                        message += re.sub(self.regex, '', data_recv)  # removing ('xxx.xxx.xxx.xxx', xxxxx):
-                        if message.count(':') >= 2:  # checking if payload started and finished
-                            mess_list = message.split(':')[:2]
-                            break
-                label = mess_list[0]
-                if label != header and label in self.sent_acks:
+                received = self.recv_all()
+                if not received:
+                    continue
+                label = received[0]
+                if label != header and label in self.sent_acks:  # received an already received message
                     self.socket.send((label + ":ack:").encode())
+                    logging.info("Sent: " + label + ':ack:')
                     continue
-                elif label != header and label in self.sent_messages:
+                elif label != header and label in self.sent_messages:  # received a request for an already sent message
                     self.socket.send((label + ":" + self.sent_messages[label] + ':').encode())
+                    logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
-                self.socket.send((header + ":ack:").encode())
-                self.sent_acks.append(label)
-                dec_message = self.decrypt_not_qpulse(label, mess_list[1])
-                logging.info("Received: " + label + ":" + dec_message)
-                return dec_message
+                elif label == header:
+                    self.sent_acks.append(label)
+                    dec_message = self.decrypt_not_qpulse(label, received[1])
+                    self.socket.send((header + ":ack:").encode())
+                    logging.info("Received: " + label + ":" + dec_message)
+                    return dec_message
+                else:
+                    raise Exception
+            raise ConnectionError
+
         except Exception as err:
             logging.error('Bob failed to receive {0}:\n{1}'.format(header, str(err)))
             sys.exit()
@@ -102,24 +103,31 @@ class receiver(Node):
         """
         try:
             for i in range(self.connection_attempts):
-                ready = select.select([self.socket], [], [], self.timeout_in_seconds)
-                if ready[0]:
-                    data = self.socket.recv(self.buffer_size)
-                request = data.decode().split(':')
-                label = request[1]
-                if label != header and label in self.sent_acks:
+                received = self.recv_all()
+                if not received:
+                    continue
+                label = received[0]
+                if label != header and label in self.sent_acks:  # received an already received message
                     self.socket.send((label + ':ack:').encode())
-                    logging.info("Sent: " + header + ':ack:')
+                    logging.info("Sent: " + label + ':ack:')
                     continue
-                elif label != header and label in self.sent_messages:
+                elif label != header and label in self.sent_messages:  # received a request for an already sent message
                     self.socket.send((label + ':' + self.sent_messages[label] + ':').encode())
-                    logging.info("Sent: " + header + ':' + self.sent_messages[label] + ':')
+                    logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
-                data = self.encrypt_not_qpulse(header, message)
-                self.socket.send(data.encode())
-                logging.info('Sent: ' + header + ':' + message)
-                self.sent_messages[header] = data
-                return True
-        except ConnectionError as ce:
-            logging.error('Bob failed to send {0}:\n{1}'.format(header, str(ce)))
+                elif label == header:
+                    data = self.encrypt_not_qpulse(header, message)
+                    self.sent_messages[header] = data
+                    self.socket.send(data.encode())
+                    logging.info('Sent: ' + header + ':' + message)
+                    return
+                else:
+                    raise Exception
+            raise ConnectionError
+
+        except ConnectionError:
+            logging.error('Bob failed to send {0}'.format(header))
+            sys.exit()
+        except Exception as err:
+            logging.error('Bob failed to receive {0}:\n{1}'.format(header, str(err)))
             sys.exit()

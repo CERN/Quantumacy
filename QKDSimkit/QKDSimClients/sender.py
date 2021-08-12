@@ -1,11 +1,8 @@
 import socket
-import select
 import sys
-import re
 import logging
 from node import Node
 from models import Photon
-from cryptography.fernet import Fernet
 from qexceptions import qsocketerror, qobjecterror
 
 logging.basicConfig(level=logging.DEBUG)
@@ -72,12 +69,11 @@ class sender(Node):
             for i in range(self.connection_attempts):
                 self.socket.send(data.encode())
                 logging.info('Sent: ' + header + ':' + message)
-                ready = select.select([self.socket], [], [], self.timeout_in_seconds)
-                if ready[0]:
-                    recv = self.socket.recv(self.buffer_size)
-                    received = recv.decode().split(':')
-                    if received[1] == header and received[2] == 'ack':
-                        return True
+                received = self.recv_all()
+                if not received:
+                    continue
+                if received[0] == header and received[1] == 'ack':
+                    return
             raise ConnectionError
         except Exception as err:
             logging.error('Alice failed to send {0}:\n{1}'.format(header, str(err)))
@@ -97,22 +93,14 @@ class sender(Node):
         """
         try:
             for i in range(self.connection_attempts):
-                message = ''
-                data_send = (header + ':request:').encode()
-                self.socket.send(data_send)
-                while 1:
-                    ready = select.select([self.socket], [], [], self.timeout_in_seconds)
-                    if ready[0]:
-                        data_recv = self.socket.recv(self.buffer_size).decode()
-                        message += re.sub(self.regex, '', data_recv)  # removing ('xxx.xxx.xxx.xxx', xxxx):
-                        if message.count(':') >= 2:  # checking if payload started and finished
-                            mess_list = message.split(':')
-                            if mess_list[0] == header:
-                                dec_message = self.decrypt_not_qpulse(mess_list[0], mess_list[1])
-                                logging.info("Received: " + header + ":" + dec_message)
-                                return dec_message
-                    else:
-                        break
+                self.socket.send((header + ':request:').encode())
+                received = self.recv_all()
+                if not received:
+                    continue
+                if received[0] == header:
+                    dec_message = self.decrypt_not_qpulse(received[0], received[1])
+                    logging.info("Received: " + header + ":" + dec_message)
+                    return dec_message
             raise Exception
         except Exception as CE:
             logging.error('Alice failed to receive: \n' + str(CE))

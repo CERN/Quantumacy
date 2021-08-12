@@ -2,6 +2,8 @@ import socket
 import ast
 import logging
 import json
+import select
+import re
 from cryptography.fernet import Fernet
 from utils import validate
 from qexceptions import qsocketerror, qobjecterror
@@ -134,6 +136,18 @@ class Node(object):
         else:
             return message
 
+    def recv_all(self,):
+        message = ''
+        ready = select.select([self.socket], [], [], self.timeout_in_seconds)
+        if ready[0]:
+            while True:
+                data_recv = self.socket.recv(self.buffer_size).decode()
+                message += re.sub(self.regex, '', data_recv)  # removing ('xxx.xxx.xxx.xxx', xxxxx):
+                if message.count(':') >= 2:  # checking if payload started and finished
+                    return message.split(':')[:2]
+
+
+
     def send(self):
         """abstract method"""
         print("send(): Override me")
@@ -141,3 +155,4 @@ class Node(object):
     def recv(self):
         """abstract method"""
         print("receive(): Override me")
+

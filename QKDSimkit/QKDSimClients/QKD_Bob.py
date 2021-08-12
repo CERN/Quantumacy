@@ -138,7 +138,7 @@ async def root(number: int = 1, size: int = 1024):
     keys = []
     for i in range(0, number):
         key = import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=size)
-        keys.append({"key_ID": 1, "key": key})
+        keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer
 
@@ -149,6 +149,6 @@ async def root(qkdParams: qkdParams):
     keys = []
     for i in range(0, qkdParams.number):
         key = import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=qkdParams.size)
-        keys.append({"key_ID": 1, "key": key})
+        keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer
