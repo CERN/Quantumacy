@@ -5,10 +5,10 @@ import re
 import logging
 from node import Node
 from models import Photon
-from cryptography.fernet import Fernet
 from qexceptions import qsocketerror, qobjecterror
 
 logging.basicConfig(level=logging.DEBUG)
+
 
 class receiver(Node):
     """Receiver class, it expands node, it contains methods to communicate a sender node, it can't take action but it
