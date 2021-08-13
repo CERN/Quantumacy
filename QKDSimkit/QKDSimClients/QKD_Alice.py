@@ -115,21 +115,8 @@ def import_key(ID: str, token: str, size: int = 512):
     return -1
 
 
-def request_handler(request: dict):
-    keys = []
-    if 'extension_mandatory' in request:
-        logging.error('Error 400: "not all extension_mandatory parameters are supported')
-        return 400
-    if 'extension_optional' in request:
-        logging.error('Error 400: "not all extension_optional parameters are supported')
-        return 400
-    for i in range(0, request['number']):
-        keys.append({"key_ID": i, "key": import_key(request['size'])})
-    return keys
-
-
 if __name__ == '__main__':
-    import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
+    import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
 
 app = FastAPI()
 
@@ -137,14 +124,15 @@ app = FastAPI()
 class qkdParams(BaseModel):
     number: int = 1
     size: int = 1024
+    ID: str = 'id'
 
 
 @app.get("/test")
-async def root(number: int = 1, size: int = 1024):
+async def root(number: int = 1, size: int = 1024, ID: str = 'id'):
     answer = {}
     keys = []
     for i in range(0, number):
-        key = import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=size)
+        key = import_key(ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=size)
         keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer
@@ -156,7 +144,7 @@ async def root(qkdParams: qkdParams):
     answer = {}
     keys = []
     for i in range(0, qkdParams.number):
-        key = import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=qkdParams.size)
+        key = import_key(qkdParams.ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=qkdParams.size)
         keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer

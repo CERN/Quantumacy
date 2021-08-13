@@ -66,17 +66,20 @@ class receiver(Node):
                     continue
                 label = received[0]
                 if label != header and label in self.sent_acks:  # received an already received message
-                    self.socket.send((label + ":ack:").encode())
+                    to_be_sent = (self.ID + ':' + label + ":ack:").encode()
+                    self.socket.send(to_be_sent)
                     logging.info("Sent: " + label + ':ack:')
                     continue
                 elif label != header and label in self.sent_messages:  # received a request for an already sent message
-                    self.socket.send((label + ":" + self.sent_messages[label] + ':').encode())
+                    to_be_sent = (self.ID + ':' + label + ":" + self.sent_messages[label] + ':').encode()
+                    self.socket.send(to_be_sent)
                     logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
                 elif label == header:
-                    self.sent_acks.append(label)
                     dec_message = self.decrypt_not_qpulse(label, received[1])
-                    self.socket.send((header + ":ack:").encode())
+                    to_be_sent = (self.ID + ':' + header + ":ack:").encode()
+                    self.socket.send(to_be_sent)
+                    self.sent_acks.append(label)
                     logging.info("Received: " + label + ":" + dec_message)
                     return dec_message
                 else:
@@ -108,17 +111,20 @@ class receiver(Node):
                     continue
                 label = received[0]
                 if label != header and label in self.sent_acks:  # received an already received message
-                    self.socket.send((label + ':ack:').encode())
+                    to_be_sent = (self.ID + ':' + label + ":ack:").encode()
+                    self.socket.send(to_be_sent)
                     logging.info("Sent: " + label + ':ack:')
                     continue
                 elif label != header and label in self.sent_messages:  # received a request for an already sent message
-                    self.socket.send((label + ':' + self.sent_messages[label] + ':').encode())
+                    to_be_sent = (self.ID + ':' + label + ":" + self.sent_messages[label] + ':').encode()
+                    self.socket.send(to_be_sent)
                     logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
-                elif label == header:
+                elif label == header and received[1] == 'request':
                     data = self.encrypt_not_qpulse(header, message)
+                    to_be_sent = (self.ID + ':' + data).encode()
                     self.sent_messages[header] = data
-                    self.socket.send(data.encode())
+                    self.socket.send(to_be_sent)
                     logging.info('Sent: ' + header + ':' + message)
                     return
                 else:

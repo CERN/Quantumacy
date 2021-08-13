@@ -136,17 +136,20 @@ class Node(object):
         else:
             return message
 
-    def recv_all(self,):
+    def recv_all(self):
         message = ''
         ready = select.select([self.socket], [], [], self.timeout_in_seconds)
         if ready[0]:
             while True:
                 data_recv = self.socket.recv(self.buffer_size).decode()
                 message += re.sub(self.regex, '', data_recv)  # removing ('xxx.xxx.xxx.xxx', xxxxx):
-                if message.count(':') >= 2:  # checking if payload started and finished
-                    return message.split(':')[:2]
-
-
+                if message.count(':') >= 3:  # checking if payload started and finished example: 'ID:head:payload:'
+                    fragments = message.split(':', 3)
+                    if fragments[0] != self.ID:  # this message doesn't belong to this node
+                        message = fragments[3]   # we can discard it
+                        continue
+                    else:
+                        return fragments[1:]  # we don't need to return ID because we already checked it is correct
 
     def send(self):
         """abstract method"""

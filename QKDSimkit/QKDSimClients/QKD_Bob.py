@@ -121,7 +121,7 @@ def import_key(ID: str, token: str, size: int = 512):
 
 
 if __name__ == '__main__':
-    import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
+    import_key('0', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
 
 app = FastAPI()
 
@@ -129,26 +129,27 @@ app = FastAPI()
 class qkdParams(BaseModel):
     number: int = 1
     size: int = 1024
+    ID: str
 
 
-# @app.get("/api/v1/keys/QKD_Bob/enc_keys")
 @app.get("/test")
-async def root(number: int = 1, size: int = 1024):
+async def root(number: int = 1, size: int = 1024, ID: str = 'id'):
     answer = {}
     keys = []
     for i in range(0, number):
-        key = import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=size)
+        key = import_key(ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=size)
         keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer
 
 
+# @app.get("/api/v1/keys/QKD_Alice/enc_keys")
 @app.post("/test")
 async def root(qkdParams: qkdParams):
     answer = {}
     keys = []
     for i in range(0, qkdParams.number):
-        key = import_key('', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=qkdParams.size)
+        key = import_key(qkdParams.ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=qkdParams.size)
         keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer

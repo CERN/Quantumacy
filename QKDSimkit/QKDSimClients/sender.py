@@ -66,8 +66,9 @@ class sender(Node):
         """
         try:
             data = self.encrypt_not_qpulse(header, message)
+            to_be_sent = (self.ID + ':' + data).encode()
             for i in range(self.connection_attempts):
-                self.socket.send(data.encode())
+                self.socket.send(to_be_sent)
                 logging.info('Sent: ' + header + ':' + message)
                 received = self.recv_all()
                 if not received:
@@ -79,7 +80,7 @@ class sender(Node):
             logging.error('Alice failed to send {0}:\n{1}'.format(header, str(err)))
             sys.exit()
         except ConnectionError as e:
-            logging.warning('Alice failed to send:\n' + str(e))
+            logging.error('Alice failed to send:\n' + str(e))
             sys.exit()
 
     def recv(self, header: str):
@@ -93,7 +94,8 @@ class sender(Node):
         """
         try:
             for i in range(self.connection_attempts):
-                self.socket.send((header + ':request:').encode())
+                to_be_sent = (self.ID + ':' + header + ':request:').encode()
+                self.socket.send(to_be_sent)
                 received = self.recv_all()
                 if not received:
                     continue
@@ -101,7 +103,9 @@ class sender(Node):
                     dec_message = self.decrypt_not_qpulse(received[0], received[1])
                     logging.info("Received: " + header + ":" + dec_message)
                     return dec_message
-            raise Exception
+            raise ConnectionError
         except Exception as CE:
             logging.error('Alice failed to receive: \n' + str(CE))
             sys.exit()
+        except ConnectionError:
+            logging.error("Alice tried to receive too many times")
