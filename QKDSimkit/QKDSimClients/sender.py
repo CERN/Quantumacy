@@ -108,4 +108,4 @@ class sender(Node):
             logging.error('Alice failed to receive: \n' + str(CE))
             sys.exit()
         except ConnectionError:
-            logging.error("Alice tried to receive too many times")
+            logging.error("Alice tried to receive too many times ")
