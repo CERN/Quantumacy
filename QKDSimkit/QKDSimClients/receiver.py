@@ -90,7 +90,7 @@ class receiver(Node):
             logging.error('Bob failed to receive {0}:\n{1}'.format(header, str(err)))
             sys.exit()
         except ConnectionError:
-            logging.error("Bob failed to receive")
+            logging.error("Bob failed to receive {0}".format(header))
             sys.exit()
 
     def send(self, header: str, message: str):

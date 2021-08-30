@@ -17,8 +17,10 @@ from pydantic import BaseModel
 logging.basicConfig(level=logging.ERROR)
 
 
-def import_key(ID: str, token: str, size: int = 512):
+def import_key(ID: str, password: str, size: int = 512):
+
     c = json.load(open('../config.json', ))['channel']
+
     channelIP = c['host']
     channelPort = c['port']
 
@@ -26,7 +28,7 @@ def import_key(ID: str, token: str, size: int = 512):
     _ = os.system('clear')
 
     for count in range(0, 1000):
-        alice = sender(ID, token, size)
+        alice = sender(ID, password, size)
         try:
             # connect to quantum channel
             alice.connect_to_channel(channelIP, channelPort)
@@ -138,7 +140,6 @@ async def root(number: int = 1, size: int = 1024, ID: str = 'id'):
     return answer
 
 
-# @app.get("/api/v1/keys/QKD_Alice/enc_keys")
 @app.post("/test")
 async def root(qkdParams: qkdParams):
     answer = {}

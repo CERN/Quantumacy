@@ -18,7 +18,8 @@ from pydantic import BaseModel
 logging.basicConfig(level=logging.ERROR)
 
 
-def import_key(ID: str, token: str, size: int = 512):
+def import_key(ID: str, password: str, size: int = 512):
+
     s = json.load(open('../config.json', ))['channel']
 
     channelIP = s['host']
@@ -28,7 +29,7 @@ def import_key(ID: str, token: str, size: int = 512):
     _ = os.system('clear')
 
     for count in range(0, 1000):
-        bob = receiver(ID, token, size)
+        bob = receiver(ID, password, size)
 
         try:
             # connect to channel
@@ -121,7 +122,7 @@ def import_key(ID: str, token: str, size: int = 512):
 
 
 if __name__ == '__main__':
-    import_key('0', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
+    import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
 
 app = FastAPI()
 

@@ -80,7 +80,7 @@ class sender(Node):
             logging.error('Alice failed to send {0}:\n{1}'.format(header, str(err)))
             sys.exit()
         except ConnectionError as e:
-            logging.error('Alice failed to send:\n' + str(e))
+            logging.error('Alice tried to receive too many times \n' + str(e))
             sys.exit()
 
     def recv(self, header: str):
