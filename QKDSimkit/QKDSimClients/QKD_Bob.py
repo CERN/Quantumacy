@@ -14,6 +14,7 @@ from fastapi import FastAPI
 from receiver import receiver
 from qexceptions import qsocketerror
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 
 logging.basicConfig(level=logging.ERROR)
@@ -134,6 +135,18 @@ class qkdParams(BaseModel):
     number: int = 1
     size: int = 256
     ID: str = 'id'
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/test")

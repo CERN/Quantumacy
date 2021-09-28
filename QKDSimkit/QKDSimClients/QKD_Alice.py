@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 """
 Created on Wed May 12 21:57:13 2021
 
@@ -15,6 +15,7 @@ from sender import sender
 from qexceptions import qsocketerror, qobjecterror
 from pydantic import BaseModel
 from cryptography.fernet import Fernet
+from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -133,6 +134,18 @@ class qkdParams(BaseModel):
     number: int = 1
     size: int = 256
     ID: str = 'id'
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/test")
