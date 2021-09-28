@@ -9,6 +9,7 @@ import os
 import sys
 import json
 import logging
+from base64 import urlsafe_b64encode
 from fastapi import FastAPI
 from receiver import receiver
 from qexceptions import qsocketerror
@@ -18,7 +19,7 @@ from pydantic import BaseModel
 logging.basicConfig(level=logging.ERROR)
 
 
-def import_key(ID: str, password: str, size: int = 512):
+def import_key(ID: str, password: str, size: int = 256):
 
     s = json.load(open('../config.json', ))['channel']
 
@@ -108,7 +109,9 @@ def import_key(ID: str, password: str, size: int = 512):
             # return a correct key
             bob.get_key()
             logging.info("Success!")
-            return bob.key[:size]
+            bob.key = bob.key[:size]
+            bob.key = [int("".join(map(str, bob.key[i:i + 8])), 2) for i in range(0, len(bob.key), 8)]
+            return urlsafe_b64encode(bytearray(bob.key))
         elif bob.decision == bob.other_decision and bob.decision == 0:
             # retry
             logging.info("Failed to match key, trying again")
@@ -129,12 +132,12 @@ app = FastAPI()
 
 class qkdParams(BaseModel):
     number: int = 1
-    size: int = 1024
-    ID: str
+    size: int = 256
+    ID: str = 'id'
 
 
 @app.get("/test")
-async def root(number: int = 1, size: int = 1024, ID: str = 'id'):
+async def root(number: int = 1, size: int = 256, ID: str = 'id'):
     answer = {}
     keys = []
     for i in range(0, number):

@@ -6,6 +6,7 @@ import select
 import re
 import os
 import base64
+import abc
 from cryptography.fernet import Fernet
 from utils import validate
 from qexceptions import qsocketerror, qobjecterror
@@ -36,7 +37,7 @@ class Node(object):
         self.fragments = []
         self.regex = r'\((.)*\):'
         self.photon_pulse_size = size * 5
-        #self.token = self.get_key_from_password(password)
+        # self.token = self.get_key_from_password(password)
         self.token = password
 
     def connect_to_channel(self, address: str, port: int):
@@ -69,7 +70,7 @@ class Node(object):
         """
         hostname = socket.gethostname()
         local_ip = socket.gethostbyname(hostname)
-        if (local_ip == addr):
+        if local_ip == addr:
             return True
         return False
 
@@ -179,13 +180,17 @@ class Node(object):
                     else:
                         return fragments[1:]  # we don't need to return ID because we already checked it is correct
 
+    @abc.abstractmethod
     def send(self):
         """abstract method"""
         print("send(): Override me")
 
+    @abc.abstractmethod
     def recv(self):
         """abstract method"""
         print("receive(): Override me")
+
+
 '''
     def get_key_from_password(self, password: str) -> bytes:
         """ it uses a password to generate a base64, urlsafe, encrypted key
@@ -203,4 +208,5 @@ class Node(object):
             backend=default_backend()
         )
         key = base64.urlsafe_b64encode(kdf.derive(bytes(password, 'utf-8')))
-        return key'''
+        return key
+'''

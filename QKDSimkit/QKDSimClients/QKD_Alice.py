@@ -9,15 +9,17 @@ import os
 import sys
 import json
 import logging
+from base64 import urlsafe_b64encode
 from fastapi import FastAPI
 from sender import sender
 from qexceptions import qsocketerror, qobjecterror
 from pydantic import BaseModel
+from cryptography.fernet import Fernet
 
 logging.basicConfig(level=logging.ERROR)
 
 
-def import_key(ID: str, password: str, size: int = 512):
+def import_key(ID: str, password: str, size: int = 256):
 
     c = json.load(open('../config.json', ))['channel']
 
@@ -104,7 +106,9 @@ def import_key(ID: str, password: str, size: int = 512):
             # return a correct key
             alice.get_key()
             logging.info("Success!")
-            return alice.key[:size]
+            alice.key = alice.key[:size]
+            alice.key = [int("".join(map(str, alice.key[i:i + 8])), 2) for i in range(0, len(alice.key), 8)]
+            return urlsafe_b64encode(bytearray(alice.key))
         elif alice.decision == alice.other_decision and alice.decision == 0:
             # retry
             logging.info("Failed to match key, trying again")
@@ -118,19 +122,21 @@ def import_key(ID: str, password: str, size: int = 512):
 
 
 if __name__ == '__main__':
-    import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
+    a = import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', 256)
+    f = Fernet(a)
+    f.encrypt(b'ciao')
 
 app = FastAPI()
 
 
 class qkdParams(BaseModel):
     number: int = 1
-    size: int = 1024
+    size: int = 256
     ID: str = 'id'
 
 
 @app.get("/test")
-async def root(number: int = 1, size: int = 1024, ID: str = 'id'):
+async def root(number: int = 1, size: int = 256, ID: str = 'id'):
     answer = {}
     keys = []
     for i in range(0, number):
