@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 Created on Wed May 12 21:57:13 2021
 
@@ -9,19 +9,21 @@ import os
 import sys
 import json
 import logging
+import uvicorn
 from base64 import urlsafe_b64encode
 from fastapi import FastAPI
-from sender import sender
-from qexceptions import qsocketerror, qobjecterror
+from QKDSimkit.QKDSimClients.sender import sender
+from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror, qobjecterror
 from pydantic import BaseModel
 from cryptography.fernet import Fernet
 from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(level=logging.ERROR)
 
+app = FastAPI()
+
 
 def import_key(ID: str, password: str, size: int = 256):
-
     c = json.load(open('../config.json', ))['channel']
 
     channelIP = c['host']
@@ -122,18 +124,33 @@ def import_key(ID: str, password: str, size: int = 256):
     return -1
 
 
-if __name__ == '__main__':
-    a = import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', 256)
-    f = Fernet(a)
-    f.encrypt(b'ciao')
-
-app = FastAPI()
-
-
 class qkdParams(BaseModel):
     number: int = 1
     size: int = 256
     ID: str = 'id'
+
+
+@app.get("/test")
+async def root(number: int = 1, size: int = 256, ID: str = 'id'):
+    answer = {}
+    keys = []
+    for i in range(number):
+        key = import_key(ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=size)
+        keys.append({"key_ID": i, "key": key})
+    answer["keys"] = keys
+    return answer
+
+
+@app.post("/test")
+async def root(qkdParams: qkdParams):
+    answer = {}
+    keys = []
+    for i in range(qkdParams.number):
+        key = import_key(qkdParams.ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=qkdParams.size)
+        keys.append({"key_ID": i, "key": key})
+    answer["keys"] = keys
+    return answer
+
 
 origins = [
     "*"
@@ -147,24 +164,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+if __name__ == '__main__':
+    #TODO: fix this to provide different options and update token management
 
-@app.get("/test")
-async def root(number: int = 1, size: int = 256, ID: str = 'id'):
-    answer = {}
-    keys = []
-    for i in range(0, number):
-        key = import_key(ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=size)
-        keys.append({"key_ID": i, "key": key})
-    answer["keys"] = keys
-    return answer
+    uvicorn.run('QKD_Alice:app', port=8001)
 
-
-@app.post("/test")
-async def root(qkdParams: qkdParams):
-    answer = {}
-    keys = []
-    for i in range(0, qkdParams.number):
-        key = import_key(qkdParams.ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=qkdParams.size)
-        keys.append({"key_ID": i, "key": key})
-    answer["keys"] = keys
-    return answer
+    '''
+    a = import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', 256)
+    f = Fernet(a)
+    f.encrypt(b'ciao')'''

@@ -59,7 +59,6 @@ class public_channel(object):  # insecure public classical/quantum channel
             except ConnectionAbortedError:
                 break
 
-
             if not message:
                 break
             else:

@@ -1,6 +1,7 @@
 import logging
+import hashlib
 import os
-from Crypto.Cipher import AES
+#from Crypto.Cipher import AES
 
 
 def validate(shared_key: list, other_shared_key: list) -> float:
@@ -24,8 +25,13 @@ def validate(shared_key: list, other_shared_key: list) -> float:
         logging.error("Error")
         return -1
 
+def hash_token(token: str):
+    h = hashlib.new('sha512_256')
+    h.update(token.encode())
+    return h.hexdigest()
 
-def decrypt_file(key: bytearray, filename: str):
+
+'''def decrypt_file(key: bytearray, filename: str):
     """It creates a new decrypted file using AES, the decrypted file will be in the same directory and it will have the
     original name except for the final '.enc'
 
@@ -74,3 +80,4 @@ def encrypt_file(key: bytearray, filename: str):
             logging.warning('File not found')
             pass
         raise Exception
+'''
