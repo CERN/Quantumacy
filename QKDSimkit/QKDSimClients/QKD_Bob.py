@@ -9,15 +9,18 @@ import os
 import sys
 import json
 import logging
+import uvicorn
 from base64 import urlsafe_b64encode
 from fastapi import FastAPI
-from receiver import receiver
-from qexceptions import qsocketerror
+from QKDSimkit.QKDSimClients.receiver import receiver
+from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 
 logging.basicConfig(level=logging.ERROR)
+
+app = FastAPI()
 
 
 def import_key(ID: str, password: str, size: int = 256):
@@ -125,28 +128,10 @@ def import_key(ID: str, password: str, size: int = 256):
     return -1
 
 
-if __name__ == '__main__':
-    import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
-
-app = FastAPI()
-
-
 class qkdParams(BaseModel):
     number: int = 1
     size: int = 256
     ID: str = 'id'
-
-origins = [
-    "*"
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 @app.get("/test")
@@ -170,3 +155,22 @@ async def root(qkdParams: qkdParams):
         keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+if __name__ == '__main__':
+    #TODO: fix this to provide different options and update token management
+    uvicorn.run('QKD_Bob:app', port=8000)
+
+#    import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')

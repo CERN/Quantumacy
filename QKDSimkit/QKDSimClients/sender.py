@@ -1,9 +1,9 @@
 import socket
 import sys
 import logging
-from node import Node
-from models import Photon
-from qexceptions import qsocketerror, qobjecterror
+from QKDSimkit.QKDSimClients.node import Node
+from QKDSimkit.QKDSimChannels.models import Photon
+from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror, qobjecterror
 
 logging.basicConfig(level=logging.DEBUG)
 
