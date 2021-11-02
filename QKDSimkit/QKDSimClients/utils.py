@@ -1,5 +1,6 @@
 import logging
 import hashlib
+from cryptography.fernet import Fernet
 import os
 #from Crypto.Cipher import AES
 
@@ -24,6 +25,19 @@ def validate(shared_key: list, other_shared_key: list) -> float:
     else:
         logging.error("Error")
         return -1
+
+
+def encrypt(token, message):
+    cipher = Fernet(token)
+    enc_message = cipher.encrypt(message.encode())
+    return enc_message.decode()
+
+
+def decrypt(token, message):
+    cipher = Fernet(token)
+    dec_message = cipher.decrypt(message.encode())
+    return dec_message.decode()
+
 
 def hash_token(token: str):
     h = hashlib.new('sha512_256')

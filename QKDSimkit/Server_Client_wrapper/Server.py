@@ -1,8 +1,10 @@
 import uvicorn
 import os
 import asyncio
+import random
+import string
 
-from QKDSimkit.QKDSimClients.utils import hash_token
+from QKDSimkit.QKDSimClients.utils import hash_token, encrypt
 from QKDSimkit.QKDSimClients.QKD_Alice import import_key
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,13 +20,13 @@ def add_user(token):
     users[hashed] = token
 
 
-async def start_alice(number: int, size: int, ID: str, token: str):
+async def start_alice(number: int, size: int, ID: str):
     id_keys_map = await cache.get('id_keys')
     if not id_keys_map:
         id_keys_map = {}
     key_list = []
     for n in range(number):
-        key_list.append(import_key(ID=ID, password=token, size=size).decode())
+        key_list.append(import_key(ID=ID, size=size).decode())
     id_keys_map[ID] = key_list
     await cache.set('id_keys', id_keys_map)
 
@@ -51,13 +53,28 @@ app.add_middleware(
 )
 
 
-@app.get("/signal")
-async def root(number: int, size: int, ID: str, background_tasks: BackgroundTasks):
+@app.get("/hello")
+async def root(hashed: str):
     users = await cache.get('users')
-    if ID not in users.keys():
+    if hashed not in users.keys():
         return Response(status_code=404, content='Provided ID does not match any user')
-    background_tasks.add_task(start_alice, number, size, ID, users[ID])
-    return "Hello!"
+    r = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(512))
+    map_hash_r = await cache.get('proof')
+    if not map_hash_r:
+        map_hash_r = {}
+    map_hash_r[hashed] = hash_token(r)
+    await cache.set('proof', map_hash_r)
+    return encrypt(users[hashed], r)
+
+
+@app.get("/proof")
+async def root(number: int, size: int, hashed: str, hash_proof: str, background_tasks: BackgroundTasks):
+    users = await cache.get('users')
+    map_hash_r = await cache.get('proof')
+    if hashed in users.keys() and hash_proof == map_hash_r[hashed]:
+        background_tasks.add_task(start_alice, number, size, hashed)
+        return "Verified!"
+    return Response(status_code=404, content='Provided ID does not match any user')
 
 
 @app.get("/get_key")
@@ -82,4 +99,4 @@ if __name__ == "__main__":
     users = {}
     add_user('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
     loop.run_until_complete(cache.set('users', users))
-    uvicorn.run('Server:app', port=8003)
+    uvicorn.run('Server:app', port=5002)

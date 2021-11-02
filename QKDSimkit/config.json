@@ -1,7 +1,7 @@
 {
   "channel": {
     "host": "",
-    "port": 5005,
+    "port": 5000,
     "buffer_size": 8192,
     "noise": 0.0,
     "eve": false

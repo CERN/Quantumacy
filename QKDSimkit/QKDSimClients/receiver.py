@@ -12,8 +12,8 @@ class receiver(Node):
     """Receiver class, it expands node, it contains methods to communicate a sender node, it can't take action but it
     has to wait for the sender node for sending data, it can answer to a request with a message or to a message with an
     acknowledgement"""
-    def __init__(self, ID, token, size):
-        super().__init__(ID, token, size)
+    def __init__(self, ID, size):
+        super().__init__(ID, size)
         self.polarization_vector = []
         self.sent_acks = []
         self.sent_messages = {}
@@ -74,7 +74,8 @@ class receiver(Node):
                     logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
                 elif label == header:
-                    dec_message = self.decrypt_not_qpulse(label, received[1])
+                    # dec_message = self.decrypt_not_qpulse(label, received[1])
+                    dec_message = received[1]
                     to_be_sent = (self.ID + ':' + header + ":ack:").encode()
                     self.socket.send(to_be_sent)
                     self.sent_acks.append(label)
@@ -119,7 +120,8 @@ class receiver(Node):
                     logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
                 elif label == header and received[1] == 'request':
-                    data = self.encrypt_not_qpulse(header, message)
+                    # data = self.encrypt_not_qpulse(header, message)
+                    data = header + ':' + message + ':'
                     to_be_sent = (self.ID + ':' + data).encode()
                     self.sent_messages[header] = data
                     self.socket.send(to_be_sent)
