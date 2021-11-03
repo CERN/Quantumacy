@@ -48,6 +48,5 @@ def manage_args():
 
 if __name__ == '__main__':
     args = manage_args()
-    print(args)
     l = get_key(args.alice_address, args.channel_address, args.token, args.number, args.size)
     print(l)

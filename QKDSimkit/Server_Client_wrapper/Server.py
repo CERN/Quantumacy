@@ -16,7 +16,6 @@ from QKDSimkit.QKDSimClients.QKD_Alice import import_key
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
-from pydantic import BaseModel
 from aiocache import Cache
 
 
@@ -115,6 +114,7 @@ def manage_args():
     parser.add_argument('-t', '--token', default='7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', type=str,
                         help='Auth token, for development purposes a default token is provided')
     return parser.parse_args()
+
 
 if __name__ == "__main__":
     args = manage_args()
