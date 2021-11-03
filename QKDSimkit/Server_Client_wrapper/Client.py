@@ -1,14 +1,19 @@
 import http.client
 import urllib.parse
+import sys
+import argparse
+
+sys.path.insert(0, "../..")
+
 from QKDSimkit.QKDSimClients.utils import hash_token, decrypt
 from QKDSimkit.QKDSimClients.QKD_Bob import import_key
 
 
-def get_key(token, number, size):
+def get_key(alice_address, channel_address, token, number, size):
     hashed = hash_token(token)
     params = urllib.parse.urlencode({'hashed': hashed})
-    conn = http.client.HTTPConnection("127.0.0.1:5002")
-    conn.request("GET", "/hello?" + params)
+    conn = http.client.HTTPConnection(f"{alice_address}")
+    conn.request("GET", f"/hello?{params}")
     r = conn.getresponse()
     if r.status != 200:
         return r.status
@@ -18,18 +23,31 @@ def get_key(token, number, size):
     hash_proof = hash_token(proof)
     params = urllib.parse.urlencode({'number': number, 'size': size, 'hashed': hashed, 'hash_proof': hash_proof})
     conn.close()
-    conn1 = http.client.HTTPConnection("127.0.0.1:5002")
-    conn1.request("GET", "/proof?" + params)
+    conn1 = http.client.HTTPConnection(f"{alice_address}")
+    conn1.request("GET", f"/proof?{params}")
     r = conn1.getresponse()
     if r.status == 200:
         key_list = []
         for n in range(number):
-            key_list.append(import_key(ID=hashed, size=size))
+            key_list.append(import_key(channel_address=channel_address, ID=hashed, size=size))
         return key_list
     else:
         return r.status
 
 
+def manage_args():
+    parser = argparse.ArgumentParser(description='Client for Quantumacy')
+    parser.add_argument('alice_address', type=str, help='Address of server/Alice')
+    parser.add_argument('channel_address', type=str, help='Address of channel')
+    parser.add_argument('-t', '--token', default='7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', type=str,
+                        help='Auth token, for development purposes a default token is provided')
+    parser.add_argument('-n', '--number', default=1, type=int, help="Number of keys (default: %(default)s)")
+    parser.add_argument('-s', '--size', default=256, type=int, help="Size of keys (default: %(default)s)")
+    return parser.parse_args()
+
+
 if __name__ == '__main__':
-    l = get_key('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', 1, 256)
+    args = manage_args()
+    print(args)
+    l = get_key(args.alice_address, args.channel_address, args.token, args.number, args.size)
     print(l)
