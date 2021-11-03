@@ -23,11 +23,10 @@ logging.basicConfig(level=logging.ERROR)
 app = FastAPI()
 
 
-def import_key(ID: str, size: int = 256):
-    c = json.load(open('../config.json', ))['channel']
+def import_key(channel_address: str, ID: str, size: int = 256):
 
-    channelIP = c['host']
-    channelPort = c['port']
+    channelIP, channelPort = channel_address.split(':')
+    channelPort = int(channelPort)
 
     # clean up
     _ = os.system('clear')
@@ -134,8 +133,10 @@ class qkdParams(BaseModel):
 async def root(number: int = 1, size: int = 256, ID: str = 'id'):
     answer = {}
     keys = []
-    for i in range(number):
-        key = import_key(ID, size=size)
+    s = json.load(open('../config.json', ))['channel']
+    address = '{}:{}'.format(s['host'], s['port'])
+    for i in range( number):
+        key = import_key(channel_address=address, ID=ID, size=size)
         keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer
@@ -145,8 +146,10 @@ async def root(number: int = 1, size: int = 256, ID: str = 'id'):
 async def root(qkdParams: qkdParams):
     answer = {}
     keys = []
+    s = json.load(open('../config.json', ))['channel']
+    address = '{}:{}'.format(s['host'], s['port'])
     for i in range(qkdParams.number):
-        key = import_key(qkdParams.ID, size=qkdParams.size)
+        key = import_key(channel_address=address, ID=qkdParams.ID, size=qkdParams.size)
         keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer

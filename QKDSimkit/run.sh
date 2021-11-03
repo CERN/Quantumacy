@@ -1,8 +1,8 @@
 #!/bin/bash
 
 cd QKDSimChannels
-python QKD-Channel.py &
+python3 QKD-Channel.py &
 
-cd ../QKDSimClients
-uvicorn QKD_Alice:app --host 127.0.0.1 --port 8000 --reload &
-uvicorn QKD_Bob:app --host 127.0.0.1 --port 8001 --reload &
+cd ../Server_Client_wrapper
+python3 Server.py &
+python3 Client.py &
