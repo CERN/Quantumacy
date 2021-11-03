@@ -14,7 +14,7 @@ class Node(object):
     """Father class for receiver and sender
     """
 
-    def __init__(self, ID, password, size):
+    def __init__(self, ID, size):
         self.__dict__ = json.load(open('../config.json', ))['node']
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.ID = ID
@@ -33,7 +33,6 @@ class Node(object):
         self.regex = r'\((.)*\):'
         self.photon_pulse_size = size * 5
         # self.token = self.get_key_from_password(password)
-        self.token = password
 
     def connect_to_channel(self, address: str, port: int):
         """It starts the connection with the channel
@@ -124,33 +123,33 @@ class Node(object):
         if percent < self.min_shared_percent:
             return -1
 
-    def encrypt_not_qpulse(self, header: str, message: str):
-        """encrypt payload
-        encrypt the payload of a message if the header is not 'qpulse'
-        
-        Returns:
-            encrypted message (str): string made by header and encrypted payload to split parts there are ':'
-        """
-        if header != 'qpulse':
-            cipher = Fernet(self.token)
-            enc_message = cipher.encrypt(message.encode())
-            return header + ':' + enc_message.decode() + ':'
-        else:
-            return header + ':' + message + ':'
+    # def encrypt_not_qpulse(self, header: str, message: str):
+    #     """encrypt payload
+    #     encrypt the payload of a message if the header is not 'qpulse'
+    #
+    #     Returns:
+    #         encrypted message (str): string made by header and encrypted payload to split parts there are ':'
+    #     """
+    #     if header != 'qpulse':
+    #         cipher = Fernet(self.token)
+    #         enc_message = cipher.encrypt(message.encode())
+    #         return header + ':' + enc_message.decode() + ':'
+    #     else:
+    #         return header + ':' + message + ':'
 
-    def decrypt_not_qpulse(self, header: str, message: str):
-        """ decrypt payload
-        decrypt the payload of a message if the header is not 'qpulse'
-
-        Returns:
-            decrypted message (str): string with decrypted payload, note that the header is not included
-        """
-        if header != 'qpulse':
-            cipher = Fernet(self.token)
-            message = cipher.decrypt(bytes(message.encode()))
-            return message.decode()
-        else:
-            return message
+    # def decrypt_not_qpulse(self, header: str, message: str):
+    #     """ decrypt payload
+    #     decrypt the payload of a message if the header is not 'qpulse'
+    #
+    #     Returns:
+    #         decrypted message (str): string with decrypted payload, note that the header is not included
+    #     """
+    #     if header != 'qpulse':
+    #         cipher = Fernet(self.token)
+    #         message = cipher.decrypt(bytes(message.encode()))
+    #         return message.decode()
+    #     else:
+    #         return message
 
     def recv_all(self) -> list:
         """receive a message
@@ -186,22 +185,21 @@ class Node(object):
         print("receive(): Override me")
 
 
-'''
-    def get_key_from_password(self, password: str) -> bytes:
-        """ it uses a password to generate a base64, urlsafe, encrypted key
-        Args:
-            password (str): password to use to generate the key
-        Returns:
-            key (bytearray): key encrypted with the password
-        """
-        salt = os.urandom(16)
-        kdf = PBKDF2HMAC(
-            algorithm=hashes.SHA256(),
-            length=32,
-            salt=salt,
-            iterations=100000,
-            backend=default_backend()
-        )
-        key = base64.urlsafe_b64encode(kdf.derive(bytes(password, 'utf-8')))
-        return key
-'''
+    # def get_key_from_password(self, password: str) -> bytes:
+    #     """ it uses a password to generate a base64, urlsafe, encrypted key
+    #     Args:
+    #         password (str): password to use to generate the key
+    #     Returns:
+    #         key (bytearray): key encrypted with the password
+    #     """
+    #     salt = os.urandom(16)
+    #     kdf = PBKDF2HMAC(
+    #         algorithm=hashes.SHA256(),
+    #         length=32,
+    #         salt=salt,
+    #         iterations=100000,
+    #         backend=default_backend()
+    #     )
+    #     key = base64.urlsafe_b64encode(kdf.derive(bytes(password, 'utf-8')))
+    #     return key
+    #

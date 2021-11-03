@@ -12,8 +12,8 @@ class sender(Node):
     """Sender class, it expands Node, it contains methods to communicate a receiver node, the general idea is that this
     node dictate the communication and the receiver can just answer"""
 
-    def __init__(self, ID, token, size: int):
-        super().__init__(ID, token, size)
+    def __init__(self, ID, size: int):
+        super().__init__(ID, size)
 
     def create_photon_pulse(self) -> list:
         """Create a list of photons given a size
@@ -65,7 +65,8 @@ class sender(Node):
             message (str): string to be sent
         """
         try:
-            data = self.encrypt_not_qpulse(header, message)
+            #data = self.encrypt_not_qpulse(header, message)
+            data = header + ':' + message + ':'
             to_be_sent = (self.ID + ':' + data).encode()
             for i in range(self.connection_attempts):
                 self.socket.send(to_be_sent)
@@ -100,7 +101,8 @@ class sender(Node):
                 if not received:
                     continue
                 if received[0] == header:
-                    dec_message = self.decrypt_not_qpulse(received[0], received[1])
+                    # dec_message = self.decrypt_not_qpulse(received[0], received[1])
+                    dec_message = received[1]
                     logging.info("Received: " + header + ":" + dec_message)
                     return dec_message
             raise ConnectionError

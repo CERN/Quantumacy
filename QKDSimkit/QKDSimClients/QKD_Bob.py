@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.ERROR)
 app = FastAPI()
 
 
-def import_key(ID: str, password: str, size: int = 256):
+def import_key(ID: str, size: int = 256):
 
     s = json.load(open('../config.json', ))['channel']
 
@@ -34,7 +34,7 @@ def import_key(ID: str, password: str, size: int = 256):
     _ = os.system('clear')
 
     for count in range(0, 1000):
-        bob = receiver(ID, password, size)
+        bob = receiver(ID, size)
 
         try:
             # connect to channel
@@ -139,19 +139,18 @@ async def root(number: int = 1, size: int = 256, ID: str = 'id'):
     answer = {}
     keys = []
     for i in range(0, number):
-        key = import_key(ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=size)
+        key = import_key(ID, size=size)
         keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer
 
 
-# @app.get("/api/v1/keys/QKD_Alice/enc_keys")
 @app.post("/test")
 async def root(qkdParams: qkdParams):
     answer = {}
     keys = []
     for i in range(0, qkdParams.number):
-        key = import_key(qkdParams.ID, b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', size=qkdParams.size)
+        key = import_key(qkdParams.ID, size=qkdParams.size)
         keys.append({"key_ID": i, "key": key})
     answer["keys"] = keys
     return answer
@@ -171,6 +170,6 @@ app.add_middleware(
 
 if __name__ == '__main__':
     #TODO: fix this to provide different options and update token management
-    uvicorn.run('QKD_Bob:app', port=8000)
+    uvicorn.run('QKD_Bob:app', port=5003)
 
 #    import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=')
