@@ -2,8 +2,10 @@ import http.client
 import urllib.parse
 import sys
 import argparse
+import os
 
-sys.path.insert(0, "../..")
+this_file_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(0, this_file_dir + "../..")
 
 from QKDSimkit.QKDSimClients.utils import hash_token, decrypt
 from QKDSimkit.QKDSimClients.QKD_Bob import import_key
