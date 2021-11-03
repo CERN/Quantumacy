@@ -5,17 +5,19 @@ import json
 import select
 import re
 import abc
+import os
 from cryptography.fernet import Fernet
 from QKDSimkit.QKDSimClients.utils import validate
 from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror
 
+config_directory = os.path.dirname(os.path.realpath(__file__)) + '/..'
 
 class Node(object):
     """Father class for receiver and sender
     """
 
     def __init__(self, ID, size):
-        self.__dict__ = json.load(open('../config.json', ))['node']
+        self.__dict__ = json.load(open(config_directory + '/config.json', ))['node']
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.ID = ID
         self.photon_pulse = []

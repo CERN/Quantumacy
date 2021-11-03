@@ -1,16 +1,18 @@
 import socket
 import logging
 import json
+import os
 from threading import Thread
 from qexceptions import qsocketerror
 from channel_features import eavesdropper
 from channel_features import random_errors
 
 logging.basicConfig(level=logging.DEBUG)
+config_directory = os.path.dirname(os.path.realpath(__file__)) + '/..'
 
 class public_channel(object):  # insecure public classical/quantum channel
     def __init__(self):
-        self.__dict__ = json.load(open('../config.json',))['channel']
+        self.__dict__ = json.load(open(config_directory + '/config.json',))['channel']
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # reusable socket
         self.ip_list = []  # blacklist already created connections
