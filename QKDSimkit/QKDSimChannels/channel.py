@@ -3,9 +3,8 @@ import logging
 import json
 import os
 from threading import Thread
-from qexceptions import qsocketerror
-from channel_features import eavesdropper
-from channel_features import random_errors
+from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror
+from QKDSimkit.QKDSimChannels.channel_features import eavesdropper, random_errors
 
 logging.basicConfig(level=logging.DEBUG)
 config_directory = os.path.dirname(os.path.realpath(__file__)) + '/..'

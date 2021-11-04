@@ -1,7 +1,7 @@
 import random
 import sys
 import logging
-from models import Photon
+from QKDSimkit.QKDSimChannels.models import Photon
 
 
 def eavesdropper(photon_stream: str) -> str:
