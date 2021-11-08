@@ -1,6 +1,6 @@
 {
   "channel": {
-    "host": "",
+    "host": "127.0.0.1",
     "port": 5000,
     "buffer_size": 8192,
     "noise": 0.0,
