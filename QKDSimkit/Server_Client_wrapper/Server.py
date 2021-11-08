@@ -14,6 +14,7 @@ data_directory = os.path.dirname(os.path.realpath(__file__)) + '/server_data/'
 from QKDSimkit.QKDSimClients.utils import hash_token, encrypt
 from QKDSimkit.QKDSimClients.QKD_Alice import import_key
 from QKDSimkit.QKDSimChannels.QKD_Channel import run_channel
+from threading import Thread
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
@@ -124,5 +125,8 @@ if __name__ == "__main__":
     asyncio.run(add_channel(args.channel_address))
     asyncio.run(add_user(args.token))
     if args.local:
-        asyncio.run(run_channel())
+        asyncio.run(add_channel('127.0.0.1:5000'))
+        _thread = Thread(target=run_channel)
+        _thread.daemon = True
+        _thread.start()
     uvicorn.run('Server:app', host=args.host, port=int(args.port))
