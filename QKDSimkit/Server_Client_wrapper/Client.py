@@ -5,7 +5,7 @@ import argparse
 import os
 
 this_file_dir = os.path.dirname(os.path.realpath(__file__))
-sys.path.insert(0, this_file_dir + "../..")
+sys.path.insert(0, this_file_dir + "/../..")
 
 from QKDSimkit.QKDSimClients.utils import hash_token, decrypt
 from QKDSimkit.QKDSimClients.QKD_Bob import import_key
@@ -31,7 +31,7 @@ def get_key(alice_address, channel_address, token, number, size):
     if r.status == 200:
         key_list = []
         for n in range(number):
-            key_list.append(import_key(channel_address=channel_address, ID=hashed, size=size))
+            key_list.append(import_key(channel_address=channel_address, ID=hashed, size=size).decode())
         return key_list
     else:
         return r.status

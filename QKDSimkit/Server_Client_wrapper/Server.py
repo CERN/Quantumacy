@@ -8,11 +8,12 @@ import json
 import argparse
 
 this_file_dir = os.path.dirname(os.path.realpath(__file__))
-sys.path.insert(0, this_file_dir + "../..")
+sys.path.insert(0, this_file_dir + "/../..")
 data_directory = os.path.dirname(os.path.realpath(__file__)) + '/server_data/'
 
 from QKDSimkit.QKDSimClients.utils import hash_token, encrypt
 from QKDSimkit.QKDSimClients.QKD_Alice import import_key
+from QKDSimkit.QKDSimChannels.QKD_Channel import run_channel
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
@@ -106,7 +107,9 @@ async def filter_get_key(request: Request, call_next):
 
 def manage_args():
     parser = argparse.ArgumentParser(description='Server for Quantumacy')
-    parser.add_argument('channel_address', type=str, help='Address of channel [host:port]')
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-ca', '--channel_address', type=str, help='Address of channel [host:port]')
+    group.add_argument('-l', '--local', action='store_true', help='Run the channel at 127.0.0.1:5000')
     parser.add_argument('--host', default='127.0.0.1', type=str,
                         help='Bind socket to this host (default: %(default)s)')
     parser.add_argument('--port', default='5002', type=str,
@@ -118,7 +121,8 @@ def manage_args():
 
 if __name__ == "__main__":
     args = manage_args()
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(add_channel(args.channel_address))
-    loop.run_until_complete(add_user(args.token))
+    asyncio.run(add_channel(args.channel_address))
+    asyncio.run(add_user(args.token))
+    if args.local:
+        asyncio.run(run_channel())
     uvicorn.run('Server:app', host=args.host, port=int(args.port))
