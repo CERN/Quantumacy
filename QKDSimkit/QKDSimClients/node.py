@@ -115,7 +115,8 @@ class Node(object):
         Returns:
             1: keys are equals
             0: error rate is below a given percent
-            -1: error rate too high"""
+            -1: error rate too high
+        """
         percent = validate(self.sub_shared_key, self.other_sub_key)
         logging.info('Correct bits percentage: ' + str(percent))
         if percent == 1:

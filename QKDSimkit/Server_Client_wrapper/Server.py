@@ -110,7 +110,7 @@ def manage_args():
     parser = argparse.ArgumentParser(description='Server for Quantumacy')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-ca', '--channel_address', type=str, help='Address of channel [host:port]')
-    group.add_argument('-l', '--local', action='store_true', help='Run the channel at 127.0.0.1:5000')
+    group.add_argument('-l', '--local', action='store_true', help='Run the channel at :5000')
     parser.add_argument('--host', default='127.0.0.1', type=str,
                         help='Bind socket to this host (default: %(default)s)')
     parser.add_argument('--port', default='5002', type=str,
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     asyncio.run(add_channel(args.channel_address))
     asyncio.run(add_user(args.token))
     if args.local:
-        asyncio.run(add_channel('127.0.0.1:5000'))
+        asyncio.run(add_channel(':5000'))
         _thread = Thread(target=run_channel)
         _thread.daemon = True
         _thread.start()
