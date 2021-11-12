@@ -39,8 +39,8 @@ def get_key(alice_address, channel_address, token, number, size):
 
 def manage_args():
     parser = argparse.ArgumentParser(description='Client for Quantumacy')
-    parser.add_argument('alice_address', type=str, help='Address of server/Alice')
-    parser.add_argument('channel_address', type=str, help='Address of channel')
+    parser.add_argument('alice_address', type=str, help='Address of server/Alice [host:port]')
+    parser.add_argument('channel_address', type=str, help='Address of channel [host:port]')
     parser.add_argument('-t', '--token', default='7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', type=str,
                         help='Auth token, for development purposes a default token is provided')
     parser.add_argument('-n', '--number', default=1, type=int, help="Number of keys (default: %(default)s)")

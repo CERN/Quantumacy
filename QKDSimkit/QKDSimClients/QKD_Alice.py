@@ -7,33 +7,15 @@ Created on Wed May 12 21:57:13 2021
 
 import os
 import sys
-import json
 import logging
-import uvicorn
 from base64 import urlsafe_b64encode
-from fastapi import FastAPI
 from QKDSimkit.QKDSimClients.sender import sender
 from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror, qobjecterror
-from pydantic import BaseModel
-from cryptography.fernet import Fernet
-from fastapi.middleware.cors import CORSMiddleware
 
-logging.basicConfig(level=logging.ERROR)
-
-app = FastAPI()
 
 
 def import_key(channel_address: str, ID: str, size: int = 256):
-    """
-    Return a list of random ingredients as strings.
 
-    :param kind: Optional "kind" of ingredients.
-    :type kind: list[str] or None
-    :raise lumache.InvalidKindError: If the kind is invalid.
-    :return: The ingredients list.
-    :rtype: list[str]
-
-    """
     channelIP, channelPort = channel_address.split(':')
     channelPort = int(channelPort)
 
@@ -132,54 +114,8 @@ def import_key(channel_address: str, ID: str, size: int = 256):
     return -1
 
 
-class qkdParams(BaseModel):
-    number: int = 1
-    size: int = 256
-    ID: str = 'id'
-
-
-@app.get("/test")
-async def root(number: int = 1, size: int = 256, ID: str = 'id'):
-    answer = {}
-    keys = []
-    s = json.load(open('../config.json', ))['channel']
-    address = '{}:{}'.format(s['host'], s['port'])
-    for i in range( number):
-        key = import_key(channel_address=address, ID=ID, size=size)
-        keys.append({"key_ID": i, "key": key})
-    answer["keys"] = keys
-    return answer
-
-
-@app.post("/test")
-async def root(qkdParams: qkdParams):
-    answer = {}
-    keys = []
-    s = json.load(open('../config.json', ))['channel']
-    address = '{}:{}'.format(s['host'], s['port'])
-    for i in range(qkdParams.number):
-        key = import_key(channel_address=address, ID=qkdParams.ID, size=qkdParams.size)
-        keys.append({"key_ID": i, "key": key})
-    answer["keys"] = keys
-    return answer
-
-
-origins = [
-    "*"
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 if __name__ == '__main__':
-    #TODO: fix this to provide different options and update token management
-
-    uvicorn.run('QKD_Alice:app', port=5001)
+    import_key('127.0.0.1:5000', 'id', 256)
 
     '''
     a = import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', 256)
