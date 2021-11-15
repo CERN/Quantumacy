@@ -59,6 +59,7 @@ class Sender(Node):
         """Sender method for sender node
         it sends a message and wait for an acknowledgment if it doesn't receive the ack in the given time
         timeout_in_seconds it may try multiple times depending on the variable connection_attempts
+
         Args:
             header (str): unique identifier
             message (str): string to be sent

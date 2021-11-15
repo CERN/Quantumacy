@@ -5,7 +5,6 @@ Welcome to QKDSimkit's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-Check out the :doc:`usage` section for further information.
 
 
 
@@ -23,4 +22,6 @@ Contents
 
 .. toctree::
 
-   usage
+   src
+   src.core
+   modules
