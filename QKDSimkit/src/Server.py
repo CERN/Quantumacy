@@ -50,8 +50,6 @@ async def start_alice(number: int, size: int, ID: str):
     if not address:
         raise Exception
     key_list = []
-    s = json.load(open('../data/config.json', ))['channel']
-    address = '{}:{}'.format(s['host'], s['port'])
     for i in range(number):
         res = core.alice.import_key(channel_address=address, ID=ID, size=size)
         if res == -1:
