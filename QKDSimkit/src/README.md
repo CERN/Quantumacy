@@ -4,21 +4,32 @@ How to set up the server and run the client with a default configuration
 
 ## Server
 
-### Dependencies
 
-* Tested with python 3.8.10
-* A requirements.txt is provided in the parent directory
-* Redis
-```
-pip install -r ../requirements.txt
-```
 ### Installing
+* Create a conda environment
+```
+$ conda create -n Quantumacy python=3.8.10
+$ conda activate Quantumacy
+```
 
-* Download, install and run Redis [[link](https://redis.io/download)]
+* install requirements
+```
+$ pip install -r ../requirements.txt
+```
+
+* Download, install and run Redis 
+```
+$ wget https://download.redis.io/releases/redis-6.2.6.tar.gz
+$ tar xzf redis-6.2.6.tar.gz
+$ cd redis-6.2.6
+$ make
+$ src/redis-server
+```
+
 
 ### Executing program
 
-* Run with the most basic configuration: channel will run on the same machine as the server
+* Run with the most basic configuration: channel will run on the same machine as the server and 
 ```
 python Server.py l 
 ```
@@ -41,22 +52,20 @@ python Server.py -h
 python Server.py l -h
 python Server.py ca -h
 ```
+
 ##Client
-
-### Dependencies
-
-* Tested with python 3.8.10
-* A requirements.txt is provided in the parent directory
-```
-pip install -r ../requirements.txt
-```
-please note that some dependencies are not required if you want to run only the client
 
 ### Installing
 
-* Download install and run Redis [[link](https://redis.io/download)]
-* Any modifications needed to be made to files/folders
-
+* Create a conda environment
+```
+$ conda create -n Quantumacy python=3.8.10
+$ conda activate Quantumacy
+```
+* install requirements
+```
+$ pip install -r ../requirements.txt
+```
 ### Executing program
 
 * Run with the most basic configuration
