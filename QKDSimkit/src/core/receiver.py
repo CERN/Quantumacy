@@ -1,14 +1,14 @@
 import socket
 import sys
 import logging
-from QKDSimkit.QKDSimClients.node import Node
-from QKDSimkit.QKDSimChannels.models import Photon
-from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror, qobjecterror
+from .node import Node
+from .models import Photon
+from .qexceptions import qsocketerror, qobjecterror
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-class receiver(Node):
+class Receiver(Node):
     """Receiver class, it expands node, it contains methods to communicate a sender node, it can't take action but it
     has to wait for the sender node for sending data, it can answer to a request with a message or to a message with an
     acknowledgement"""
@@ -47,7 +47,6 @@ class receiver(Node):
 
     def recv(self, header: str) -> str:
         """Receive function for receiver node
-
         it listen for a message, in case the header of the received message doesn't match it checks if an acknowledgment
         for the received message has been already sent or if the received message is an acknowledgement itself for a
         previously sent message, it sends a new acknowledgment in the first case and it sends again the message in the
@@ -74,7 +73,6 @@ class receiver(Node):
                     logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
                 elif label == header:
-                    # dec_message = self.decrypt_not_qpulse(label, received[1])
                     dec_message = received[1]
                     to_be_sent = (self.ID + ':' + header + ":ack:").encode()
                     self.socket.send(to_be_sent)
@@ -94,7 +92,6 @@ class receiver(Node):
 
     def send(self, header: str, message: str):
         """ Send method for receiver
-
         it listens for the request from the sender node, in case the header of the received message doesn't match it
         checks if an acknowledgment for the received header has been already sent or if the message for the requested
         header has been already sent, it sends a new acknowledgement in the first case and it sends again the message in

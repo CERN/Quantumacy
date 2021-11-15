@@ -1,10 +1,10 @@
 import random
 import sys
 import logging
-from QKDSimkit.QKDSimChannels.models import Photon
+from .models import Photon
 
 
-def eavesdropper(photon_stream: str) -> str:
+def eavesdropper(photon_stream) -> str:
     """Method to simulate an eavesdropper in a quantum channel
     Args:
         photon_stream (str): message containing polarizations
@@ -13,19 +13,20 @@ def eavesdropper(photon_stream: str) -> str:
     """
     try:
         photon_pulse = []
-        new_message = 'qpulse:'
-        polarization_vector = photon_stream.split("~")[:-1]
+        new_message = '' + photon_stream[0] + ':' + photon_stream[1] + ':'
+        polarization_vector = photon_stream[2].split("~")[:-1]
         for p in range(len(polarization_vector)):
             photon_pulse.append(Photon())
             photon_pulse[p].polarization = photon_pulse[p].measure(int(polarization_vector[p]))
             photon_pulse[p].bit = photon_pulse[p].set_bit_from_measurement()
             new_message += str(photon_pulse[p].polarization) + '~'
-        return new_message
+        return new_message + ':'
     except Exception as e:
         logging.error('Eavesdropper error:\n' + str(e))
         sys.exit()
 
-def random_errors(photon_stream: str, rate: float) -> str:
+
+def random_errors(photon_stream, rate: float) -> str:
     """Method to simulate random errors in a quantum channel
     Args:
         photon_stream (str): message containing polarizations
@@ -34,8 +35,8 @@ def random_errors(photon_stream: str, rate: float) -> str:
         message with errors
     """
     try:
-        polarization_vector = photon_stream.split("~")[:-1]
-        new_message = 'qpulse:'
+        polarization_vector = photon_stream[2].split("~")[:-1]
+        new_message = '' + photon_stream[0] + ':' + photon_stream[1] + ':'
         count = 0
         for p in polarization_vector:
             if random.randint(1, 100) <= rate*100:
@@ -45,7 +46,7 @@ def random_errors(photon_stream: str, rate: float) -> str:
             else:
                 new_message += str(p) + '~'
         logging.info('Errors: ' + str(count))
-        return new_message
+        return new_message + ':'
     except Exception as e:
         logging.error("Failed to add errors in photon stream:\n" + str(e))
         sys.exit()
