@@ -1,14 +1,14 @@
 import socket
 import sys
 import logging
-from QKDSimkit.QKDSimClients.node import Node
-from QKDSimkit.QKDSimChannels.models import Photon
-from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror, qobjecterror
+from .node import Node
+from .models import Photon
+from .qexceptions import qsocketerror, qobjecterror
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-class sender(Node):
+class Sender(Node):
     """Sender class, it expands Node, it contains methods to communicate a receiver node, the general idea is that this
     node dictate the communication and the receiver can just answer"""
 
@@ -57,7 +57,6 @@ class sender(Node):
 
     def send(self, header: str, message: str):
         """Sender method for sender node
-
         it sends a message and wait for an acknowledgment if it doesn't receive the ack in the given time
         timeout_in_seconds it may try multiple times depending on the variable connection_attempts
         Args:
@@ -65,7 +64,6 @@ class sender(Node):
             message (str): string to be sent
         """
         try:
-            #data = self.encrypt_not_qpulse(header, message)
             data = header + ':' + message + ':'
             to_be_sent = (self.ID + ':' + data).encode()
             for i in range(self.connection_attempts):
@@ -86,7 +84,6 @@ class sender(Node):
 
     def recv(self, header: str):
         """Receiver method for sender node
-
         It will send a request message with the given header and it will wait for the response for a time
         timeout_in_seconds it may try multiple times depending on the variable connection_attempts, every received
         message with a different header will be discarded
@@ -101,7 +98,6 @@ class sender(Node):
                 if not received:
                     continue
                 if received[0] == header:
-                    # dec_message = self.decrypt_not_qpulse(received[0], received[1])
                     dec_message = received[1]
                     logging.info("Received: " + header + ":" + dec_message)
                     return dec_message

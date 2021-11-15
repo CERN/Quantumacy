@@ -1,17 +1,19 @@
 import socket
 import logging
-import json
-import os
 from threading import Thread
-from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror
-from QKDSimkit.QKDSimChannels.channel_features import eavesdropper, random_errors
+from .qexceptions import qsocketerror
+from .channel_features import eavesdropper, random_errors
 
 logging.basicConfig(level=logging.DEBUG)
-config_directory = os.path.dirname(os.path.realpath(__file__)) + '/..'
+
 
 class public_channel(object):  # insecure public classical/quantum channel
-    def __init__(self):
-        self.__dict__ = json.load(open(config_directory + '/config.json',))['channel']
+    def __init__(self, host: str, port: str, noise: float, eve: bool):
+        self.host = host
+        self.port = port
+        self.noise = noise
+        self.eve = eve
+        self.buffer_size = 8192
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # reusable socket
         self.ip_list = []  # blacklist already created connections
@@ -22,6 +24,8 @@ class public_channel(object):  # insecure public classical/quantum channel
         """Start channel"""
         if len(port) > 0:
             self.port = str(port[0])
+        if isinstance(self.port, str):
+            self.port = int(self.port)
 
         try:
             self.socket.bind((self.host, self.port))
@@ -50,11 +54,12 @@ class public_channel(object):  # insecure public classical/quantum channel
             try:
                 data = conn.recv(self.buffer_size)
                 message = data.decode()
-                if message.split(':')[0] == 'qpulse' and message.split(':')[1] != 'ack':
-                    if self.eve:
-                        message = eavesdropper(str(message).split(':', 1)[1])
-                    if self.noise > 0:
-                        message = random_errors(str(message).split(':', 1)[1], self.noise)
+                if len(message.split(':')) > 1:
+                    if message.split(':')[1] == 'qpulse' and message.split(':')[2] != 'ack':
+                        if self.eve:
+                            message = eavesdropper(message.split(':', 2))
+                        if self.noise > 0:
+                            message = random_errors(message.split(':', 2), self.noise)
             except ConnectionResetError:
                 break
             except ConnectionAbortedError:

@@ -9,9 +9,8 @@ import os
 import sys
 import logging
 from base64 import urlsafe_b64encode
-from QKDSimkit.QKDSimClients.sender import sender
-from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror, qobjecterror
-
+from .sender import Sender
+from .qexceptions import qsocketerror
 
 
 def import_key(channel_address: str, ID: str, size: int = 256):
@@ -23,7 +22,7 @@ def import_key(channel_address: str, ID: str, size: int = 256):
     _ = os.system('clear')
 
     for count in range(0, 1000):
-        alice = sender(ID, size)
+        alice = Sender(ID, size)
         try:
             # connect to quantum channel
             alice.connect_to_channel(channelIP, channelPort)

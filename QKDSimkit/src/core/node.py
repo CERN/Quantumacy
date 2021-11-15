@@ -1,23 +1,31 @@
 import socket
 import ast
 import logging
-import json
 import select
 import re
 import abc
-import os
-from cryptography.fernet import Fernet
-from QKDSimkit.QKDSimClients.utils import validate
-from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror
+from .utils import validate
+from .qexceptions import qsocketerror
 
-config_directory = os.path.dirname(os.path.realpath(__file__)) + '/..'
+MIN_SHARED = 20
+BUFFER_SIZE = 8192
+TIMEOUT_IN_SECONDS = 1
+CONNECTION_ATTEMPTS = 50
+MAX_REPETITIONS = 1000
+MIN_SHARED_PERCENT = 0.89
+
 
 class Node(object):
     """Father class for receiver and sender
     """
 
     def __init__(self, ID, size):
-        self.__dict__ = json.load(open(config_directory + '/config.json', ))['node']
+        self.min_shared = MIN_SHARED
+        self.buffer_size = BUFFER_SIZE
+        self.timeout_in_seconds = TIMEOUT_IN_SECONDS
+        self.connection_attempts = CONNECTION_ATTEMPTS
+        self.max_repetitions = MAX_REPETITIONS
+        self.min_shared_percent = MIN_SHARED_PERCENT
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.ID = ID
         self.photon_pulse = []
@@ -34,7 +42,6 @@ class Node(object):
         self.fragments = []
         self.regex = r'\((.)*\):'
         self.photon_pulse_size = size * 5
-        # self.token = self.get_key_from_password(password)
 
     def connect_to_channel(self, address: str, port: int):
         """It starts the connection with the channel
@@ -115,8 +122,7 @@ class Node(object):
         Returns:
             1: keys are equals
             0: error rate is below a given percent
-            -1: error rate too high
-        """
+            -1: error rate too high"""
         percent = validate(self.sub_shared_key, self.other_sub_key)
         logging.info('Correct bits percentage: ' + str(percent))
         if percent == 1:
@@ -126,33 +132,33 @@ class Node(object):
         if percent < self.min_shared_percent:
             return -1
 
-    # def encrypt_not_qpulse(self, header: str, message: str):
-    #     """encrypt payload
-    #     encrypt the payload of a message if the header is not 'qpulse'
-    #
-    #     Returns:
-    #         encrypted message (str): string made by header and encrypted payload to split parts there are ':'
-    #     """
-    #     if header != 'qpulse':
-    #         cipher = Fernet(self.token)
-    #         enc_message = cipher.encrypt(message.encode())
-    #         return header + ':' + enc_message.decode() + ':'
-    #     else:
-    #         return header + ':' + message + ':'
+    '''def encrypt_not_qpulse(self, header: str, message: str):
+        """encrypt payload
+        encrypt the payload of a message if the header is not 'qpulse'
+        
+        Returns:
+            encrypted message (str): string made by header and encrypted payload to split parts there are ':'
+        """
+        if header != 'qpulse':
+            cipher = Fernet(self.token)
+            enc_message = cipher.encrypt(message.encode())
+            return header + ':' + enc_message.decode() + ':'
+        else:
+            return header + ':' + message + ':'
 
-    # def decrypt_not_qpulse(self, header: str, message: str):
-    #     """ decrypt payload
-    #     decrypt the payload of a message if the header is not 'qpulse'
-    #
-    #     Returns:
-    #         decrypted message (str): string with decrypted payload, note that the header is not included
-    #     """
-    #     if header != 'qpulse':
-    #         cipher = Fernet(self.token)
-    #         message = cipher.decrypt(bytes(message.encode()))
-    #         return message.decode()
-    #     else:
-    #         return message
+    def decrypt_not_qpulse(self, header: str, message: str):
+        """ decrypt payload
+        decrypt the payload of a message if the header is not 'qpulse'
+
+        Returns:
+            decrypted message (str): string with decrypted payload, note that the header is not included
+        """
+        if header != 'qpulse':
+            cipher = Fernet(self.token)
+            message = cipher.decrypt(bytes(message.encode()))
+            return message.decode()
+        else:
+            return message'''
 
     def recv_all(self) -> list:
         """receive a message
@@ -178,31 +184,32 @@ class Node(object):
                         return fragments[1:]  # we don't need to return ID because we already checked it is correct
 
     @abc.abstractmethod
-    def send(self):
+    def send(self, header: str, message: str):
         """abstract method"""
         print("send(): Override me")
 
     @abc.abstractmethod
-    def recv(self):
+    def recv(self, header: str):
         """abstract method"""
         print("receive(): Override me")
 
 
-    # def get_key_from_password(self, password: str) -> bytes:
-    #     """ it uses a password to generate a base64, urlsafe, encrypted key
-    #     Args:
-    #         password (str): password to use to generate the key
-    #     Returns:
-    #         key (bytearray): key encrypted with the password
-    #     """
-    #     salt = os.urandom(16)
-    #     kdf = PBKDF2HMAC(
-    #         algorithm=hashes.SHA256(),
-    #         length=32,
-    #         salt=salt,
-    #         iterations=100000,
-    #         backend=default_backend()
-    #     )
-    #     key = base64.urlsafe_b64encode(kdf.derive(bytes(password, 'utf-8')))
-    #     return key
-    #
+'''
+    def get_key_from_password(self, password: str) -> bytes:
+        """ it uses a password to generate a base64, urlsafe, encrypted key
+        Args:
+            password (str): password to use to generate the key
+        Returns:
+            key (bytearray): key encrypted with the password
+        """
+        salt = os.urandom(16)
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=salt,
+            iterations=100000,
+            backend=default_backend()
+        )
+        key = base64.urlsafe_b64encode(kdf.derive(bytes(password, 'utf-8')))
+        return key
+'''

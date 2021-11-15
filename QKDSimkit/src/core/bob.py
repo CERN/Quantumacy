@@ -9,8 +9,8 @@ import os
 import sys
 import logging
 from base64 import urlsafe_b64encode
-from QKDSimkit.QKDSimClients.receiver import receiver
-from QKDSimkit.QKDSimChannels.qexceptions import qsocketerror
+from .receiver import Receiver
+from .qexceptions import qsocketerror
 
 
 def import_key(channel_address: str, ID: str, size: int = 256):
@@ -22,7 +22,7 @@ def import_key(channel_address: str, ID: str, size: int = 256):
     _ = os.system('clear')
 
     for count in range(0, 1000):
-        bob = receiver(ID, size)
+        bob = Receiver(ID, size)
 
         try:
             # connect to channel

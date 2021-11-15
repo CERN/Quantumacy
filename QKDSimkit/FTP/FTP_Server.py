@@ -67,7 +67,7 @@ class Server(object):
             sys.exit()
 
         try:
-            s = json.load(open('../config.json', ))['Server']
+            s = json.load(open('../data/config.json', ))['Server']
             handler = MyHandler  # select the created custom FTP handler
             handler.authorizer = authorizer  # assign the authorizer to the handler
             handler.banner = "Server Ready.."  # server banner is returned when the client calls a getWelcomeMessage() call

@@ -7,7 +7,6 @@ import os
 
 def validate(shared_key: list, other_shared_key: list) -> float:
     """It compares two keys to find differences
-
     Args:
         shared_key (str): first key
         other_shared_key (str): second key

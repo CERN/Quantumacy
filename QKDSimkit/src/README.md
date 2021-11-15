@@ -18,15 +18,29 @@ pip install -r ../requirements.txt
 
 ### Executing program
 
-* Run with the most basic configuration: channel will run on the same machine as server
+* Run with the most basic configuration: channel will run on the same machine as the server
 ```
-python Server.py -l 
-```
-* Run just server and use an external channel
-```
-python Server.py -ca [host:port] --host [host] --port [port]
+python Server.py l 
 ```
 
+* Run with personalized channel settings (noise, eavesdropper)
+```
+python Server.py l -n 0.5 -e True
+```
+
+* Run server and use an external channel
+```
+python Server.py --host [host] --port [port] ca [host:port]
+```
+
+### Help
+
+For more options please check
+```
+python Server.py -h
+python Server.py l -h
+python Server.py ca -h
+```
 ##Client
 
 ### Dependencies
@@ -54,9 +68,9 @@ python Client.py [server_host:port] [channel_host:port]
 python Client.py [server_host:port] [channel_host:port] -n [num_keys] -s [size]
 ```
 
-## Help
+### Help
 
-Any advise for common problems or issues.
+For more options please check
 ```
 python Client.py -h
 ```
