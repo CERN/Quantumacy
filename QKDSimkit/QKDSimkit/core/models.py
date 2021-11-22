@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+
+"""This module simulates the behaviour of a photon"""
+
 import random
 
 
@@ -31,6 +40,7 @@ class Photon(object):
 
     def measure(self, polarization: int) -> int:
         """Give back a polarization according to the basis of the photon
+
         Args:
             polarization (int): polarization
         Returns:

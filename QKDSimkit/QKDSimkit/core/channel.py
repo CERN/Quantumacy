@@ -1,16 +1,27 @@
+# -*- coding: utf-8 -*-
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+
+"""This module simulates channel's operations"""
+
 import socket
 import logging
+
 from threading import Thread
-from .qexceptions import qsocketerror
+
 from .channel_features import eavesdropper, random_errors
+from .qexceptions import qsocketerror
 
 logging.basicConfig(level=logging.DEBUG)
 
 
 class public_channel(object):  # insecure public classical/quantum channel
-    def __init__(self, host: str, port: str, noise: float, eve: bool):
-        self.host = host
-        self.port = port
+    def __init__(self, address: str, noise: float, eve: bool):
+        self.host = address.split(':')[0]
+        self.port = address.split(':')[1]
         self.noise = noise
         self.eve = eve
         self.buffer_size = 8192

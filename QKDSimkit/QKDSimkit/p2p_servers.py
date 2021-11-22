@@ -1,11 +1,22 @@
-import uvicorn
-import json
-import logging
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+
 import argparse
-import core
-from pydantic import BaseModel
+import logging
+import json
+
+import uvicorn
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+import QKDSimkit.core as core
 
 
 logging.basicConfig(level=logging.ERROR)
@@ -65,14 +76,22 @@ bob_app.add_middleware(
     allow_headers=["*"],
 )
 
-if __name__ == '__main__':
+
+def manage_args():
     parser = argparse.ArgumentParser(description='Server for Quantumacy')
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-a', '--sender', action='store_const', dest='node', const='alice',
-                       help='Run this server as a sender (Alice) node')
-    group.add_argument('-b', '--receiver', action='store_const', dest='node', const='bob',
-                       help='Run this server as a receiver (Bob) node')
-    parser.add_argument('-c', '--channel', default=':5000', type=str,
+    parser.add_argument('node', choices=['alice', 'bob'],
+                       help='Choose how to run this node')
+    parser.add_argument('-c', '--channel_address', default=':5000', type=str,
                         help='Specify the address of the channel [host:port]')
-    a = parser.parse_args()
-    uvicorn.run('p2p_servers:{}_app'.format(a.node), port=5003)
+    parser.add_argument('-a', '--address', default='127.0.0.1:5003', type=str,
+                        help='Bind socket to this address (default: %(default)s)')
+    return parser.parse_args()
+
+
+def start_p2p(node, address):
+    uvicorn.run('p2p_servers:{}_app'.format(node), host=address.split(':')[0], port=int(address.split(':')[1]))
+
+
+if __name__ == '__main__':
+    args = manage_args()
+    start_p2p(args.node, args.address)

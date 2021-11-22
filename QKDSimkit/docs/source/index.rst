@@ -5,8 +5,13 @@ Welcome to QKDSimkit's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-Check out the :doc:`usage` section for further information.
 
+Instructions
+------------
+
+.. toctree::
+
+   readme_link
 
 
 Indices and tables
@@ -23,4 +28,4 @@ Contents
 
 .. toctree::
 
-   usage
+   QKDSimkit

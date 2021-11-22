@@ -1,8 +1,16 @@
+# -*- coding: utf-8 -*-
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+
+import logging
 import socket
 import sys
-import logging
-from .node import Node
+
 from .models import Photon
+from .node import Node
 from .qexceptions import qsocketerror, qobjecterror
 
 logging.basicConfig(level=logging.DEBUG)
@@ -26,10 +34,10 @@ class Sender(Node):
 
     def send_photon_pulse(self, pulse: list):
         """Send an already created photon pulse
+        it takes the polarization from each photon
 
-            it takes the polarization from each photon
-            Args:
-                pulse (list): photon pulse to be sent
+        Args:
+            pulse (list): photon pulse to be sent
         """
         if not isinstance(pulse, list):
             raise qobjecterror("argument must be list")
@@ -59,6 +67,7 @@ class Sender(Node):
         """Sender method for sender node
         it sends a message and wait for an acknowledgment if it doesn't receive the ack in the given time
         timeout_in_seconds it may try multiple times depending on the variable connection_attempts
+
         Args:
             header (str): unique identifier
             message (str): string to be sent
@@ -87,6 +96,7 @@ class Sender(Node):
         It will send a request message with the given header and it will wait for the response for a time
         timeout_in_seconds it may try multiple times depending on the variable connection_attempts, every received
         message with a different header will be discarded
+
         Args:
             header (str): unique identifier
         """

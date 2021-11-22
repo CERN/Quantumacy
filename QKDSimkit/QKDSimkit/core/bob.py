@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed May 12 21:57:13 2021
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
 
-@author: Alberto Di Meglio
-"""
+"""This module simulates Bob's operations"""
 
-import os
 import sys
 import logging
+
 from base64 import urlsafe_b64encode
+
 from .receiver import Receiver
 from .qexceptions import qsocketerror
 
@@ -17,9 +20,6 @@ def import_key(channel_address: str, ID: str, size: int = 256):
 
     channelIP, channelPort = channel_address.split(':')
     channelPort = int(channelPort)
-
-    # clean up
-    _ = os.system('clear')
 
     for count in range(0, 1000):
         bob = Receiver(ID, size)

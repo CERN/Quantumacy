@@ -1,17 +1,28 @@
-import uvicorn
-import os
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+
+import argparse
 import asyncio
+import os
 import random
 import string
-import json
-import argparse
-import core
-import Channel
-from threading import Thread
+
+import uvicorn
+
+import QKDSimkit.core as core
+
+from aiocache import Cache
 from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
-from aiocache import Cache
+from threading import Thread
+
+from QKDSimkit.Channel import start_channel
 
 data_directory = os.path.dirname(os.path.realpath(__file__)) + '/../data/'
 
@@ -103,38 +114,39 @@ async def filter_get_key(request: Request, call_next):
 
 def manage_args():
     parser = argparse.ArgumentParser(description='Server for Quantumacy')
-    parser.add_argument('--host', default='127.0.0.1', type=str,
-                        help='Bind socket to this host (default: %(default)s)')
-    parser.add_argument('--port', default='5002', type=str,
-                        help='Bind socket to this port (default: %(default)s)')
-    parser.add_argument('-t', '--token', default='7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', type=str,
-                        help='Auth token, for development purposes a default token is provided')
+    parser.add_argument('-a', '--address', default='127.0.0.1:5002', type=str,
+                        help='Bind socket to this address (default: %(default)s)')
     channels = parser.add_subparsers(title='Channel type', dest='channel_type', required=True,
                                      help='Specify where the channel is (required)')
-    parser_l = channels.add_parser('l', help='Run the channel on this machine')
-    parser_l.add_argument('-ch', '--channel_host', default='', type=str,
-                          help='Bind socket to this host (default: %(default)s)')
-    parser_l.add_argument('-cp', '--channel_port', default='5000', type=str,
-                        help='Bind socket to this port (default: %(default)s)')
+    parser_l = channels.add_parser('local', help='Run the channel on this machine')
+    parser_l.add_argument('-ca', '--channel_address', default=':5000', type=str,
+                          help='Bind socket to this address (default: %(default)s)')
     parser_l.add_argument('-n', '--noise', default=0.0, type=float,
                           help='Set a noise value for channel, type a float number in [0,1] (default: %(default)s)')
     parser_l.add_argument('-e', '--eve', action='store_true',
                           help='Add an eavesdropper to the channel')
-    parser_e = channels.add_parser('e', help='Connect to an external channel')
+    parser_e = channels.add_parser('external', help='Connect to an external channel')
     parser_e.add_argument('-ca', '--channel_address', type=str, required=True, help='Address of channel [host:port]')
     return parser.parse_args()
 
 
+def start_server_and_channel(channel_address, noise, eve, address):
+    asyncio.run(add_user('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA='))
+    asyncio.run(add_channel(channel_address))
+    _thread = Thread(target=start_channel, args=(channel_address, noise, eve))
+    _thread.daemon = True
+    _thread.start()
+    uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
+
+
+def start_server(channel_address, address):
+    asyncio.run(add_channel(channel_address))
+    uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
+
+
 if __name__ == "__main__":
     args = manage_args()
-    asyncio.run(add_user(args.token))
-    if args.channel_type == 'l':
-        address = '{h}:{p}'.format(h=args.channel_host, p=args.channel_port)
-        asyncio.run(add_channel(address))
-        _thread = Thread(target=Channel.run_channel, args=(args.channel_host, args.channel_port, args.noise,
-                                                            args.eve))
-        _thread.daemon = True
-        _thread.start()
-    else:
-        asyncio.run(add_channel(args.channel_address))
-    uvicorn.run('Server:app', host=args.host, port=int(args.port))
+    if args.channel_type == 'local':
+        start_server_and_channel(args.channel_address, args.noise, args.eve, args.address)
+    if args.channel_type == 'external':
+        start_server(args.channel_address, args.address)

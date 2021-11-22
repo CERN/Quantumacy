@@ -1,7 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+
+import argparse
 import http.client
 import urllib.parse
-import argparse
-import core
+
+import QKDSimkit.core as core
 
 
 def get_key(alice_address, channel_address, token, number, size):
@@ -27,7 +36,7 @@ def get_key(alice_address, channel_address, token, number, size):
             res = core.bob.import_key(channel_address=channel_address, ID=hashed, size=size)
             if res == -1:
                 print("Can't exchange a safe key")
-            if isinstance(res, bytearray):
+            if isinstance(res, bytes):
                 key_list.append(res.decode())
         return key_list
     else:
@@ -38,13 +47,15 @@ def manage_args():
     parser = argparse.ArgumentParser(description='Client for Quantumacy')
     parser.add_argument('alice_address', type=str, help='Address of server/Alice [host:port]')
     parser.add_argument('channel_address', type=str, help='Address of channel [host:port]')
-    parser.add_argument('-t', '--token', default='7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', type=str,
-                        help='Auth token, for development purposes a default token is provided')
     parser.add_argument('-n', '--number', default=1, type=int, help="Number of keys (default: %(default)s)")
     parser.add_argument('-s', '--size', default=256, type=int, help="Size of keys (default: %(default)s)")
     return parser.parse_args()
 
 
+def start_client(alice_address, channel_address, number, size):
+    l = get_key(alice_address, channel_address, '7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', number, size)
+    print(l)
+
 if __name__ == '__main__':
     args = manage_args()
-    l = get_key(args.alice_address, args.channel_address, args.token, args.number, args.size)
+    start_client(args.alice_address, args.channel_address, args.number, args.size)

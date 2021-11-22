@@ -1,168 +1,103 @@
-# Quantum-Key-Distribution
-A modified BB84 protocol utilizing emulated photons for Quantum Key Distribution (QKD).
+# Server-client interface
 
-# Point
-Considering that we don't have an access to Quantum Computer yet, we will utilize emulated photons for key distribution. A protocol is modified - the common attacking methods such as eavesdropping can be avoided by the channel (classical server in this case) controlling pulses. Emulated photons in this case are in ideal environment, thus we use perfect single photon source. 
+How to set up the server and run the client with a default configuration
 
-# Example
-Quantum channel is initiated. Both **Bob** (receiver) and **Alice** (sender) known the ip address of this quantum channel.
+## Server
 
-**input:**
 
-```python
-from channel import public_channel
-public_channel.initiate_server()
+### Installing
+* Create a conda environment
+```
+$ conda create -n Quantumacy python=3.8.10
+$ conda activate Quantumacy
 ```
 
-**server output:**
+* install requirements
 ```
-initiated the channel on xxx.xxx.x.xxx:xxxx, waiting for clients...
-```
-
-Bob starts listening to quantum channel.
-
-**input:**
-
-```python
-from receiver import receiver
-bob = receiver()
-bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.listen_quantum()
+$ pip install -r ../requirements.txt
 ```
 
-**server output:**
-
+* Download, install and run Redis 
 ```
-xxx.xxx.x.xxx:xxxx has connected.
-```
-
-Alice sends a photon pulse to Bob.
-
-**input:**
-
-```python
-from sender import sender
-alice = sender()
-alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-photon_pulse = alice.create_photon_pulse()
-alice.send_photon_pulse(photon_pulse)
+$ wget https://download.redis.io/releases/redis-6.2.6.tar.gz
+$ tar xzf redis-6.2.6.tar.gz
+$ cd redis-6.2.6
+$ make
+$ src/redis-server
 ```
 
-**server output:**
 
+### Executing program
+
+* Run with the most basic configuration: channel will run on the same machine as the server and 
 ```
-xxx.xxx.x.xxx:xxxx has connected.
-xxx.xxx.x.xxx:xxxx: qpulse:170
-xxx.xxx.x.xxx:xxxx: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-```
-
-Alice and Bob reset their sockets.
-
-**input:**
-```python
-bob.reset_socket()
+python Server.py l 
 ```
 
-**input 2:**
-
-```python
-alice.reset_socket()
+* Run with personalized channel settings (noise, eavesdropper)
+```
+python Server.py l -n 0.5 -e True
 ```
 
-After quantum channel is closed, classical channel is initiated. Both Bob and Alice known the ip address of this classical channel.
-
-**input:**
-
-```python
-from channel import public_channel
-public_channel.initiate_server()
+* Run server and use an external channel
+```
+python Server.py --host [host] --port [port] ca [host:port]
 ```
 
-Bob listens to public classical channel.
+### Help
 
-**input:**
-
-```python
-bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.listen_classical()
+For more options please check
+```
+python Server.py -h
+python Server.py l -h
+python Server.py ca -h
 ```
 
-Alice sends her basis to Bob over public classical channel.
+##Client
 
-**input:**
-```python
-alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-alice.send_classical_bits(alice.basis)
+### Installing
+
+* Create a conda environment
+```
+$ conda create -n Quantumacy python=3.8.10
+$ conda activate Quantumacy
+```
+* install requirements
+```
+$ pip install -r ../requirements.txt
+```
+### Executing program
+
+* Run with the most basic configuration
+```
+python Client.py [server_host:port] [channel_host:port]
+```
+* If you want to specify the number of keys use and their size use:
+```
+python Client.py [server_host:port] [channel_host:port] -n [num_keys] -s [size]
 ```
 
-Alice listens to public classical channel.
+### Help
 
-**input:**
-
-```python
-alice.reset_socket()
-alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-alice.listen_classical()
+For more options please check
+```
+python Client.py -h
 ```
 
-Bob sends his randomly measured basis over public classical channel.
-```python
-bob.reset_socket()
-bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.send_classical_bits(bob.basis)
-```
+## Authors
 
-Alice & Bob validate their shared bases, whether or not they are similar enough, then they can notify each other.
+Contributors names and contact info:
 
-**input 1:**
+[Gabriele Morello](https://www.linkedin.com/in/gabriele-morello/)
 
-```python
-decision = alice.validate()
-```
+## Version History
 
-**input 2:**
+* 0.1
+    * Initial Release
 
-```python
-decision = bob.validate()
-```
+## License
 
-Finally, Alice & Bob exchange their decisions on classical public channel.
+This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
 
+## Acknowledgments
 
-Bob listens to public classical channel.
-
-**input:**
-
-```python
-bob.reset_socket()
-bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.listen_classical()
-```
-
-Alice sends her decision to Bob over public classical channel.
-
-**input:**
-```python
-alice.reset_socket()
-alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-alice.send_classical_bits(decision)
-```
-
-Alice listens to public classical channel.
-
-**input:**
-
-```python
-alice.reset_socket()
-alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-alice.listen_classical()
-```
-
-Bob sends his decision over public classical channel.
-```python
-bob.reset_socket()
-bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.send_classical_bits()
-```
-
-If both of the users decide to use the key, Alice and Bob will have identical keys and then they can use some symmetric algorithm such as OTP (One Time Pad) or AES (Advanced Encryption Sequence) to communicate. Otherwise, this process is repeated.

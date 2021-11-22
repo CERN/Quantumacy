@@ -1,11 +1,22 @@
+# -*- coding: utf-8 -*-
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+
+"""This module contains methods to simulate some feature of a channel"""
+
+import logging
 import random
 import sys
-import logging
+
 from .models import Photon
 
 
 def eavesdropper(photon_stream) -> str:
     """Method to simulate an eavesdropper in a quantum channel
+
     Args:
         photon_stream (str): message containing polarizations
     Returns:
@@ -28,6 +39,7 @@ def eavesdropper(photon_stream) -> str:
 
 def random_errors(photon_stream, rate: float) -> str:
     """Method to simulate random errors in a quantum channel
+
     Args:
         photon_stream (str): message containing polarizations
         rate (float): decimal number from 0 to 1, it sets the error rate

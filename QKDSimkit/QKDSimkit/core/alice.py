@@ -1,25 +1,25 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed May 12 21:57:13 2021
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
 
-@author: Alberto Di Meglio
-"""
+"""This module simulates Alice's operations"""
 
-import os
-import sys
 import logging
+import sys
+
 from base64 import urlsafe_b64encode
-from .sender import Sender
+
 from .qexceptions import qsocketerror
+from .sender import Sender
 
 
 def import_key(channel_address: str, ID: str, size: int = 256):
 
     channelIP, channelPort = channel_address.split(':')
     channelPort = int(channelPort)
-
-    # clean up
-    _ = os.system('clear')
 
     for count in range(0, 1000):
         alice = Sender(ID, size)
@@ -115,8 +115,3 @@ def import_key(channel_address: str, ID: str, size: int = 256):
 
 if __name__ == '__main__':
     import_key('127.0.0.1:5000', 'id', 256)
-
-    '''
-    a = import_key('id', b'7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', 256)
-    f = Fernet(a)
-    f.encrypt(b'ciao')'''

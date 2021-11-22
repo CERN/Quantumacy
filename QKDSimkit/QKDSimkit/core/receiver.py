@@ -1,9 +1,17 @@
+# -*- coding: utf-8 -*-
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+
+import logging
 import socket
 import sys
-import logging
-from .node import Node
+
 from .models import Photon
-from .qexceptions import qsocketerror, qobjecterror
+from .node import Node
+from .qexceptions import qsocketerror
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -33,8 +41,7 @@ class Receiver(Node):
 
     def listen_quantum(self):
         """ Listen method to receive photon pulse
-
-         it behaves like a wrapper for recv for photon pulses
+        it behaves like a wrapper for recv for photon pulses
         """
         try:
             logging.info("listening to quantum channel for photon pulse...")

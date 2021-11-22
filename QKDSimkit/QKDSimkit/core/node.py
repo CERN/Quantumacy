@@ -1,11 +1,19 @@
-import socket
+# -*- coding: utf-8 -*-
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+
+import abc
 import ast
 import logging
-import select
 import re
-import abc
-from .utils import validate
+import select
+import socket
+
 from .qexceptions import qsocketerror
+from .utils import validate
 
 MIN_SHARED = 20
 BUFFER_SIZE = 8192
@@ -45,6 +53,7 @@ class Node(object):
 
     def connect_to_channel(self, address: str, port: int):
         """It starts the connection with the channel
+
         Args:
             address (str): address
             port (int): port
@@ -98,6 +107,7 @@ class Node(object):
 
     def listen_for(self, sender: str, attr: str):
         """Receive a message and store it in the right place
+
         Args:
             sender (str): name of the node from which we expect to receive
             attr (str): name of the attribute that will store the content of the received message
@@ -119,10 +129,10 @@ class Node(object):
 
     def validate(self) -> int:
         """Wrapper of utils.validate it manages different outputs, it also gives info of eventual errors
+
         Returns:
-            1: keys are equals
-            0: error rate is below a given percent
-            -1: error rate too high"""
+            int: 1: keys are equals, 0: error rate is below a given percent, -1: error rate too high
+        """
         percent = validate(self.sub_shared_key, self.other_sub_key)
         logging.info('Correct bits percentage: ' + str(percent))
         if percent == 1:
@@ -131,34 +141,6 @@ class Node(object):
             return 0
         if percent < self.min_shared_percent:
             return -1
-
-    '''def encrypt_not_qpulse(self, header: str, message: str):
-        """encrypt payload
-        encrypt the payload of a message if the header is not 'qpulse'
-        
-        Returns:
-            encrypted message (str): string made by header and encrypted payload to split parts there are ':'
-        """
-        if header != 'qpulse':
-            cipher = Fernet(self.token)
-            enc_message = cipher.encrypt(message.encode())
-            return header + ':' + enc_message.decode() + ':'
-        else:
-            return header + ':' + message + ':'
-
-    def decrypt_not_qpulse(self, header: str, message: str):
-        """ decrypt payload
-        decrypt the payload of a message if the header is not 'qpulse'
-
-        Returns:
-            decrypted message (str): string with decrypted payload, note that the header is not included
-        """
-        if header != 'qpulse':
-            cipher = Fernet(self.token)
-            message = cipher.decrypt(bytes(message.encode()))
-            return message.decode()
-        else:
-            return message'''
 
     def recv_all(self) -> list:
         """receive a message
@@ -192,24 +174,3 @@ class Node(object):
     def recv(self, header: str):
         """abstract method"""
         print("receive(): Override me")
-
-
-'''
-    def get_key_from_password(self, password: str) -> bytes:
-        """ it uses a password to generate a base64, urlsafe, encrypted key
-        Args:
-            password (str): password to use to generate the key
-        Returns:
-            key (bytearray): key encrypted with the password
-        """
-        salt = os.urandom(16)
-        kdf = PBKDF2HMAC(
-            algorithm=hashes.SHA256(),
-            length=32,
-            salt=salt,
-            iterations=100000,
-            backend=default_backend()
-        )
-        key = base64.urlsafe_b64encode(kdf.derive(bytes(password, 'utf-8')))
-        return key
-'''
