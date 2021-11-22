@@ -6,6 +6,12 @@ Welcome to QKDSimkit's documentation!
    :caption: Contents:
 
 
+Instructions
+------------
+
+.. toctree::
+
+   readme_link
 
 
 Indices and tables
@@ -22,6 +28,4 @@ Contents
 
 .. toctree::
 
-   src
-   src.core
-   modules
+   QKDSimkit
