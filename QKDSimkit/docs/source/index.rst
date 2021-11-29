@@ -29,3 +29,5 @@ Contents
 .. toctree::
 
    QKDSimkit
+
+.. whoops::mistake
