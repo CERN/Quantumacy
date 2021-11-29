@@ -30,4 +30,3 @@ Contents
 
    QKDSimkit
 
-.. whoops::mistake
