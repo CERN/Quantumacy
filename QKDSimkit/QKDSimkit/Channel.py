@@ -6,13 +6,20 @@
 #
 # (C) Copyright 2021 CERN.
 
+"""This module contains channel's interface"""
+
 import argparse
 
 from QKDSimkit.core import channel
 
 
-def start_channel(address, noise, eve):
-
+def start_channel(address: str, noise: float, eve: bool):
+    """Starts channel
+    Args:
+        address (str): where to bind the channel
+        noise (float): ratio of noise in channel
+        eve (bool): simulate an eavesdropper in channel
+    """
     # instantiate a receiver channel
     theChannel = channel.public_channel(address, noise, eve)
 
@@ -21,6 +28,8 @@ def start_channel(address, noise, eve):
 
 
 def manage_args():
+    """Manages possible arguments and provides help messages"""
+
     parser = argparse.ArgumentParser(description='Channel for Quantumacy')
     parser.add_argument('-a', '--address', default=':5000', type=str,
                         help='Bind socket to this address (default: %(default)s)')

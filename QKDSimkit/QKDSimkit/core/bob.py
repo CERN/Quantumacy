@@ -12,12 +12,18 @@ import logging
 
 from base64 import urlsafe_b64encode
 
-from .receiver import Receiver
-from .qexceptions import qsocketerror
+from QKDSimkit.core.receiver import Receiver
+from QKDSimkit.core.qexceptions import qsocketerror
 
 
 def import_key(channel_address: str, ID: str, size: int = 256):
+    """Bob's procedure to agree on a shared key
 
+    Args:
+        channel_address (str): channel address
+        ID (str): identifier of alice-bob pair
+        size (int): size of key in bits
+    """
     channelIP, channelPort = channel_address.split(':')
     channelPort = int(channelPort)
 
@@ -55,7 +61,7 @@ def import_key(channel_address: str, ID: str, size: int = 256):
         # exchange basis
         try:
             # send Bob's chosen basis
-            bob.send('bob-other_basis', repr(bob.basis))
+            bob.send('bob-other_bases', repr(bob.bases))
             # listen for Alice's reconciled key through classic channel
             bob.listen_for('alice', 'reconciled_key')
 

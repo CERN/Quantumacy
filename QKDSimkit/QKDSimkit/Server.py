@@ -6,6 +6,8 @@
 #
 # (C) Copyright 2021 CERN.
 
+"""This module contains server's APIs and method to run it"""
+
 import argparse
 import asyncio
 import os
@@ -24,7 +26,6 @@ from threading import Thread
 
 from QKDSimkit.Channel import start_channel
 
-data_directory = os.path.dirname(os.path.realpath(__file__)) + '/../data/'
 
 app = FastAPI()
 
@@ -42,18 +43,27 @@ app.add_middleware(
 )
 
 
-async def add_user(token):
+async def add_user(token: str):
+    """Saves a token and its hash in memory"""
     users = {}
     hashed = core.utils.hash_token(token)
     users[hashed] = token
     await cache.set('users', users)
 
 
-async def add_channel(address):
+async def add_channel(address: str):
+    """Saves an address in memory"""
     await cache.set('address', address)
 
 
 async def start_alice(number: int, size: int, ID: str):
+    """Imports keys from an alice node, saves keys in memory
+
+    Args:
+        number (int): number of keys
+        size (int): size of keys (bits)
+        ID (str): identifier (hash of token)
+    """
     id_keys_map = await cache.get('id_keys')
     if not id_keys_map:
         id_keys_map = {}
@@ -65,7 +75,7 @@ async def start_alice(number: int, size: int, ID: str):
         res = core.alice.import_key(channel_address=address, ID=ID, size=size)
         if res == -1:
             print("Can't exchange a safe key")
-        if isinstance(res, bytearray):
+        if isinstance(res, bytes):
             key_list.append(res.decode())
     id_keys_map[ID] = key_list
     await cache.set('id_keys', id_keys_map)
@@ -73,6 +83,14 @@ async def start_alice(number: int, size: int, ID: str):
 
 @app.get("/hello")
 async def root(hashed: str):
+    """Handshake request
+
+    Args:
+        hashed (str): hash of a pre-shared token
+
+    Returns:
+        message (str): test message for handshake
+    """
     users = await cache.get('users')
     if hashed not in users.keys():
         return Response(status_code=404, content='Provided ID does not match any user')
@@ -87,6 +105,15 @@ async def root(hashed: str):
 
 @app.get("/proof")
 async def root(number: int, size: int, hashed: str, hash_proof: str, background_tasks: BackgroundTasks):
+    """Chacek handshake and starts alice
+
+    Args:
+        number (int): number of keys
+        size (int): size of keys (bits)
+        hashed (str): identifier (hash of token)
+        hash_proof (str): hash of proof message
+        background_tasks: background tasks
+    """
     users = await cache.get('users')
     map_hash_r = await cache.get('proof')
     if hashed in users.keys() and hash_proof == map_hash_r[hashed]:
@@ -97,6 +124,11 @@ async def root(number: int, size: int, hashed: str, hash_proof: str, background_
 
 @app.get("/get_key")
 async def root(ID: str = 'id'):
+    """Retrieves key from server
+
+    Args:
+        ID (str): hashed token
+    """
     id_keys_map = await cache.get('id_keys')
     if ID not in id_keys_map.keys():
         raise HTTPException(status_code=404, detail="No keys for the given ID")
@@ -113,6 +145,7 @@ async def filter_get_key(request: Request, call_next):
 
 
 def manage_args():
+    """Manages possible arguments and provides help messages"""
     parser = argparse.ArgumentParser(description='Server for Quantumacy')
     parser.add_argument('-a', '--address', default='127.0.0.1:5002', type=str,
                         help='Bind socket to this address (default: %(default)s)')
@@ -130,7 +163,15 @@ def manage_args():
     return parser.parse_args()
 
 
-def start_server_and_channel(channel_address, noise, eve, address):
+def start_server_and_channel(channel_address: str, noise: float, eve: bool, address: str):
+    """Starts both server and channel
+
+    Returns:
+        channel_address (str): address of channel
+        noise (float): ratio of noise in channel
+        eve (bool): simulate an eavesdropper in channel
+        address (str): where to bind this server
+    """
     asyncio.run(add_user('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA='))
     asyncio.run(add_channel(channel_address))
     _thread = Thread(target=start_channel, args=(channel_address, noise, eve))
@@ -140,6 +181,12 @@ def start_server_and_channel(channel_address, noise, eve, address):
 
 
 def start_server(channel_address, address):
+    """Starts server and connect to an external channel
+
+    Args:
+        channel_address (str): address of channel
+        address (str): where to bind this server
+    """
     asyncio.run(add_channel(channel_address))
     uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
 

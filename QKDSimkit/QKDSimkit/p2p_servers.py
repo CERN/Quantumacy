@@ -6,6 +6,8 @@
 #
 # (C) Copyright 2021 CERN.
 
+"""This module contains methods to operate a p2p node"""
+
 import argparse
 import logging
 import json
@@ -14,7 +16,6 @@ import uvicorn
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 
 import QKDSimkit.core as core
 
@@ -25,13 +26,17 @@ alice_app = FastAPI()
 bob_app = FastAPI()
 
 
-class qkdParams(BaseModel):
-    number: int = 1
-    size: int = 256
-    ID: str = 'id'
+def answer_get(number: int, size: int, ID: str, type: str):
+    """Starts a node
 
-
-def answer_get(number, size, ID, type):
+    Args:
+        number (int): number of keys
+        size (int): size of keys (bits)
+        ID (str): identifier of a pair of nodes
+        type (str): alice or bob (sender or receiver)
+    Returns:
+        keys
+    """
     answer = {}
     keys = []
     s = json.load(open('../data/config.json', ))['channel']
@@ -48,11 +53,29 @@ def answer_get(number, size, ID, type):
 
 @alice_app.get("/test")
 async def root(number: int = 1, size: int = 256, ID: str = 'id'):
+    """http request handler for alice
+
+        Args:
+            number (int): number of keys
+            size (int): size of keys (bits)
+            ID (str): identifier of a pair of nodes
+        Returns:
+            keys
+    """
     return answer_get(number, size, ID, 'Alice')
 
 
 @bob_app.get("/test")
 async def root(number: int = 1, size: int = 256, ID: str = 'id'):
+    """http request handler for bob
+
+        Args:
+            number (int): number of keys
+            size (int): size of keys (bits)
+            ID (str): identifier of a pair of nodes
+        Returns:
+            keys
+    """
     return answer_get(number, size, ID, 'Bob')
 
 
@@ -78,6 +101,8 @@ bob_app.add_middleware(
 
 
 def manage_args():
+    """Manages possible arguments and provides help messages"""
+
     parser = argparse.ArgumentParser(description='Server for Quantumacy')
     parser.add_argument('node', choices=['alice', 'bob'],
                        help='Choose how to run this node')
@@ -88,7 +113,13 @@ def manage_args():
     return parser.parse_args()
 
 
-def start_p2p(node, address):
+def start_p2p(node: str, address: str):
+    """Starts server
+
+    Args:
+        node (str): type of node [alice, bob]
+        address (str): where to bind socket
+    """
     uvicorn.run('p2p_servers:{}_app'.format(node), host=address.split(':')[0], port=int(address.split(':')[1]))
 
 

@@ -1,10 +1,10 @@
 # Quantum-Key-Distribution
 A modified BB84 protocol utilizing emulated photons for Quantum Key Distribution (QKD).
 
-# Point
+## Point
 Considering that we don't have an access to Quantum Computer yet, we will utilize emulated photons for key distribution. A protocol is modified - the common attacking methods such as eavesdropping can be avoided by the channel (classical server in this case) controlling pulses. Emulated photons in this case are in ideal environment, thus we use perfect single photon source. 
 
-# Example
+## Example
 Quantum channel is initiated. Both **Bob** (receiver) and **Alice** (sender) known the ip address of this quantum channel.
 
 **input:**
@@ -90,9 +90,10 @@ bob.listen_classical()
 Alice sends her basis to Bob over public classical channel.
 
 **input:**
+
 ```python
 alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-alice.send_classical_bits(alice.basis)
+alice.send_classical_bits(alice.bases)
 ```
 
 Alice listens to public classical channel.
@@ -106,10 +107,11 @@ alice.listen_classical()
 ```
 
 Bob sends his randomly measured basis over public classical channel.
+
 ```python
 bob.reset_socket()
 bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.send_classical_bits(bob.basis)
+bob.send_classical_bits(bob.bases)
 ```
 
 Alice & Bob validate their shared bases, whether or not they are similar enough, then they can notify each other.

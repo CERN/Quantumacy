@@ -6,6 +6,8 @@
 #
 # (C) Copyright 2021 CERN.
 
+"""This module contains client's procedure to retrieve keys"""
+
 import argparse
 import http.client
 import urllib.parse
@@ -13,7 +15,16 @@ import urllib.parse
 import QKDSimkit.core as core
 
 
-def get_key(alice_address, channel_address, token, number, size):
+def get_key(alice_address: str, channel_address: str, token: str, number: int, size: int):
+    """Runs handshake and starts bob procedure
+
+    Args:
+        alice_address (str): address of server
+        channel_address (str): address of channel
+        token (str): pre shared token
+        number (int): number of keys
+        size (int): size of keys (bits)
+    """
     hashed = core.utils.hash_token(token)
     params = urllib.parse.urlencode({'hashed': hashed})
     conn = http.client.HTTPConnection(f"{alice_address}")
@@ -44,6 +55,8 @@ def get_key(alice_address, channel_address, token, number, size):
 
 
 def manage_args():
+    """Manages possible arguments and provides help messages"""
+
     parser = argparse.ArgumentParser(description='Client for Quantumacy')
     parser.add_argument('alice_address', type=str, help='Address of server/Alice [host:port]')
     parser.add_argument('channel_address', type=str, help='Address of channel [host:port]')
@@ -53,8 +66,15 @@ def manage_args():
 
 
 def start_client(alice_address, channel_address, number, size):
-    l = get_key(alice_address, channel_address, '7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', number, size)
-    print(l)
+    """Wrapper for get_key()
+    Args:
+        alice_address (str): address of server
+        channel_address (str): address of channel
+        number (int): number of keys
+        size (int): size of keys (bits)
+    """
+    return get_key(alice_address, channel_address, '7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', number, size)
+
 
 if __name__ == '__main__':
     args = manage_args()

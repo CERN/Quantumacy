@@ -1,4 +1,4 @@
-# Server-client interface
+# Instructions
 
 How to set up the server and run the client with a default configuration
 
@@ -6,7 +6,7 @@ How to set up the server and run the client with a default configuration
 
 
 ### Installing
-* Create a conda environment
+* Create a conda environment (optional but recommended)
 ```
 $ conda create -n Quantumacy python=3.8.10
 $ conda activate Quantumacy
@@ -14,7 +14,7 @@ $ conda activate Quantumacy
 
 * install requirements
 ```
-$ pip install -r ../requirements.txt
+$ pip install QKDSimkit
 ```
 
 * Download, install and run Redis 
@@ -31,73 +31,76 @@ $ src/redis-server
 
 * Run with the most basic configuration: channel will run on the same machine as the server and 
 ```
-python Server.py l 
+$ QKDSimkit server local 
 ```
 
-* Run with personalized channel settings (noise, eavesdropper)
+* Run with custom channel settings (noise, eavesdropper)
 ```
-python Server.py l -n 0.5 -e True
+$ QKDSimkit server local -n 0.5 -e True
 ```
 
-* Run server and use an external channel
+* Run server using an external channel
 ```
-python Server.py --host [host] --port [port] ca [host:port]
+$ QKDSimkit server -a [host:port] external -ca [host:port]
 ```
 
 ### Help
 
 For more options please check
 ```
-python Server.py -h
-python Server.py l -h
-python Server.py ca -h
+$ QKDSimkit server -h
+$ QKDSimkit server local -h
+$ QKDSimkit server external -h
 ```
 
 ##Client
 
 ### Installing
-
-* Create a conda environment
+* Create a conda environment (optional but recommended)
 ```
 $ conda create -n Quantumacy python=3.8.10
 $ conda activate Quantumacy
 ```
-* install requirements
+* Install requirements
 ```
-$ pip install -r ../requirements.txt
+$ pip install QKDSimkit
 ```
+
 ### Executing program
 
 * Run with the most basic configuration
 ```
-python Client.py [server_host:port] [channel_host:port]
+QKDSimkit client [server_host:port] [channel_host:port]
 ```
 * If you want to specify the number of keys use and their size use:
 ```
-python Client.py [server_host:port] [channel_host:port] -n [num_keys] -s [size]
+QKDSimkit client [server_host:port] [channel_host:port] -n [num_keys] -s [size]
 ```
 
 ### Help
 
 For more options please check
 ```
-python Client.py -h
+python client -h
 ```
 
 ## Authors
 
-Contributors names and contact info:
+Contributor names and contact info:
 
-[Gabriele Morello](https://www.linkedin.com/in/gabriele-morello/)
+Alberto Di Meglio
 
-## Version History
-
-* 0.1
-    * Initial Release
+Gabriele Morello [[email]](mailto:gabriele.morello@cern.ch)
 
 ## License
 
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+This project is licensed under the MIT License - see the LICENSE file for details
+
+## Version History
+* 
+* 0.0.1
+    * Initial Release
+    
 
 ## Acknowledgments
 
