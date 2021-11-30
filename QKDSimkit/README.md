@@ -27,7 +27,7 @@ $ src/redis-server
 ```
 
 
-### Executing program
+### Executing
 
 * Run with the most basic configuration: channel will run on the same machine as the server and 
 ```
@@ -66,7 +66,7 @@ $ conda activate Quantumacy
 $ pip install QKDSimkit
 ```
 
-### Executing program
+### Executing
 
 * Run with the most basic configuration
 ```
