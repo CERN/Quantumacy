@@ -1,6 +1,5 @@
 name: "Pull Request Docs Check"
-on: 
-- pull_request
+on: push
 
 jobs:
   docs:
