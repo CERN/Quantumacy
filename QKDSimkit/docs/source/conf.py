@@ -187,4 +187,4 @@ def linkcode_resolve(domain, info):
     if not info['module']:
         return None
     filename = info['module'].replace('.', '/')
-    return "https://github.com/CERN/Quantumacy/tree/main/QKDSimkit/src/%s.py" % filename
+    return "https://github.com/CERN/Quantumacy/tree/main/QKDSimkit/Qiskit/%s.py" % filename

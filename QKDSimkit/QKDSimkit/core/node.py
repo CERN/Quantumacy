@@ -25,8 +25,35 @@ MIN_SHARED_PERCENT = 0.89
 
 class Node(object):
     """Father class for receiver and sender
-    """
 
+    Args:
+        ID (str): identifier of alice-bob pair
+        size (int): size of key in bits
+
+    Attributes:
+        min_shared (int): 
+        buffer_size (int):
+        timeout_in_seconds (int):
+        connection_attempts (int):
+        max_repetitions (int):
+        min_shared_percent (float):
+        socket: socket
+        ID (str): identifier of alice-bob pair
+        photon_pulse (list): list of photons
+        bases (list): list of bases
+        other_bases (list): list of bases of the other node
+        reconciled_key (list): key with only common values and ""
+        shared_key (list): key with only common values
+        sub_shared_key (list): first half of the key
+        other_sub_key (list): first half of the key of the other node
+        decision (int): result of comparison between shared part of the key
+        other_decision (int): result of comparison between ke ys
+        not_shared_key (list):
+        key (list): non-revealed part of the key
+        fragments (list):
+        regex: utility regex
+        photon_pulse_size (int): number of photons exchanged photons
+    """
     def __init__(self, ID, size):
         self.min_shared = MIN_SHARED
         self.buffer_size = BUFFER_SIZE
@@ -37,17 +64,15 @@ class Node(object):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.ID = ID
         self.photon_pulse = []
-        self.basis = []
-        self.other_basis = []
+        self.bases = []
+        self.other_bases = []
         self.reconciled_key = []
         self.shared_key = []
         self.sub_shared_key = []
         self.other_sub_key = []
         self.decision = 0
         self.other_decision = 0
-        self.not_shared_key = []
         self.key = []
-        self.fragments = []
         self.regex = r'\((.)*\):'
         self.photon_pulse_size = size * 5
 

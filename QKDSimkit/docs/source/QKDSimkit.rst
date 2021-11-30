@@ -8,8 +8,6 @@ Subpackages
 
     QKDSimkit.core
 
-Submodules
-----------
 
 Channel module
 --------------
@@ -39,6 +37,15 @@ p2p\_servers module
 -------------------
 
 .. automodule:: p2p_servers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+cli module
+----------
+
+.. automodule:: cli
     :members:
     :undoc-members:
     :show-inheritance:

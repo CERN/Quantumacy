@@ -32,19 +32,40 @@ def validate(shared_key: list, other_shared_key: list) -> float:
         return -1
 
 
-def encrypt(token, message):
+def encrypt(token: bytes, message: str) -> str:
+    """Encrypts a message using a given key
+
+    Args:
+        token (bytes): key (32 url-safe base64-encoded bytes)
+        message (str): clear text message
+    Returns:
+         encrypted message (str)
+        """
     cipher = Fernet(token)
     enc_message = cipher.encrypt(message.encode())
     return enc_message.decode()
 
 
-def decrypt(token, message):
+def decrypt(token: bytes, message: str) -> str:
+    """Decrypts a message using a given key
+
+    Args:
+        token (bytes): key (32 url-safe base64-encoded bytes)
+        message (str): encrypted message
+    Returns:
+        clear text message (str)
+        """
     cipher = Fernet(token)
     dec_message = cipher.decrypt(message.encode())
     return dec_message.decode()
 
 
 def hash_token(token: str):
+    """hash a string
+    Args:
+        token (str): message
+    Returns: hash (str)
+    """
     h = hashlib.new('sha512_256')
     h.update(token.encode())
     return h.hexdigest()

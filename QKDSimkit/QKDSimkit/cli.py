@@ -6,6 +6,8 @@
 #
 # (C) Copyright 2021 CERN.
 
+"""This module contains the command line interface"""
+
 import argparse
 
 from QKDSimkit.Channel import start_channel

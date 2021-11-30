@@ -29,7 +29,7 @@ class Sender(Node):
              list of photons"""
         for i in range(self.photon_pulse_size):
             self.photon_pulse.append(Photon())
-        self.basis = [p.basis for p in self.photon_pulse]
+        self.bases = [p.basis for p in self.photon_pulse]
         return self.photon_pulse
 
     def send_photon_pulse(self, pulse: list):
@@ -54,12 +54,12 @@ class Sender(Node):
 
         it checks for every photon if the chosen basis is common, if it is not common the basis is discarded
         """
-        if len(self.basis) != len(self.other_basis):
+        if len(self.bases) != len(self.other_bases):
             raise qobjecterror("both pulses must contain the same amount of photons")
         else:
-            for i in range(len(self.basis)):
-                if self.basis[i] == self.other_basis[i]:
-                    self.reconciled_key.append(self.basis[i])
+            for i in range(len(self.bases)):
+                if self.bases[i] == self.other_bases[i]:
+                    self.reconciled_key.append(self.bases[i])
                 else:
                     self.reconciled_key.append("")
 

@@ -12,7 +12,7 @@ Instructions
 .. toctree::
 
    readme_link
-
+   README_legacy
 
 Indices and tables
 ==================
@@ -23,8 +23,8 @@ Indices and tables
 
 
 
-Contents
---------
+Contents of the package
+-----------------------
 
 .. toctree::
 

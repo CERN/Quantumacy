@@ -37,7 +37,7 @@ class Receiver(Node):
             self.photon_pulse.append(Photon())
             self.photon_pulse[p].polarization = self.photon_pulse[p].measure(int(self.polarization_vector[p]))
             self.photon_pulse[p].bit = self.photon_pulse[p].set_bit_from_measurement()
-        self.basis = [p.basis for p in self.photon_pulse]
+        self.bases = [p.basis for p in self.photon_pulse]
 
     def listen_quantum(self):
         """ Listen method to receive photon pulse
@@ -124,7 +124,6 @@ class Receiver(Node):
                     logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
                 elif label == header and received[1] == 'request':
-                    # data = self.encrypt_not_qpulse(header, message)
                     data = header + ':' + message + ':'
                     to_be_sent = (self.ID + ':' + data).encode()
                     self.sent_messages[header] = data
