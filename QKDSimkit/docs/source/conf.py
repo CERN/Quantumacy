@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 #
+# This code is part of QKDSimkit.
+#
+# SPDX-License-Identifier: MIT
+#
+# (C) Copyright 2021 CERN.
+#
 # Configuration file for the Sphinx documentation builder.
 #
 # This file does only contain a selection of the most common options. For a

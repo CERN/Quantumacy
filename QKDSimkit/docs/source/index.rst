@@ -1,3 +1,6 @@
+.. # Copyright (C) 2021 CERN
+.. # SPDX-License-Identifier: MIT
+
 Welcome to QKDSimkit's documentation!
 =====================================
 
@@ -29,3 +32,4 @@ Contents of the package
 .. toctree::
 
    QKDSimkit
+
