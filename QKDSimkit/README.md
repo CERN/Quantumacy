@@ -29,9 +29,9 @@ $ src/redis-server
 
 ### Executing
 
-* Run with the most basic configuration: channel will run on the same machine as the server and 
+* Run with the most basic configuration: channel will run on the same machine as the server
 ```
-$ QKDSimkit server local 
+$ QKDSimkit server local
 ```
 
 * Run with custom channel settings (noise, eavesdropper)
@@ -53,7 +53,8 @@ $ QKDSimkit server local -h
 $ QKDSimkit server external -h
 ```
 
-##Client
+## Client
+
 
 ### Installing
 * Create a conda environment (optional but recommended)
@@ -97,7 +98,7 @@ Gabriele Morello [[email]](mailto:gabriele.morello@cern.ch)
 This project is licensed under the MIT License - see the LICENSE file for details
 
 ## Version History
-* 
+
 * 0.0.1
     * Initial Release
     

@@ -31,7 +31,7 @@ def manage_args():
     """Manages possible arguments and provides help messages"""
 
     parser = argparse.ArgumentParser(description='Channel for Quantumacy')
-    parser.add_argument('-a', '--address', default=':5000', type=str,
+    parser.add_argument('-a', '--address', default=':8000', type=str,
                         help='Bind socket to this address (default: %(default)s)')
     parser.add_argument('-n', '--noise', default=0.0, type=float,
                         help='Set a noise value for channel, type a float number in [0,1] (default: %(default)s)')
