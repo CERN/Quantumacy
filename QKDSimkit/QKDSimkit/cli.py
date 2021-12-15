@@ -10,6 +10,8 @@
 
 import argparse
 
+from aiocache import Cache
+
 from QKDSimkit.Channel import start_channel
 from QKDSimkit.Client import start_client
 from QKDSimkit.p2p_servers import start_p2p
@@ -82,7 +84,7 @@ def cli():
     elif args.program == 'channel':
         start_channel(args.address, args.noise, args.eve)
     elif args.program == 'p2p':
-        start_p2p(args.node, args.address)
+        start_p2p(args.node, args.address, args.channel_address)
     else:
         parser.print_help()
 

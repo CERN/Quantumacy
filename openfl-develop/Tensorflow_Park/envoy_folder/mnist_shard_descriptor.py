@@ -45,7 +45,7 @@ class MnistShardDescriptor(ShardDescriptor):
 
     def download_data(self):
         """Download prepared dataset."""
-        local_file_path = '/mnt/c/Users/Gabriele Morello/Documents/park_openfl/'
+        local_file_path = 'data/'
         x_train = np.genfromtxt(local_file_path + "train.csv", delimiter=",")
         y_train = np.genfromtxt(local_file_path + "train_labels.csv", delimiter=",")[:, 0]
         x_test = np.genfromtxt(local_file_path + "test.csv", delimiter=",")

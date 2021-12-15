@@ -9,11 +9,13 @@
 """This module contains methods to operate a p2p node"""
 
 import argparse
+import asyncio
 import logging
 import json
 
 import uvicorn
 
+from aiocache import Cache
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -22,11 +24,13 @@ import QKDSimkit.core as core
 
 logging.basicConfig(level=logging.ERROR)
 
+cache = Cache(Cache.REDIS, endpoint="localhost", port=6379, namespace="p2p_server")
+
 alice_app = FastAPI()
 bob_app = FastAPI()
 
 
-def answer_get(number: int, size: int, ID: str, type: str):
+async def answer_get(number: int, size: int, ID: str, type: str):
     """Starts a node
 
     Args:
@@ -39,8 +43,7 @@ def answer_get(number: int, size: int, ID: str, type: str):
     """
     answer = {}
     keys = []
-    s = json.load(open('../data/config.json', ))['channel']
-    address = '{}:{}'.format(s['host'], s['port'])
+    address = await cache.get("channel_address")
     for i in range(number):
         if type == 'Alice':
             key = core.alice.import_key(channel_address=address, ID=ID, size=size)
@@ -62,7 +65,7 @@ async def root(number: int = 1, size: int = 256, ID: str = 'id'):
         Returns:
             keys
     """
-    return answer_get(number, size, ID, 'Alice')
+    return await answer_get(number, size, ID, 'Alice')
 
 
 @bob_app.get("/test")
@@ -76,7 +79,7 @@ async def root(number: int = 1, size: int = 256, ID: str = 'id'):
         Returns:
             keys
     """
-    return answer_get(number, size, ID, 'Bob')
+    return await answer_get(number, size, ID, 'Bob')
 
 
 origins = [
@@ -113,14 +116,15 @@ def manage_args():
     return parser.parse_args()
 
 
-def start_p2p(node: str, address: str):
+def start_p2p(node: str, address: str, channel_address: str):
     """Starts server
 
     Args:
         node (str): type of node [alice, bob]
         address (str): where to bind socket
     """
-    uvicorn.run('p2p_servers:{}_app'.format(node), host=address.split(':')[0], port=int(address.split(':')[1]))
+    asyncio.run(cache.set('channel_address', channel_address))
+    uvicorn.run('QKDSimkit.p2p_servers:{}_app'.format(node), host=address.split(':')[0], port=int(address.split(':')[1]))
 
 
 if __name__ == '__main__':

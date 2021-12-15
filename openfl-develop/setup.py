@@ -72,7 +72,7 @@ setup(
         'tensorboard',
         'requests'
     ],
-    python_requires='>=3.6, <3.9',
+    python_requires='>=3.6',
     project_urls={
         'Bug Tracker': 'https://github.com/intel/openfl/issues',
         'Documentation': 'https://openfl.readthedocs.io/en/stable/',
