@@ -15,6 +15,16 @@ def create_model():
     model = keras.Model(inputs=inputs, outputs=outputs)
     return model
 
+def optimized_model():
+    """Create keras model."""
+    inputs = keras.Input(shape=(312,), name='digits')
+    x1 = layers.Dense(8, activation='relu')(inputs)
+    x2 = layers.Dense(16, activation='relu')(x1)
+    x3 = layers.Dense(32, activation='relu')(x2)
+    outputs = layers.Dense(5, name='predictions')(x3)
+    model = keras.Model(inputs=inputs, outputs=outputs)
+    return model
+
 # Instantiate an optimizer.
 # Instantiate a loss function.
 
