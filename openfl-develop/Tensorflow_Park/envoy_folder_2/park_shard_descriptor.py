@@ -1,7 +1,7 @@
 # Copyright (C) 2020-2021 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-"""Mnist Shard Descriptor."""
+"""Park Shard Descriptor."""
 
 import logging
 import os
@@ -14,8 +14,8 @@ from openfl.interface.interactive_api.shard_descriptor import ShardDescriptor
 logger = logging.getLogger(__name__)
 
 
-class MnistShardDescriptor(ShardDescriptor):
-    """Mnist Shard descriptor class."""
+class ParkShardDescriptor(ShardDescriptor):
+    """Park Shard descriptor class."""
 
     def __init__(
             self,
@@ -45,7 +45,7 @@ class MnistShardDescriptor(ShardDescriptor):
 
     def download_data(self):
         """Download prepared dataset."""
-        local_file_path = '/mnt/c/Users/Gabriele Morello/Documents/park_openfl/'
+        local_file_path = 'data/'
         x_train = np.genfromtxt(local_file_path + "train.csv", delimiter=",")
         y_train = np.genfromtxt(local_file_path + "train_labels.csv", delimiter=",")[:, 0]
         x_test = np.genfromtxt(local_file_path + "test.csv", delimiter=",")

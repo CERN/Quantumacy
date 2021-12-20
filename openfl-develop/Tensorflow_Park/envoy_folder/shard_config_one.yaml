@@ -1,3 +1,3 @@
-template: mnist_shard_descriptor.MnistShardDescriptor
+template: park_shard_descriptor.ParkShardDescriptor
 params:
   rank_worldsize: 1, 2

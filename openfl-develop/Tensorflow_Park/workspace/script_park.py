@@ -34,7 +34,7 @@ f"Sample shape: {sample.shape}, target shape: {target.shape}"
 
 from openfl.interface.interactive_api.experiment import TaskInterface, DataInterface, ModelInterface, FLExperiment
 
-from layers import create_model, optimizer
+from layers import create_model, optimizer, optimized_model
 framework_adapter = 'openfl.plugins.frameworks_adapters.keras_adapter.FrameworkAdapterPlugin'
 model = create_model()
 MI = ModelInterface(model=model, optimizer=optimizer, framework_plugin=framework_adapter)
@@ -64,7 +64,7 @@ class DataGenerator(Sequence):
         np.random.shuffle(self.indices)
 
 
-class MnistFedDataset(DataInterface):
+class ParkFedDataset(DataInterface):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -125,7 +125,7 @@ class MnistFedDataset(DataInterface):
         """
         return self.shard_descriptor.get_test_size()
 
-fed_dataset = MnistFedDataset(train_bs=64, valid_bs=64)
+fed_dataset = ParkFedDataset(train_bs=64, valid_bs=64)
 
 TI = TaskInterface()
 
@@ -182,7 +182,7 @@ def validate(model, val_dataset, device):
             
     return {'validation_accuracy': val_acc,}
 
-# create an experimnet in federation
+# create an experiment in federation
 experiment_name = 'Parkinson_experiment'
 fl_experiment = FLExperiment(federation=federation, experiment_name=experiment_name)
 

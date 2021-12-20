@@ -1,7 +1,7 @@
 # Copyright (C) 2020-2021 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-"""Mnist Shard Descriptor."""
+"""Park Shard Descriptor."""
 
 import logging
 import os
@@ -14,15 +14,15 @@ from openfl.interface.interactive_api.shard_descriptor import ShardDescriptor
 logger = logging.getLogger(__name__)
 
 
-class MnistShardDescriptor(ShardDescriptor):
-    """Mnist Shard descriptor class."""
+class ParkShardDescriptor(ShardDescriptor):
+    """Park Shard descriptor class."""
 
     def __init__(
             self,
             rank_worldsize: str = '1, 1',
             **kwargs
     ):
-        """Initialize MnistShardDescriptor."""
+        """Initialize ParkShardDescriptor."""
         self.rank, self.worldsize = tuple(int(num) for num in rank_worldsize.split(','))
         (x_train, y_train), (x_test, y_test) = self.download_data()
         self.x_train = x_train[self.rank - 1::self.worldsize]
@@ -52,8 +52,6 @@ class MnistShardDescriptor(ShardDescriptor):
         y_test = np.genfromtxt(local_file_path + "test_labels.csv", delimiter=",")[:, 0]
         y_train = y_train.astype(int)
         y_test = y_test.astype(int)
-        print(x_test.shape)
-        print(x_train.shape)
         return (x_train, y_train), (x_test, y_test)
 
     def __getitem__(self, index: int):
