@@ -247,7 +247,7 @@ class Plan(object):
         if self.config['network'][SETTINGS]['agg_port'] == AUTO:
             self.config['network'][SETTINGS]['agg_port'] = int(
                 self.hash[:8], 16
-            ) % (60999 - 49152) + 49152
+            ) % (3003 - 3001) + 3001
 
     def get_assigner(self):
         """Get the plan task assigner."""
