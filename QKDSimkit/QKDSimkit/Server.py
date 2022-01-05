@@ -10,7 +10,9 @@
 
 import argparse
 import asyncio
-import os
+import logging
+import sys
+import time
 import random
 import string
 
@@ -25,7 +27,7 @@ from fastapi.responses import Response
 from threading import Thread
 
 from QKDSimkit.Channel import start_channel
-
+from QKDSimkit.core.qexceptions import cacheerror
 
 app = FastAPI()
 
@@ -45,15 +47,22 @@ app.add_middleware(
 
 async def add_user(token: str):
     """Saves a token and its hash in memory"""
-    users = {}
-    hashed = core.utils.hash_token(token)
-    users[hashed] = token
-    await cache.set('users', users)
+    try:
+        users = {}
+        hashed = core.utils.hash_token(token)
+        users[hashed] = token
+        await cache.set('users', users)
+    except Exception:
+        raise cacheerror("Failed to add user in cache")
 
 
 async def add_channel(address: str):
     """Saves an address in memory"""
-    await cache.set('address', address)
+    try:
+        await cache.set('address', address)
+    except Exception:
+        raise cacheerror("Failed to add channel in cache")
+
 
 
 async def start_alice(number: int, size: int, ID: str):
@@ -64,21 +73,37 @@ async def start_alice(number: int, size: int, ID: str):
         size (int): size of keys (bits)
         ID (str): identifier (hash of token)
     """
-    id_keys_map = await cache.get('id_keys')
-    if not id_keys_map:
-        id_keys_map = {}
-    address = await cache.get('address')
-    if not address:
-        raise Exception
+    try:
+        id_keys_map = await cache.get('id_keys')
+        if not id_keys_map:
+            id_keys_map = {}
+    except Exception:
+        logging.error("Failed to retrieve key map from cache")
+        sys.exit()
+    try:
+        address = await cache.get('address')
+        if not address:
+            raise Exception
+    except Exception:
+        logging.error("Failed to retrieve address from cache")
+        sys.exit()
     key_list = []
-    for i in range(number):
-        res = core.alice.import_key(channel_address=address, ID=ID, size=size)
-        if res == -1:
-            print("Can't exchange a safe key")
-        if isinstance(res, bytes):
-            key_list.append(res.decode())
-    id_keys_map[ID] = key_list
-    await cache.set('id_keys', id_keys_map)
+    try:
+        for i in range(number):
+            res = core.alice.import_key(channel_address=address, ID=ID, size=size)
+            if res == -1:
+                print("Can't exchange a safe key")
+            if isinstance(res, bytes):
+                key_list.append(res.decode())
+        id_keys_map[ID] = key_list
+    except Exception as e:
+        logging.error("Alice failed to exchange key " + str(e))
+        return
+    try:
+        await cache.set('id_keys', id_keys_map)
+    except Exception:
+        logging.error("Failed to set key map in cache")
+        sys.exit()
 
 
 @app.get("/hello")
@@ -91,16 +116,20 @@ async def root(hashed: str):
     Returns:
         message (str): test message for handshake
     """
-    users = await cache.get('users')
-    if hashed not in users.keys():
-        return Response(status_code=404, content='Provided ID does not match any user')
-    r = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(512))
-    map_hash_r = await cache.get('proof')
-    if not map_hash_r:
-        map_hash_r = {}
-    map_hash_r[hashed] = core.utils.hash_token(r)
-    await cache.set('proof', map_hash_r)
-    return core.utils.encrypt(users[hashed], r)
+    try:
+        users = await cache.get('users')
+        if hashed not in users.keys():
+            return Response(status_code=404, content='Provided ID does not match any user')
+        r = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(512))
+        map_hash_r = await cache.get('proof')
+        if not map_hash_r:
+            map_hash_r = {}
+        map_hash_r[hashed] = core.utils.hash_token(r)
+        await cache.set('proof', map_hash_r)
+        response = core.utils.encrypt(users[hashed], r)
+        return response
+    except Exception:
+        logging.error("Error while validating request")
 
 
 @app.get("/proof")
@@ -114,8 +143,12 @@ async def root(number: int, size: int, hashed: str, hash_proof: str, background_
         hash_proof (str): hash of proof message
         background_tasks: background tasks
     """
-    users = await cache.get('users')
-    map_hash_r = await cache.get('proof')
+    try:
+        users = await cache.get('users')
+        map_hash_r = await cache.get('proof')
+    except Exception:
+        logging.error("Failed to retrieve data from cache")
+        return Response(status_code=500, content='Internal server error')
     if hashed in users.keys() and hash_proof == map_hash_r[hashed]:
         background_tasks.add_task(start_alice, number, size, hashed)
         return "Verified!"
@@ -129,9 +162,12 @@ async def root(ID: str = 'id'):
     Args:
         ID (str): hashed token
     """
-    id_keys_map = await cache.get('id_keys')
+    try:
+        id_keys_map = await cache.get('id_keys')
+    except Exception:
+        logging.error("Failed to retrieve key map from cache")
     if ID not in id_keys_map.keys():
-        raise HTTPException(status_code=404, detail="No keys for the given ID")
+        return Response(status_code=404, content="No keys for the given ID")
     return id_keys_map[ID]
 
 
@@ -172,12 +208,22 @@ def start_server_and_channel(channel_address: str, noise: float, eve: bool, addr
         eve (bool): simulate an eavesdropper in channel
         address (str): where to bind this server
     """
-    asyncio.run(add_user('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA='))
-    asyncio.run(add_channel(channel_address))
+    try:
+        asyncio.run(add_user('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA='))
+        asyncio.run(add_channel(channel_address))
+    except cacheerror as ce:
+        logging.error(str(ce))
+        sys.exit()
     _thread = Thread(target=start_channel, args=(channel_address, noise, eve))
     _thread.daemon = True
     _thread.start()
-    uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
+    time.sleep(0.5)
+    if _thread.is_alive():
+        try:
+            uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
+        except Exception:
+            logging.error("Error on while running server")
+            sys.exit()
 
 
 def start_server(channel_address, address):
@@ -187,8 +233,16 @@ def start_server(channel_address, address):
         channel_address (str): address of channel
         address (str): where to bind this server
     """
-    asyncio.run(add_channel(channel_address))
-    uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
+    try:
+        asyncio.run(add_channel(channel_address))
+    except cacheerror as ce:
+        logging.error(str(ce))
+        sys.exit()
+    try:
+        uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
+    except Exception:
+        logging.error("Error on while running server")
+        sys.exit()
 
 
 if __name__ == "__main__":

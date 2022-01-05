@@ -13,7 +13,7 @@ import logging
 from base64 import urlsafe_b64encode
 
 from QKDSimkit.core.receiver import Receiver
-from QKDSimkit.core.qexceptions import qsocketerror
+from QKDSimkit.core.qexceptions import qsocketerror, boberror
 
 
 def import_key(channel_address: str, ID: str, size: int = 256):
@@ -36,27 +36,19 @@ def import_key(channel_address: str, ID: str, size: int = 256):
             # listen for a photon pulse on the quantum channel (this calls is blocking)
             bob.listen_quantum()
             bob.measure_photon_pulse()
-
         except qsocketerror as err:
-            logging.error(
-                "An error occurred while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
-            sys.exit()
-        except Exception as err:
-            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
-            sys.exit()
+            raise boberror("Connection error while connecting to the quantum channel (" + str(err) + "). Disconnecting.")
+        except Exception as e:
+            raise boberror('Generic error during qunatum photon exchange: ' + str(e))
 
-        # now connect to classic channel
+# now connect to classic channel
         try:
             # connect to channel
             bob.reset_socket()
             bob.connect_to_channel(channelIP, channelPort)
         except qsocketerror as err:
-            logging.error(
-                "An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
-            sys.exit()
-        except Exception as err:
-            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
-            sys.exit()
+            raise boberror(
+                "Connection error while connecting to the classic channel (" + str(err) + "). Disconnecting.")
 
         # exchange basis
         try:
@@ -64,14 +56,10 @@ def import_key(channel_address: str, ID: str, size: int = 256):
             bob.send('bob-other_bases', repr(bob.bases))
             # listen for Alice's reconciled key through classic channel
             bob.listen_for('alice', 'reconciled_key')
-
         except qsocketerror as err:
-            logging.error(
-                "An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
-            sys.exit()
+            raise boberror("Connection error while exchanging bases (" + str(err) + "). Disconnecting.")
         except Exception as err:
-            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
-            sys.exit()
+            raise boberror("Generic error while exchanging bases: " + str(err))
 
         # create key and public sub key
         bob.create_keys()
@@ -93,12 +81,9 @@ def import_key(channel_address: str, ID: str, size: int = 256):
             bob.send('bob-other_decision', repr(bob.decision))
 
         except qsocketerror as err:
-            logging.error(
-                "An error occurred while connecting to the classic channel (" + str(err) + "). Disconnecting.")
-            sys.exit()
+            raise boberror("Connection error while comparing sub_keys (" + str(err) + "). Disconnecting.")
         except Exception as err:
-            logging.error("An error occurred (" + str(err) + "). Disconnecting.")
-            sys.exit()
+            raise boberror("Generic error while comparing sub_keys (" + str(err) + "). Disconnecting.")
 
         bob.reset_socket()
 
@@ -116,11 +101,12 @@ def import_key(channel_address: str, ID: str, size: int = 256):
             continue
         else:
             # exit
-            logging.warning("Failed! Noise or eavesdropper detected")
-            return -1
-    logging.warning("Error: too many attempts to find a shared key")
-    return -1
+            raise boberror("Failed! Noise or eavesdropper detected")
+    raise boberror("Error: too many attempts to find a shared key")
 
 
 if __name__ == '__main__':
-    import_key('127.0.0.1:8000', 'id', 256)
+    try:
+        import_key('127.0.0.1:8000', 'id', 256)
+    except boberror as be:
+        logging.error(str(be))

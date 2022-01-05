@@ -112,8 +112,6 @@ class Sender(Node):
                     logging.info("Received: " + header + ":" + dec_message)
                     return dec_message
             raise ConnectionError
-        except Exception as CE:
-            logging.error('Alice failed to receive: \n' + str(CE))
-            sys.exit()
         except ConnectionError:
-            logging.error("Alice tried to receive too many times ")
+            raise qsocketerror("Alice tried to receive too many times ")
+

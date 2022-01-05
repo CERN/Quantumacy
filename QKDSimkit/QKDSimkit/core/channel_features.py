@@ -12,7 +12,7 @@ import random
 import sys
 
 from .models import Photon
-
+from QKDSimkit.core.qexceptions import qnoiseerror
 
 def eavesdropper(photon_stream) -> str:
     """Method to simulate an eavesdropper in a quantum channel
@@ -33,8 +33,7 @@ def eavesdropper(photon_stream) -> str:
             new_message += str(photon_pulse[p].polarization) + '~'
         return new_message + ':'
     except Exception as e:
-        logging.error('Eavesdropper error:\n' + str(e))
-        sys.exit()
+        raise qnoiseerror('Eavesdropper error:\n' + str(e))
 
 
 def random_errors(photon_stream, rate: float) -> str:
@@ -60,5 +59,4 @@ def random_errors(photon_stream, rate: float) -> str:
         logging.info('Errors: ' + str(count))
         return new_message + ':'
     except Exception as e:
-        logging.error("Failed to add errors in photon stream:\n" + str(e))
-        sys.exit()
+        raise qnoiseerror("Failed to add errors in photon stream:\n" + str(e))

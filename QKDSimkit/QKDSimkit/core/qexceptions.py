@@ -11,3 +11,15 @@ class qsocketerror(Exception):
 
 class qobjecterror(Exception):
     pass
+
+class qnoiseerror(Exception):
+    pass
+
+class cacheerror(Exception):
+    pass
+
+class aliceerror(Exception):
+    pass
+
+class boberror(Exception):
+    pass

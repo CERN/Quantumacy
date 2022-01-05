@@ -18,7 +18,7 @@ from .utils import validate
 MIN_SHARED = 20
 BUFFER_SIZE = 8192
 TIMEOUT_IN_SECONDS = 1
-CONNECTION_ATTEMPTS = 50
+CONNECTION_ATTEMPTS = 60
 MAX_REPETITIONS = 1000
 MIN_SHARED_PERCENT = 0.89
 
@@ -97,7 +97,7 @@ class Node(object):
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except Exception as e:
             logging.info("Failed to reset socket:\n" + str(e))
-            raise ConnectionError
+            raise qsocketerror
 
     def ownMessage(self, addr: str) -> bool:
         """Check if a message comes from this node

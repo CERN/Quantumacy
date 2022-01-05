@@ -9,9 +9,15 @@
 """This module contains channel's interface"""
 
 import argparse
+import logging
+import sys
 
 from QKDSimkit.core import channel
+from QKDSimkit.core.qexceptions import qsocketerror
+from QKDSimkit.core.qexceptions import qnoiseerror
 
+
+logging.basicConfig(level=logging.DEBUG)
 
 def start_channel(address: str, noise: float, eve: bool):
     """Starts channel
@@ -22,9 +28,15 @@ def start_channel(address: str, noise: float, eve: bool):
     """
     # instantiate a receiver channel
     theChannel = channel.public_channel(address, noise, eve)
-
-    # initiate the channel and listen for connections
-    theChannel.initiate_channel()
+    try:
+        # initiate the channel and listen for connections
+        theChannel.initiate_channel()
+    except qsocketerror as qs:
+        logging.error(str(qs))
+        sys.exit()
+    except qnoiseerror as qn:
+        logging.error(str(qn))
+        sys.exit()
 
 
 def manage_args():
@@ -41,4 +53,7 @@ def manage_args():
 
 if __name__ == '__main__':
     args = manage_args().parse_args()
-    start_channel(args.address, args.noise, args.eve)
+    try:
+        start_channel(args.address, args.noise, args.eve)
+    except Exception as e:
+        logging.error(str(e))

@@ -12,15 +12,16 @@ import argparse
 import asyncio
 import logging
 import json
+import sys
 
 import uvicorn
 
 from aiocache import Cache
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 import QKDSimkit.core as core
-
+from QKDSimkit.core.qexceptions import aliceerror, cacheerror
 
 logging.basicConfig(level=logging.ERROR)
 
@@ -43,15 +44,24 @@ async def answer_get(number: int, size: int, ID: str, type: str):
     """
     answer = {}
     keys = []
-    address = await cache.get("channel_address")
-    for i in range(number):
-        if type == 'Alice':
-            key = core.alice.import_key(channel_address=address, ID=ID, size=size)
-        if type == 'Bob':
-            key = core.bob.import_key(channel_address=address, ID=ID, size=size)
-        keys.append({"key_ID": i, "key": key})
-    answer["keys"] = keys
-    return answer
+    try:
+        address = await cache.get("channel_address")
+    except Exception:
+        logging.error("Failed to retrieve address from cache")
+        sys.exit()
+    try:
+        for i in range(number):
+            if type == 'Alice':
+                key = core.alice.import_key(channel_address=address, ID=ID, size=size)
+            if type == 'Bob':
+                key = core.bob.import_key(channel_address=address, ID=ID, size=size)
+            if key != -1:
+                keys.append({"key_ID": i, "key": key})
+        answer["keys"] = keys
+        return answer
+    except aliceerror as e:
+        logging.error(type + " failed to exchange key: " + e)
+        sys.exit()
 
 
 @alice_app.get("/test")
@@ -65,7 +75,10 @@ async def root(number: int = 1, size: int = 256, ID: str = 'id'):
         Returns:
             keys
     """
-    return await answer_get(number, size, ID, 'Alice')
+    try:
+        return await answer_get(number, size, ID, 'Alice')
+    except Exception:
+        return Response(status_code=500, content='Internal server error')
 
 
 @bob_app.get("/test")
@@ -79,8 +92,10 @@ async def root(number: int = 1, size: int = 256, ID: str = 'id'):
         Returns:
             keys
     """
-    return await answer_get(number, size, ID, 'Bob')
-
+    try:
+        return await answer_get(number, size, ID, 'Bob')
+    except Exception:
+        return Response(status_code=500, content='Internal server error')
 
 origins = [
     "*"
