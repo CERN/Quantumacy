@@ -39,7 +39,7 @@ export default function UseCaseQKDPage(props) {
   );
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
-  const url = "/qkd-client";
+  const url = "/demos/qkd-client";
   const [executed, setExecuted] = React.useState(false);
   const [qkdHTML, setHTML] = React.useState("");
 
@@ -58,7 +58,7 @@ export default function UseCaseQKDPage(props) {
       //setHTML( data );
       }.bind(this))
     .catch(function (err) {
-      setResponse( err.stack );
+      setHTML( err.stack );
     });
 
   };

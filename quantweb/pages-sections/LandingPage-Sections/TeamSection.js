@@ -247,7 +247,7 @@ export default function TeamSection() {
             <Card plain>
               <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
                 <img
-                  src="/img/faces/avatar-male.png"
+                  src="/img/faces/michele.jpg"
                   alt="..."
                   className={imageClasses}
                 />
@@ -259,10 +259,10 @@ export default function TeamSection() {
               </h4>
               <CardBody>
                 <p className={classes.description}>
-                  You can write here details about one of your team members. You
-                  can give more details about what they do. Feel free to add
-                  some <a href="#pablo">links</a> for people to be able to
-                  follow them outside the site.
+                  Michele is a senior fellow in quantum computing at CERN.
+                  Michele has been working as Quantum Technical Ambassador at IBM and
+                  Hybrid Cloud solution Architect. His focus is the development
+                  of QML pipelines for HEP problems and their usage in different fields.
                 </p>
               </CardBody>
               <CardFooter className={classes.justifyCenter}>
