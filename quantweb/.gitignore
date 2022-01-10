@@ -8,6 +8,7 @@
 
 # production
 /build
+/out
 
 # misc
 .DS_Store
@@ -24,5 +25,4 @@ yarn-error.log*
 
 # package
 /dist
-# compiled css
-*.css
+/.next
