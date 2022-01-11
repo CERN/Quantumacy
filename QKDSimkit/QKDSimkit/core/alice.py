@@ -15,6 +15,7 @@ from base64 import urlsafe_b64encode
 from QKDSimkit.core.qexceptions import qsocketerror, aliceerror
 from QKDSimkit.core.sender import Sender
 
+logger = logging.getLogger("QKDSimkit_logger")
 
 def import_key(channel_address: str, ID: str, size: int = 256):
     """Alice's procedure to agree on a shared key
@@ -88,13 +89,13 @@ def import_key(channel_address: str, ID: str, size: int = 256):
         if alice.decision == alice.other_decision and alice.decision == 1:
             # return a correct key
             alice.get_key()
-            logging.info("Success!")
+            logger.info("Success!")
             alice.key = alice.key[:size]
             alice.key = [int("".join(map(str, alice.key[i:i + 8])), 2) for i in range(0, len(alice.key), 8)]
             return urlsafe_b64encode(bytearray(alice.key))
         elif alice.decision == alice.other_decision and alice.decision == 0:
             # retry
-            logging.warning("Failed to match key, trying again")
+            logger.warning("Failed to match key, trying again")
             continue
         else:
             # exit
@@ -106,4 +107,4 @@ if __name__ == '__main__':
     try:
         import_key('127.0.0.1:8000', 'id', 256)
     except aliceerror as ae:
-        logging.error(str(ae))
+        logger.error(str(ae))

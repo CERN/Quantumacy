@@ -22,6 +22,8 @@ CONNECTION_ATTEMPTS = 60
 MAX_REPETITIONS = 1000
 MIN_SHARED_PERCENT = 0.89
 
+logger = logging.getLogger("QKDSimkit_logger")
+
 
 class Node(object):
     """Father class for receiver and sender
@@ -96,7 +98,7 @@ class Node(object):
             self.socket.close()
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         except Exception as e:
-            logging.info("Failed to reset socket:\n" + str(e))
+            logger.info("Failed to reset socket:\n" + str(e))
             raise qsocketerror
 
     def ownMessage(self, addr: str) -> bool:
@@ -138,13 +140,13 @@ class Node(object):
             attr (str): name of the attribute that will store the content of the received message
             """
         try:
-            logging.info("Listening to classical channel for " + attr)
+            logger.info("Listening to classical channel for " + attr)
             while True:
                 message = self.recv(sender + '-' + attr)
                 try:
                     literal = ast.literal_eval(message)
                 except ValueError as VE:
-                    logging.error("Value Error: " + str(VE))
+                    logger.error("Value Error: " + str(VE))
                     pass
                 else:
                     setattr(self, attr, literal)
@@ -159,7 +161,7 @@ class Node(object):
             int: 1: keys are equals, 0: error rate is below a given percent, -1: error rate too high
         """
         percent = validate(self.sub_shared_key, self.other_sub_key)
-        logging.info('Correct bits percentage: ' + str(percent))
+        logger.info('Correct bits percentage: ' + str(percent))
         if percent == 1:
             return 1
         if self.min_shared_percent <= percent < 1:

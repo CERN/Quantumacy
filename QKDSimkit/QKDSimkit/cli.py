@@ -9,13 +9,21 @@
 """This module contains the command line interface"""
 
 import argparse
+import logging
 
 from aiocache import Cache
 
 from QKDSimkit.Channel import start_channel
 from QKDSimkit.Client import start_client
 from QKDSimkit.p2p_servers import start_p2p
-from QKDSimkit.Server import start_server, start_server_and_channel
+from QKDSimkit.Server import start_server, start_server_and_channel, get_key_cli
+
+logging.Logger("QKDSimkit_logger")
+logger = logging.getLogger("QKDSimkit_logger")
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+logger.addHandler(ch)
 
 
 def cli():
@@ -30,8 +38,11 @@ def cli():
     server = interfaces.add_parser(name='server', description='Server for QKDSimkit')
     server.add_argument('-a', '--address', default='127.0.0.1:5002', type=str,
                         help='Bind socket to this address (default: %(default)s)')
-    channels = server.add_subparsers(title='Channel type', dest='channel_type', required=True,
-                                     help='Specify where the channel is (required)')
+    channels = server.add_subparsers(title='Action', dest='action',
+                                     help='Choose a possible action')
+    parser_k = channels.add_parser('retrieve', help="Retrieve keys")
+    parser_k.add_argument('-i', '--identifier', type=str, default=None,
+                          help='Specify an identifier to retrieve a specific set of keys')
     parser_l = channels.add_parser('local', help='Run the channel on this machine')
     parser_l.add_argument('-ca', '--channel_address', default=':5000', type=str,
                           help='Bind socket to this address (default: %(default)s)')
@@ -75,9 +86,11 @@ def cli():
     args = parser.parse_args()
 
     if args.program == 'server':
-        if args.channel_type == 'local':
+        if args.action == 'retrieve':
+            get_key_cli(args.identifier)
+        if args.action == 'local':
             start_server_and_channel(args.channel_address, args.noise, args.eve, args.address)
-        if args.channel_type == 'external':
+        if args.action == 'external':
             start_server(args.channel_address, args.address)
     elif args.program == 'client':
         start_client(args.alice_address, args.channel_address, args.number, args.size)

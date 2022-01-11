@@ -14,6 +14,9 @@ import sys
 from .models import Photon
 from QKDSimkit.core.qexceptions import qnoiseerror
 
+logger = logging.getLogger("QKDSimkit_logger")
+
+
 def eavesdropper(photon_stream) -> str:
     """Method to simulate an eavesdropper in a quantum channel
 
@@ -56,7 +59,7 @@ def random_errors(photon_stream, rate: float) -> str:
                 count += 1
             else:
                 new_message += str(p) + '~'
-        logging.info('Errors: ' + str(count))
+        logger.info('Errors: ' + str(count))
         return new_message + ':'
     except Exception as e:
         raise qnoiseerror("Failed to add errors in photon stream:\n" + str(e))

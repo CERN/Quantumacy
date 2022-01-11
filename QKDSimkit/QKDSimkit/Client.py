@@ -17,6 +17,8 @@ import urllib.parse
 import QKDSimkit.core as core
 from QKDSimkit.core.qexceptions import boberror
 
+logger = logging.getLogger("QKDSimkit_logger")
+
 
 def get_key(alice_address: str, channel_address: str, token: str, number: int, size: int):
     """Runs handshake and starts bob procedure
@@ -31,7 +33,7 @@ def get_key(alice_address: str, channel_address: str, token: str, number: int, s
     try:
         hashed = core.utils.hash_token(token)
         params = urllib.parse.urlencode({'hashed': hashed})
-        conn = http.client.HTTPConnection(f"{alice_address}")
+        conn = http.client.HTTPConnection(f"{alice_address}", timeout=2)
         conn.request("GET", f"/hello?{params}")
         r = conn.getresponse()
         if r.status != 200:
@@ -46,7 +48,7 @@ def get_key(alice_address: str, channel_address: str, token: str, number: int, s
         conn1.request("GET", f"/proof?{params}")
         r = conn1.getresponse()
     except Exception as e:
-        logging.error("Error while connecting to server: " + str(e))
+        logger.error("Error while connecting to server: " + str(e))
         sys.exit()
     if r.status == 200:
         try:
@@ -59,7 +61,7 @@ def get_key(alice_address: str, channel_address: str, token: str, number: int, s
                     key_list.append(res.decode())
             return key_list
         except boberror as e:
-            logging.error('Bob failed to exchange key: ' + str(e))
+            logger.error('Bob failed to exchange key: ' + str(e))
             sys.exit()
     else:
         return r.status
