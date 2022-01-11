@@ -15,7 +15,7 @@ from threading import Thread
 from .channel_features import eavesdropper, random_errors
 from .qexceptions import qsocketerror
 
-logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger("QKDSimkit_logger")
 
 
 class public_channel(object):  # insecure public classical/quantum channel
@@ -45,19 +45,19 @@ class public_channel(object):  # insecure public classical/quantum channel
 
         self.socket.listen(1)
 
-        logging.info("initiated the channel on {0}:{1}, waiting for clients...".format(self.host, self.port))
+        logger.info("initiated the channel on {0}:{1}, waiting for clients...".format(self.host, self.port))
 
         while True:
             conn, addr = self.socket.accept()  # initiate new serving thread for every new connection:
             if conn not in self.conn_list:
-                logging.info("{0} has connected.".format(addr))
+                logger.info("{0} has connected.".format(addr))
                 self.ip_list.append(addr)
                 self.conn_list.append(conn)
                 _thread = Thread(target=self.initiate_connection, args=(conn, addr))
                 _thread.daemon = True
                 _thread.start()
             else:
-                logging.info(self.ip_list)
+                logger.info(self.ip_list)
 
     def initiate_connection(self, conn, addr):
         """Listen for messages and broadcast them"""
@@ -80,17 +80,17 @@ class public_channel(object):  # insecure public classical/quantum channel
                 break
             else:
                 fwdMessage = "{0}:{1}".format(addr, message)
-                logging.info(fwdMessage)
+                logger.info(fwdMessage)
                 for clients in self.conn_list:
                     try:
                         if clients.getpeername() != addr:
                             clients.sendall(fwdMessage.encode())
                     except OSError:
                         # old connections?
-                        logging.warning("Ünknown connection, ignoring...")
+                        logger.warning("Ünknown connection, ignoring...")
 
         conn.close()
         self.conn_list.remove(conn)
         self.ip_list.remove(addr)
 
-        logging.info(str(addr) + " has disconnected")
+        logger.info(str(addr) + " has disconnected")

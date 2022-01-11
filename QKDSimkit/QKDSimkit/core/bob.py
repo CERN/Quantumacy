@@ -15,6 +15,8 @@ from base64 import urlsafe_b64encode
 from QKDSimkit.core.receiver import Receiver
 from QKDSimkit.core.qexceptions import qsocketerror, boberror
 
+logging.getLogger("QKDSimkit_logger")
+
 
 def import_key(channel_address: str, ID: str, size: int = 256):
     """Bob's procedure to agree on a shared key

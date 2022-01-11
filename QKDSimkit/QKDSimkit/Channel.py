@@ -16,8 +16,8 @@ from QKDSimkit.core import channel
 from QKDSimkit.core.qexceptions import qsocketerror
 from QKDSimkit.core.qexceptions import qnoiseerror
 
+logger = logging.getLogger("QKDSimkit_logger")
 
-logging.basicConfig(level=logging.DEBUG)
 
 def start_channel(address: str, noise: float, eve: bool):
     """Starts channel
@@ -32,10 +32,10 @@ def start_channel(address: str, noise: float, eve: bool):
         # initiate the channel and listen for connections
         theChannel.initiate_channel()
     except qsocketerror as qs:
-        logging.error(str(qs))
+        logger.error(str(qs))
         sys.exit()
     except qnoiseerror as qn:
-        logging.error(str(qn))
+        logger.error(str(qn))
         sys.exit()
 
 
@@ -56,4 +56,4 @@ if __name__ == '__main__':
     try:
         start_channel(args.address, args.noise, args.eve)
     except Exception as e:
-        logging.error(str(e))
+        logger.error(str(e))

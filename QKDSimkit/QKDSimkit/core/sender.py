@@ -13,8 +13,7 @@ from .models import Photon
 from .node import Node
 from .qexceptions import qsocketerror, qobjecterror
 
-logging.basicConfig(level=logging.DEBUG)
-
+logger = logging.getLogger("QKDSimkit_logger")
 
 class Sender(Node):
     """Sender class, it expands Node, it contains methods to communicate a receiver node, the general idea is that this
@@ -77,7 +76,7 @@ class Sender(Node):
             to_be_sent = (self.ID + ':' + data).encode()
             for i in range(self.connection_attempts):
                 self.socket.send(to_be_sent)
-                logging.info('Sent: ' + header + ':' + message)
+                logger.info('Sent: ' + header + ':' + message)
                 received = self.recv_all()
                 if not received:
                     continue
@@ -85,10 +84,10 @@ class Sender(Node):
                     return
             raise ConnectionError
         except Exception as err:
-            logging.error('Alice failed to send {0}:\n{1}'.format(header, str(err)))
+            logger.error('Alice failed to send {0}:\n{1}'.format(header, str(err)))
             sys.exit()
         except ConnectionError as e:
-            logging.error('Alice tried to receive too many times \n' + str(e))
+            logger.error('Alice tried to receive too many times \n' + str(e))
             sys.exit()
 
     def recv(self, header: str):
@@ -109,7 +108,7 @@ class Sender(Node):
                     continue
                 if received[0] == header:
                     dec_message = received[1]
-                    logging.info("Received: " + header + ":" + dec_message)
+                    logger.info("Received: " + header + ":" + dec_message)
                     return dec_message
             raise ConnectionError
         except ConnectionError:

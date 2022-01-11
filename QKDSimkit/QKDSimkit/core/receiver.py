@@ -13,7 +13,7 @@ from .models import Photon
 from .node import Node
 from .qexceptions import qsocketerror
 
-logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger("QKDSimkit_logger")
 
 
 class Receiver(Node):
@@ -44,7 +44,7 @@ class Receiver(Node):
         it behaves like a wrapper for recv for photon pulses
         """
         try:
-            logging.info("listening to quantum channel for photon pulse...")
+            logger.info("listening to quantum channel for photon pulse...")
             while True:
                 message = self.recv('qpulse')
                 self.polarization_vector = message.split("~")[:-1]
@@ -72,29 +72,29 @@ class Receiver(Node):
                 if label != header and label in self.sent_acks:  # received an already received message
                     to_be_sent = (self.ID + ':' + label + ":ack:").encode()
                     self.socket.send(to_be_sent)
-                    logging.info("Sent: " + label + ':ack:')
+                    logger.info("Sent: " + label + ':ack:')
                     continue
                 elif label != header and label in self.sent_messages:  # received a request for an already sent message
                     to_be_sent = (self.ID + ':' + label + ":" + self.sent_messages[label] + ':').encode()
                     self.socket.send(to_be_sent)
-                    logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
+                    logger.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
                 elif label == header:
                     dec_message = received[1]
                     to_be_sent = (self.ID + ':' + header + ":ack:").encode()
                     self.socket.send(to_be_sent)
                     self.sent_acks.append(label)
-                    logging.info("Received: " + label + ":" + dec_message)
+                    logger.info("Received: " + label + ":" + dec_message)
                     return dec_message
                 else:
                     raise Exception
             raise ConnectionError
 
         except Exception as err:
-            logging.error('Bob failed to receive {0}:\n{1}'.format(header, str(err)))
+            logger.error('Bob failed to receive {0}:\n{1}'.format(header, str(err)))
             sys.exit()
         except ConnectionError:
-            logging.error("Bob failed to receive {0}".format(header))
+            logger.error("Bob failed to receive {0}".format(header))
             sys.exit()
 
     def send(self, header: str, message: str):
@@ -116,27 +116,27 @@ class Receiver(Node):
                 if label != header and label in self.sent_acks:  # received an already received message
                     to_be_sent = (self.ID + ':' + label + ":ack:").encode()
                     self.socket.send(to_be_sent)
-                    logging.info("Sent: " + label + ':ack:')
+                    logger.info("Sent: " + label + ':ack:')
                     continue
                 elif label != header and label in self.sent_messages:  # received a request for an already sent message
                     to_be_sent = (self.ID + ':' + label + ":" + self.sent_messages[label] + ':').encode()
                     self.socket.send(to_be_sent)
-                    logging.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
+                    logger.info("Sent: " + label + ':' + self.sent_messages[label] + ':')
                     continue
                 elif label == header and received[1] == 'request':
                     data = header + ':' + message + ':'
                     to_be_sent = (self.ID + ':' + data).encode()
                     self.sent_messages[header] = data
                     self.socket.send(to_be_sent)
-                    logging.info('Sent: ' + header + ':' + message)
+                    logger.info('Sent: ' + header + ':' + message)
                     return
                 else:
                     raise Exception
             raise ConnectionError
 
         except ConnectionError:
-            logging.error('Bob failed to send {0}'.format(header))
+            logger.error('Bob failed to send {0}'.format(header))
             sys.exit()
         except Exception as err:
-            logging.error('Bob failed to receive {0}:\n{1}'.format(header, str(err)))
+            logger.error('Bob failed to receive {0}:\n{1}'.format(header, str(err)))
             sys.exit()

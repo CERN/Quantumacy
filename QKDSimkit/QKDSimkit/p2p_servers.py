@@ -23,7 +23,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import QKDSimkit.core as core
 from QKDSimkit.core.qexceptions import aliceerror, cacheerror
 
-logging.basicConfig(level=logging.ERROR)
+logger = logging.getLogger("QKDSimkit_logger")
 
 cache = Cache(Cache.REDIS, endpoint="localhost", port=6379, namespace="p2p_server")
 
@@ -47,7 +47,7 @@ async def answer_get(number: int, size: int, ID: str, type: str):
     try:
         address = await cache.get("channel_address")
     except Exception:
-        logging.error("Failed to retrieve address from cache")
+        logger.error("Failed to retrieve address from cache")
         sys.exit()
     try:
         for i in range(number):
@@ -60,7 +60,7 @@ async def answer_get(number: int, size: int, ID: str, type: str):
         answer["keys"] = keys
         return answer
     except aliceerror as e:
-        logging.error(type + " failed to exchange key: " + e)
+        logger.error(type + " failed to exchange key: " + e)
         sys.exit()
 
 

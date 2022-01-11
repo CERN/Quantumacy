@@ -25,9 +25,12 @@ from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from threading import Thread
+from typing import Optional
 
 from QKDSimkit.Channel import start_channel
 from QKDSimkit.core.qexceptions import cacheerror
+
+logger = logging.getLogger("QKDSimkit_logger")
 
 app = FastAPI()
 
@@ -78,14 +81,14 @@ async def start_alice(number: int, size: int, ID: str):
         if not id_keys_map:
             id_keys_map = {}
     except Exception:
-        logging.error("Failed to retrieve key map from cache")
+        logger.error("Failed to retrieve key map from cache")
         sys.exit()
     try:
         address = await cache.get('address')
         if not address:
             raise Exception
     except Exception:
-        logging.error("Failed to retrieve address from cache")
+        logger.error("Failed to retrieve address from cache")
         sys.exit()
     key_list = []
     try:
@@ -97,12 +100,12 @@ async def start_alice(number: int, size: int, ID: str):
                 key_list.append(res.decode())
         id_keys_map[ID] = key_list
     except Exception as e:
-        logging.error("Alice failed to exchange key " + str(e))
+        logger.error("Alice failed to exchange key " + str(e))
         return
     try:
         await cache.set('id_keys', id_keys_map)
     except Exception:
-        logging.error("Failed to set key map in cache")
+        logger.error("Failed to set key map in cache")
         sys.exit()
 
 
@@ -129,7 +132,7 @@ async def root(hashed: str):
         response = core.utils.encrypt(users[hashed], r)
         return response
     except Exception:
-        logging.error("Error while validating request")
+        logger.error("Error while validating request")
 
 
 @app.get("/proof")
@@ -147,7 +150,7 @@ async def root(number: int, size: int, hashed: str, hash_proof: str, background_
         users = await cache.get('users')
         map_hash_r = await cache.get('proof')
     except Exception:
-        logging.error("Failed to retrieve data from cache")
+        logger.error("Failed to retrieve data from cache")
         return Response(status_code=500, content='Internal server error')
     if hashed in users.keys() and hash_proof == map_hash_r[hashed]:
         background_tasks.add_task(start_alice, number, size, hashed)
@@ -156,7 +159,7 @@ async def root(number: int, size: int, hashed: str, hash_proof: str, background_
 
 
 @app.get("/get_key")
-async def root(ID: str = 'id'):
+async def getkey(ID: Optional[str] = None):
     """Retrieves key from server
 
     Args:
@@ -165,15 +168,19 @@ async def root(ID: str = 'id'):
     try:
         id_keys_map = await cache.get('id_keys')
     except Exception:
-        logging.error("Failed to retrieve key map from cache")
-    if ID not in id_keys_map.keys():
-        return Response(status_code=404, content="No keys for the given ID")
-    return id_keys_map[ID]
+        logger.error("Failed to retrieve key map from cache")
+        return Response(status_code=404, content="No keys available")
+    if ID is None:
+        return id_keys_map
+    else:
+        if ID not in id_keys_map.keys():
+            return Response(status_code=404, content="No keys for the given ID")
+        return id_keys_map[ID]
 
 
 @app.middleware("http")
 async def filter_get_key(request: Request, call_next):
-    if request.client.host != '127.0.0.1' and request.url.path == '/get_key':
+    if request.client.host != '127.0.0.1' and (request.url.path == '/get_key'):
         response = Response(status_code=403, content='Forbidden')
     else:
         response = await call_next(request)
@@ -199,6 +206,12 @@ def manage_args():
     return parser.parse_args()
 
 
+def get_key_cli(id):
+    keys = asyncio.run(getkey(id))
+    logger.info(keys)
+    return keys
+
+
 def start_server_and_channel(channel_address: str, noise: float, eve: bool, address: str):
     """Starts both server and channel
 
@@ -212,7 +225,7 @@ def start_server_and_channel(channel_address: str, noise: float, eve: bool, addr
         asyncio.run(add_user('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA='))
         asyncio.run(add_channel(channel_address))
     except cacheerror as ce:
-        logging.error(str(ce))
+        logger.error(str(ce))
         sys.exit()
     _thread = Thread(target=start_channel, args=(channel_address, noise, eve))
     _thread.daemon = True
@@ -222,7 +235,7 @@ def start_server_and_channel(channel_address: str, noise: float, eve: bool, addr
         try:
             uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
         except Exception:
-            logging.error("Error on while running server")
+            logger.error("Error on while running server")
             sys.exit()
 
 
@@ -234,14 +247,15 @@ def start_server(channel_address, address):
         address (str): where to bind this server
     """
     try:
+        asyncio.run(add_user('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA='))
         asyncio.run(add_channel(channel_address))
     except cacheerror as ce:
-        logging.error(str(ce))
+        logger.error(str(ce))
         sys.exit()
     try:
         uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
     except Exception:
-        logging.error("Error on while running server")
+        logger.error("Error on while running server")
         sys.exit()
 
 
