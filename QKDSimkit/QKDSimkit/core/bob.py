@@ -15,7 +15,7 @@ from base64 import urlsafe_b64encode
 from QKDSimkit.core.receiver import Receiver
 from QKDSimkit.core.qexceptions import qsocketerror, boberror
 
-logging.getLogger("QKDSimkit_logger")
+logger = logging.getLogger("QKDSimkit_logger")
 
 
 def import_key(channel_address: str, ID: str, size: int = 256):
@@ -93,13 +93,13 @@ def import_key(channel_address: str, ID: str, size: int = 256):
         if bob.decision == bob.other_decision and bob.decision == 1:
             # return a correct key
             bob.get_key()
-            logging.info("Success!")
+            logger.info("Success!")
             bob.key = bob.key[:size]
             bob.key = [int("".join(map(str, bob.key[i:i + 8])), 2) for i in range(0, len(bob.key), 8)]
             return urlsafe_b64encode(bytearray(bob.key))
         elif bob.decision == bob.other_decision and bob.decision == 0:
             # retry
-            logging.info("Failed to match key, trying again")
+            logger.info("Failed to match key, trying again")
             continue
         else:
             # exit
@@ -111,4 +111,4 @@ if __name__ == '__main__':
     try:
         import_key('127.0.0.1:8000', 'id', 256)
     except boberror as be:
-        logging.error(str(be))
+        logger.error(str(be))

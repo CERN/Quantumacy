@@ -5,10 +5,14 @@
 #
 # (C) Copyright 2021 CERN.
 
+import base64
 import hashlib
 import logging
+import os
 
 from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 
 def validate(shared_key: list, other_shared_key: list) -> float:
@@ -69,3 +73,15 @@ def hash_token(token: str):
     h = hashlib.new('sha512_256')
     h.update(token.encode())
     return h.hexdigest()
+
+
+def generate_token(password: bytes):
+    """Generates a com"""
+    salt = os.urandom(16)
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt,
+        iterations=390000,
+    )
+    return base64.urlsafe_b64encode(kdf.derive(password))

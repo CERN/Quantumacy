@@ -51,7 +51,9 @@ app.add_middleware(
 async def add_user(token: str):
     """Saves a token and its hash in memory"""
     try:
-        users = {}
+        users = await cache.get('users')
+        if not users:
+            users = {}
         hashed = core.utils.hash_token(token)
         users[hashed] = token
         await cache.set('users', users)

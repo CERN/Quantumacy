@@ -15,6 +15,7 @@ import sys
 import urllib.parse
 
 import QKDSimkit.core as core
+from QKDSimkit.core.utils import generate_token
 from QKDSimkit.core.qexceptions import boberror
 
 logger = logging.getLogger("QKDSimkit_logger")
@@ -78,7 +79,7 @@ def manage_args():
     return parser.parse_args()
 
 
-def start_client(alice_address, channel_address, number, size):
+def start_client(alice_address, channel_address, number, size, password, show_keys):
     """Wrapper for get_key()
     Args:
         alice_address (str): address of server
@@ -86,8 +87,11 @@ def start_client(alice_address, channel_address, number, size):
         number (int): number of keys
         size (int): size of keys (bits)
     """
-    return get_key(alice_address, channel_address, '7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', number, size)
-
+    token = password
+    keys = get_key(alice_address, channel_address, token, number, size)
+    if show_keys:
+        logger.info(keys)
+    return keys
 
 if __name__ == '__main__':
     args = manage_args()
