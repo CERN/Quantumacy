@@ -11,6 +11,7 @@
 import argparse
 import asyncio
 import logging
+import sys
 
 from aiocache import Cache
 
@@ -22,7 +23,7 @@ from QKDSimkit.Server import start_server, start_server_and_channel, get_key_cli
 logging.Logger("QKDSimkit_logger")
 logger = logging.getLogger("QKDSimkit_logger")
 logger.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
+ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(logging.DEBUG)
 logger.addHandler(ch)
 
