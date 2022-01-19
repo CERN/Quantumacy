@@ -16,7 +16,7 @@ from QKDSimkit.core import channel
 from QKDSimkit.core.qexceptions import qsocketerror
 from QKDSimkit.core.qexceptions import qnoiseerror
 
-logger = logging.getLogger("QKDSimkit_logger")
+logger = logging.getLogger("QKDSimkit")
 
 
 def start_channel(address: str, noise: float, eve: bool):

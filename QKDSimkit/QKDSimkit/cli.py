@@ -10,22 +10,15 @@
 
 import argparse
 import asyncio
-import logging
-import sys
+import logging.config
+from QKDSimkit import LOGGING
 
-from aiocache import Cache
+logging.config.dictConfig(LOGGING)
 
 from QKDSimkit.Channel import start_channel
 from QKDSimkit.Client import start_client
 from QKDSimkit.p2p_servers import start_p2p
 from QKDSimkit.Server import start_server, start_server_and_channel, get_key_cli, add_user
-
-logging.Logger("QKDSimkit_logger")
-logger = logging.getLogger("QKDSimkit_logger")
-logger.setLevel(logging.DEBUG)
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.DEBUG)
-logger.addHandler(ch)
 
 
 def cli():
@@ -65,7 +58,7 @@ def cli():
     client.add_argument('channel_address', type=str, help='Address of channel [host:port]')
     client.add_argument('-n', '--number', default=1, type=int, help="Number of keys (default: %(default)s)")
     client.add_argument('-s', '--size', default=256, type=int, help="Size of keys (default: %(default)s)")
-    client.add_argument('-t', '--token', default='7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA=', help='Specify token')
+    client.add_argument('-t', '--token', default='token', help='Specify token')
     client.add_argument('-k', '--show_keys', default=False, type=bool, help='Show keys in output')
 
     #   CHANNEL PARSER

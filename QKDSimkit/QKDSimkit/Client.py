@@ -18,10 +18,10 @@ import QKDSimkit.core as core
 from QKDSimkit.core.utils import generate_token
 from QKDSimkit.core.qexceptions import boberror
 
-logger = logging.getLogger("QKDSimkit_logger")
+logger = logging.getLogger("QKDSimkit")
 
 
-def get_key(alice_address: str, channel_address: str, token: str, number: int, size: int):
+def get_key(alice_address: str, channel_address: str, password: str, number: int, size: int):
     """Runs handshake and starts bob procedure
 
     Args:
@@ -32,9 +32,10 @@ def get_key(alice_address: str, channel_address: str, token: str, number: int, s
         size (int): size of keys (bits)
     """
     try:
+        token = generate_token(password)
         hashed = core.utils.hash_token(token)
         params = urllib.parse.urlencode({'hashed': hashed})
-        conn = http.client.HTTPConnection(f"{alice_address}", timeout=2)
+        conn = http.client.HTTPConnection(f"{alice_address}", timeout=2*number)
         conn.request("GET", f"/hello?{params}")
         r = conn.getresponse()
         if r.status != 200:
@@ -68,17 +69,6 @@ def get_key(alice_address: str, channel_address: str, token: str, number: int, s
         return r.status
 
 
-def manage_args():
-    """Manages possible arguments and provides help messages"""
-
-    parser = argparse.ArgumentParser(description='Client for Quantumacy')
-    parser.add_argument('alice_address', type=str, help='Address of server/Alice [host:port]')
-    parser.add_argument('channel_address', type=str, help='Address of channel [host:port]')
-    parser.add_argument('-n', '--number', default=1, type=int, help="Number of keys (default: %(default)s)")
-    parser.add_argument('-s', '--size', default=256, type=int, help="Size of keys (default: %(default)s)")
-    return parser.parse_args()
-
-
 def start_client(alice_address, channel_address, number, size, password, show_keys):
     """Wrapper for get_key()
     Args:
@@ -87,12 +77,7 @@ def start_client(alice_address, channel_address, number, size, password, show_ke
         number (int): number of keys
         size (int): size of keys (bits)
     """
-    token = password
-    keys = get_key(alice_address, channel_address, token, number, size)
+    keys = get_key(alice_address, channel_address, password, number, size)
     if show_keys:
         logger.info(keys)
     return keys
-
-if __name__ == '__main__':
-    args = manage_args()
-    start_client(args.alice_address, args.channel_address, args.number, args.size)

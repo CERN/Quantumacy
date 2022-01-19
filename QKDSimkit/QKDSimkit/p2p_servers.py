@@ -23,9 +23,11 @@ from fastapi.middleware.cors import CORSMiddleware
 import QKDSimkit.core as core
 from QKDSimkit.core.qexceptions import aliceerror, cacheerror
 
-logger = logging.getLogger("QKDSimkit_logger")
+logger = logging.getLogger("QKDSimkit")
+
 
 cache = Cache(Cache.REDIS, endpoint="localhost", port=6379, namespace="p2p_server")
+
 
 alice_app = FastAPI()
 bob_app = FastAPI()

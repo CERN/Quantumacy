@@ -75,13 +75,13 @@ def hash_token(token: str):
     return h.hexdigest()
 
 
-def generate_token(password: bytes):
+def generate_token(password):
     """Generates a com"""
-    salt = os.urandom(16)
+    salt = b'1234567890123456'
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
         iterations=390000,
     )
-    return base64.urlsafe_b64encode(kdf.derive(password))
+    return base64.urlsafe_b64encode(kdf.derive(password.encode())).decode()

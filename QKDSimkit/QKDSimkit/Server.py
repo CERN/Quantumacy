@@ -15,7 +15,6 @@ import sys
 import time
 import random
 import string
-
 import uvicorn
 
 import QKDSimkit.core as core
@@ -29,8 +28,10 @@ from typing import Optional
 
 from QKDSimkit.Channel import start_channel
 from QKDSimkit.core.qexceptions import cacheerror
+from QKDSimkit.core.utils import generate_token
 
-logger = logging.getLogger("QKDSimkit_logger")
+logger = logging.getLogger("QKDSimkit")
+
 
 app = FastAPI()
 
@@ -48,17 +49,18 @@ app.add_middleware(
 )
 
 
-async def add_user(token: str):
+async def add_user(password: str):
     """Saves a token and its hash in memory"""
     try:
+        token = generate_token(password)
         users = await cache.get('users')
         if not users:
             users = {}
         hashed = core.utils.hash_token(token)
         users[hashed] = token
         await cache.set('users', users)
-    except Exception:
-        raise cacheerror("Failed to add user in cache")
+    except Exception as e:
+        raise cacheerror("Failed to add user in cache: " + str(e))
 
 
 async def add_channel(address: str):
@@ -161,7 +163,7 @@ async def root(number: int, size: int, hashed: str, hash_proof: str, background_
 
 
 @app.get("/get_key")
-async def getkey(ID: Optional[str] = None):
+async def getkey(password: Optional[str] = None):
     """Retrieves key from server
 
     Args:
@@ -172,12 +174,15 @@ async def getkey(ID: Optional[str] = None):
     except Exception:
         logger.error("Failed to retrieve key map from cache")
         return Response(status_code=404, content="No keys available")
-    if ID is None:
+    if password is None:
         return id_keys_map
     else:
+        ID = core.utils.hash_token(generate_token(password))
+
         if ID not in id_keys_map.keys():
             return Response(status_code=404, content="No keys for the given ID")
-        return id_keys_map[ID]
+        else:
+            return id_keys_map[ID]
 
 
 @app.middleware("http")
@@ -187,25 +192,6 @@ async def filter_get_key(request: Request, call_next):
     else:
         response = await call_next(request)
     return response
-
-
-def manage_args():
-    """Manages possible arguments and provides help messages"""
-    parser = argparse.ArgumentParser(description='Server for Quantumacy')
-    parser.add_argument('-a', '--address', default='127.0.0.1:5002', type=str,
-                        help='Bind socket to this address (default: %(default)s)')
-    channels = parser.add_subparsers(title='Channel type', dest='channel_type', required=True,
-                                     help='Specify where the channel is (required)')
-    parser_l = channels.add_parser('local', help='Run the channel on this machine')
-    parser_l.add_argument('-ca', '--channel_address', default=':5000', type=str,
-                          help='Bind socket to this address (default: %(default)s)')
-    parser_l.add_argument('-n', '--noise', default=0.0, type=float,
-                          help='Set a noise value for channel, type a float number in [0,1] (default: %(default)s)')
-    parser_l.add_argument('-e', '--eve', action='store_true',
-                          help='Add an eavesdropper to the channel')
-    parser_e = channels.add_parser('external', help='Connect to an external channel')
-    parser_e.add_argument('-ca', '--channel_address', type=str, required=True, help='Address of channel [host:port]')
-    return parser.parse_args()
 
 
 def get_key_cli(id):
@@ -224,7 +210,7 @@ def start_server_and_channel(channel_address: str, noise: float, eve: bool, addr
         address (str): where to bind this server
     """
     try:
-        asyncio.run(add_user('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA='))
+        asyncio.run(add_user('token'))
         asyncio.run(add_channel(channel_address))
     except cacheerror as ce:
         logger.error(str(ce))
@@ -236,8 +222,8 @@ def start_server_and_channel(channel_address: str, noise: float, eve: bool, addr
     if _thread.is_alive():
         try:
             uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
-        except Exception:
-            logger.error("Error on while running server")
+        except Exception as e:
+            logger.error("Error on while running server: " + str(e))
             sys.exit()
 
 
@@ -249,7 +235,7 @@ def start_server(channel_address, address):
         address (str): where to bind this server
     """
     try:
-        asyncio.run(add_user('7KHuKtJ1ZsV21DknPbcsOZIXfmH1_MnKdOIGymsQ5aA='))
+        asyncio.run(add_user('token'))
         asyncio.run(add_channel(channel_address))
     except cacheerror as ce:
         logger.error(str(ce))
@@ -259,11 +245,3 @@ def start_server(channel_address, address):
     except Exception:
         logger.error("Error on while running server")
         sys.exit()
-
-
-if __name__ == "__main__":
-    args = manage_args()
-    if args.channel_type == 'local':
-        start_server_and_channel(args.channel_address, args.noise, args.eve, args.address)
-    if args.channel_type == 'external':
-        start_server(args.channel_address, args.address)
