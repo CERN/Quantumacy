@@ -76,7 +76,7 @@ export default function UseCaseMRIPage(props) {
         }}
         {...rest}
       />
-      <Parallax small filter image="/img/reearch-bg.jpg" />
+      <Parallax small filter image="/img/research-bg.jpg" />
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div>
           <div className={classes.container}>
