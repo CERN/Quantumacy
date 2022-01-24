@@ -92,13 +92,13 @@ export default function UseCaseSection() {
           <Card plain>
               <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
                 <a href="/uc-mri">
-                  <img src={case3} alt="..." className={imageClasses} />
+                  <img src={case3} alt="Chest MRI Classification" className={imageClasses} />
                 </a>
               </GridItem>
               <h4 className={classes.cardTitle}>
                 Chest MRI Classification
                 <br />
-                <small className={classes.smallTitle}>Research</small>
+                <small className={classes.smallTitle}>Medical Research</small>
               </h4>
               <CardBody>
                 <p className={classes.description}>
