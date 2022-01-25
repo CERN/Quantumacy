@@ -39,9 +39,31 @@ export default function UseCaseMRIPage(props) {
   );
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
+  const urlImageList = "http://olvm-livinglab-02:7000/images";
   const url = "/demos/mri-client";
+  const [imageListAvailable, setImageListAvailable] = React.useState(false);
   const [executed, setExecuted] = React.useState(false);
   const [qkdHTML, setHTML] = React.useState("");
+
+  const showImages = () => {
+    var parser = new DOMParser();
+
+    fetch(urlImageList)
+    .then(function (response) {
+      return response.text();
+    })
+    .then(function (data) {
+      var htmlDoc = parser.parseFromString(data, 'text/html');
+      setHTML( htmlDoc.getElementById("result").innerHTML );
+      //setHTML( data );
+      }.bind(this))
+    .catch(function (err) {
+      setHTML( err.stack );
+    });
+
+    setImageListAvailable(true);
+
+  };
 
   const executeTask = () => {
     var parser = new DOMParser();
@@ -107,7 +129,7 @@ export default function UseCaseMRIPage(props) {
               </GridItem>
               <GridItem xs={12} sm={12} md={8}>
                 <center>
-                  <Button color="primary" round onClick={executeTask}>
+                  <Button color="primary" round onClick={showImages}>
                     Run demo
                   </Button>
                 </center>
