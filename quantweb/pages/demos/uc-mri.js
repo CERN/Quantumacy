@@ -40,8 +40,10 @@ export default function UseCaseMRIPage(props) {
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
   const urlImageList = "http://olvm-livinglab-02:7000/images";
-  const url = "/demos/mri-client";
   const [imageListAvailable, setImageListAvailable] = React.useState(false);
+  const [imageListHTML, setImageListHTML] = React.useState("");
+
+  const url = "/demos/mri-client";
   const [executed, setExecuted] = React.useState(false);
   const [qkdHTML, setHTML] = React.useState("");
 
@@ -54,11 +56,11 @@ export default function UseCaseMRIPage(props) {
     })
     .then(function (data) {
       var htmlDoc = parser.parseFromString(data, 'text/html');
-      setHTML( htmlDoc.getElementById("result").innerHTML );
+      setImageListHTML( htmlDoc.getElementById("result").innerHTML );
       //setHTML( data );
       }.bind(this))
     .catch(function (err) {
-      setHTML( err.stack );
+      setImageListHTML( err.stack );
     });
 
     setImageListAvailable(true);
@@ -137,10 +139,10 @@ export default function UseCaseMRIPage(props) {
             </GridContainer>
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={8}>
-                <Collapse in={executed}>
+                <Collapse in={imageListAvailable}>
                   <Card>
                     <CardBody >
-                      <div dangerouslySetInnerHTML={ { __html: qkdHTML} } />
+                      <div dangerouslySetInnerHTML={ { __html: setImageListHTML} } />
                     </CardBody>
                   </Card>
                 </Collapse>
