@@ -1,0 +1,80 @@
+{'env_one': {'shard_info': node_info {
+  name: "env_one"
+}
+shard_description: "Park dataset, shard number 1 out of 2"
+sample_shape: "312"
+target_shape: "1"
+, 'is_online': True, 'is_experiment_running': False, 'last_updated': '2022-01-30 11:30:56', 'current_time': '2022-01-30 11:31:03', 'valid_duration': seconds: 120
+}, 'env_two': {'shard_info': node_info {
+  name: "env_two"
+}
+shard_description: "Park dataset, shard number 2 out of 2"
+sample_shape: "312"
+target_shape: "1"
+, 'is_online': True, 'is_experiment_running': False, 'last_updated': '2022-01-30 11:30:58', 'current_time': '2022-01-30 11:31:03', 'valid_duration': seconds: 120
+}}
+[11:31:04] INFO     Building 🡆 Object CloudpickleSerializer from openfl.plugins.interface_serializer.cloudpickle_serializer Module.                  plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           INFO     Building 🡆 Object FrameworkAdapterPlugin from openfl.plugins.frameworks_adapters.keras_adapter Module.                           plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           INFO     Starting experiment!                                                                                                       experiment.py:155
+           INFO     FL-Plan hash is 32900c93e3fdc23b0b6cbc725e6e6bb345155bd15256189e92cda7558beca23e02282ebfc753c4d466e39c881a06faf8                 plan.py:231
+           INFO     FL-Plan hash is 32900c93e3fdc23b0b6cbc725e6e6bb345155bd15256189e92cda7558beca23e02282ebfc753c4d466e39c881a06faf8                 plan.py:231
+           INFO     Building 🡆 Object CoreTaskRunner from openfl.federated.task.task_runner Module.                                                  plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {'required_plugin_components': {'framework_adapters':                                                                 plan.py:175
+                    'openfl.plugins.frameworks_adapters.keras_adapter.FrameworkAdapterPlugin'}}                                                                 
+           INFO     Building 🡆 Object FrameworkAdapterPlugin from openfl.plugins.frameworks_adapters.keras_adapter Module.                           plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+[11:31:05] WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           INFO     SetNewExperiment                                                                                                      director_client.py:166
+           INFO     Experiment was accepted and launched.                                                                                      experiment.py:169
+[11:31:10] METRIC   Round 0, collaborator env_two train result train_acc:   0.45136088132858276                                                 experiment.py:90
+           METRIC   Round 0, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4375                              experiment.py:90
+           METRIC   Round 0, collaborator env_two aggregated_model_validate result validation_accuracy:     0.171875                            experiment.py:90
+           METRIC   Round 0, collaborator env_one train result train_acc:   0.4468246102333069                                                  experiment.py:90
+           METRIC   Round 0, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4401041567325592                  experiment.py:90
+           METRIC   Round 0, collaborator env_one aggregated_model_validate result validation_accuracy:     0.1432291716337204                  experiment.py:90
+           METRIC   Round 0, collaborator Aggregator aggregated_model_validate result validation_accuracy:  0.1575520932674408                  experiment.py:90
+           METRIC   Round 0, collaborator Aggregator train result train_acc:        0.4490927457809448                                          experiment.py:90
+           METRIC   Round 0, collaborator Aggregator localy_tuned_model_validate result validation_accuracy:        0.4388020634651184          experiment.py:90
+           METRIC   Round 1, collaborator env_one train result train_acc:   0.46748992800712585                                                 experiment.py:90
+           METRIC   Round 1, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4479166567325592                  experiment.py:90
+           METRIC   Round 1, collaborator env_one aggregated_model_validate result validation_accuracy:     0.4348958432674408                  experiment.py:90
+[11:31:20] METRIC   Round 1, collaborator env_two train result train_acc:   0.47530242800712585                                                 experiment.py:90
+           METRIC   Round 1, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4427083432674408                  experiment.py:90
+           METRIC   Round 1, collaborator env_two aggregated_model_validate result validation_accuracy:     0.4479166567325592                  experiment.py:90
+           METRIC   Round 1, collaborator Aggregator aggregated_model_validate result validation_accuracy:  0.44140625                          experiment.py:90
+           METRIC   Round 1, collaborator Aggregator train result train_acc:        0.47139617800712585                                         experiment.py:90
+           METRIC   Round 1, collaborator Aggregator localy_tuned_model_validate result validation_accuracy:        0.4453125                   experiment.py:90
+           METRIC   Round 2, collaborator env_two train result train_acc:   0.47530242800712585                                                 experiment.py:90
+           METRIC   Round 2, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4479166567325592                  experiment.py:90
+           METRIC   Round 2, collaborator env_two aggregated_model_validate result validation_accuracy:     0.4505208432674408                  experiment.py:90
+           METRIC   Round 2, collaborator env_one train result train_acc:   0.4667338728904724                                                  experiment.py:90
+           METRIC   Round 2, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4375                              experiment.py:90
+           METRIC   Round 2, collaborator env_one aggregated_model_validate result validation_accuracy:     0.4348958432674408                  experiment.py:90
+           METRIC   Round 2, collaborator Aggregator aggregated_model_validate result validation_accuracy:  0.4427083432674408                  experiment.py:90
+           METRIC   Round 2, collaborator Aggregator train result train_acc:        0.47101813554763794                                         experiment.py:90
+           METRIC   Round 2, collaborator Aggregator localy_tuned_model_validate result validation_accuracy:        0.4427083134651184          experiment.py:90
+           METRIC   Round 3, collaborator env_one train result train_acc:   0.4672378897666931                                                  experiment.py:90
+           METRIC   Round 3, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4661458432674408                  experiment.py:90
+           METRIC   Round 3, collaborator env_one aggregated_model_validate result validation_accuracy:     0.4427083432674408                  experiment.py:90
+[11:31:30] METRIC   Round 3, collaborator env_two train result train_acc:   0.4750503897666931                                                  experiment.py:90
+           METRIC   Round 3, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4661458432674408                  experiment.py:90
+           METRIC   Round 3, collaborator env_two aggregated_model_validate result validation_accuracy:     0.4375                              experiment.py:90
+           METRIC   Round 3, collaborator Aggregator aggregated_model_validate result validation_accuracy:  0.4401041865348816                  experiment.py:90
+           METRIC   Round 3, collaborator Aggregator train result train_acc:        0.4711441397666931                                          experiment.py:90
+           METRIC   Round 3, collaborator Aggregator localy_tuned_model_validate result validation_accuracy:        0.4661458432674408          experiment.py:90
+           METRIC   Round 4, collaborator env_two train result train_acc:   0.47479838132858276                                                 experiment.py:90
+           METRIC   Round 4, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4401041567325592                  experiment.py:90
+           METRIC   Round 4, collaborator env_two aggregated_model_validate result validation_accuracy:     0.4583333432674408                  experiment.py:90
+           METRIC   Round 4, collaborator env_one train result train_acc:   0.4667338728904724                                                  experiment.py:90
+           METRIC   Round 4, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4713541567325592                  experiment.py:90
+           METRIC   Round 4, collaborator env_one aggregated_model_validate result validation_accuracy:     0.4375                              experiment.py:90
+           METRIC   Round 4, collaborator Aggregator aggregated_model_validate result validation_accuracy:  0.4479166865348816                  experiment.py:90
+           METRIC   Round 4, collaborator Aggregator train result train_acc:        0.4707661271095276                                          experiment.py:90
+           METRIC   Round 4, collaborator Aggregator localy_tuned_model_validate result validation_accuracy:        0.4557291567325592          experiment.py:90

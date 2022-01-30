@@ -1,0 +1,377 @@
+[11:30:51] INFO     🧿 Starting the Director Service.                                                                                             director.py:47
+           INFO     Sample shape: ['312'], target shape: ['1']                                                                                    director.py:53
+           INFO     Starting server on localhost:50051                                                                                     director_server.py:99
+[11:30:56] INFO     AcknowledgeShard request has got: node_info {                                                                         director_server.py:105
+                      name: "env_one"                                                                                                                           
+                    }                                                                                                                                           
+                    shard_description: "Park dataset, shard number 1 out of 2"                                                                                  
+                    sample_shape: "312"                                                                                                                         
+                    target_shape: "1"                                                                                                                           
+                                                                                                                                                                
+           INFO     Request was accepted                                                                                                          director.py:62
+           INFO     Request WaitExperiment has got!                                                                                       director_server.py:183
+           INFO     collaborator_name: "env_one"                                                                                          director_server.py:185
+                                                                                                                                                                
+[11:30:58] INFO     AcknowledgeShard request has got: node_info {                                                                         director_server.py:105
+                      name: "env_two"                                                                                                                           
+                    }                                                                                                                                           
+                    shard_description: "Park dataset, shard number 2 out of 2"                                                                                  
+                    sample_shape: "312"                                                                                                                         
+                    target_shape: "1"                                                                                                                           
+                                                                                                                                                                
+           INFO     Request was accepted                                                                                                          director.py:62
+           INFO     Request WaitExperiment has got!                                                                                       director_server.py:183
+           INFO     collaborator_name: "env_two"                                                                                          director_server.py:185
+                                                                                                                                                                
+[11:31:03] INFO     Request GetDatasetInfo has got!                                                                                       director_server.py:193
+           INFO     Shard registry: {'env_one': {'shard_info': node_info {                                                                       director.py:193
+                      name: "env_one"                                                                                                                           
+                    }                                                                                                                                           
+                    shard_description: "Park dataset, shard number 1 out of 2"                                                                                  
+                    sample_shape: "312"                                                                                                                         
+                    target_shape: "1"                                                                                                                           
+                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1643538656.047446}, 'env_two':                  
+                    {'shard_info': node_info {                                                                                                                  
+                      name: "env_two"                                                                                                                           
+                    }                                                                                                                                           
+                    shard_description: "Park dataset, shard number 2 out of 2"                                                                                  
+                    sample_shape: "312"                                                                                                                         
+                    target_shape: "1"                                                                                                                           
+                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1643538658.2365131}}                            
+[11:31:04] INFO     Shard registry: {'env_one': {'shard_info': node_info {                                                                       director.py:193
+                      name: "env_one"                                                                                                                           
+                    }                                                                                                                                           
+                    shard_description: "Park dataset, shard number 1 out of 2"                                                                                  
+                    sample_shape: "312"                                                                                                                         
+                    target_shape: "1"                                                                                                                           
+                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1643538656.047446}, 'env_two':                  
+                    {'shard_info': node_info {                                                                                                                  
+                      name: "env_two"                                                                                                                           
+                    }                                                                                                                                           
+                    shard_description: "Park dataset, shard number 2 out of 2"                                                                                  
+                    sample_shape: "312"                                                                                                                         
+                    target_shape: "1"                                                                                                                           
+                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1643538658.2365131}}                            
+[11:31:05] INFO     SetNewExperiment request has got <grpc._cython.cygrpc._MessageReceiver object at 0x169ca6760>                         director_server.py:113
+           INFO     New experiment Parkinson_experiment for collaborators ['env_one', 'env_two']                                                  director.py:93
+           INFO     Send response                                                                                                         director_server.py:137
+           INFO     FL-Plan hash is 32900c93e3fdc23b0b6cbc725e6e6bb345155bd15256189e92cda7558beca23e02282ebfc753c4d466e39c881a06faf8                 plan.py:231
+           INFO     FL-Plan hash is 32900c93e3fdc23b0b6cbc725e6e6bb345155bd15256189e92cda7558beca23e02282ebfc753c4d466e39c881a06faf8                 plan.py:231
+           INFO     Parsing Federated Learning Plan : SUCCESS : plan/plan.yaml.                                                                      plan.py:141
+           INFO     aggregator:                                                                                                                      plan.py:145
+                      settings:                                                                                                                                 
+                        best_state_path: save/best.pbuf                                                                                                         
+                        db_store_rounds: 1                                                                                                                      
+                        init_state_path: save/init.pbuf                                                                                                         
+                        last_state_path: save/last.pbuf                                                                                                         
+                        rounds_to_train: 5                                                                                                                      
+                      template: openfl.component.Aggregator                                                                                                     
+                    api_layer:                                                                                                                                  
+                      required_plugin_components:                                                                                                               
+                        serializer_plugin: openfl.plugins.interface_serializer.cloudpickle_serializer.CloudpickleSerializer                                     
+                      settings:                                                                                                                                 
+                        dataloader_interface_file: loader_obj.pkl                                                                                               
+                        model_interface_file: model_obj.pkl                                                                                                     
+                        tasks_interface_file: tasks_obj.pkl                                                                                                     
+                    assigner:                                                                                                                                   
+                      settings:                                                                                                                                 
+                        task_groups:                                                                                                                            
+                        - name: train_and_validate                                                                                                              
+                          percentage: 1.0                                                                                                                       
+                          tasks:                                                                                                                                
+                          - train                                                                                                                               
+                          - localy_tuned_model_validate                                                                                                         
+                          - aggregated_model_validate                                                                                                           
+                      template: openfl.component.RandomGroupedAssigner                                                                                          
+                    collaborator:                                                                                                                               
+                      settings:                                                                                                                                 
+                        db_store_rounds: 1                                                                                                                      
+                        delta_updates: false                                                                                                                    
+                        opt_treatment: CONTINUE_GLOBAL                                                                                                          
+                      template: openfl.component.Collaborator                                                                                                   
+                    data_loader:                                                                                                                                
+                      settings:                                                                                                                                 
+                        train_bs: 64                                                                                                                            
+                        valid_bs: 64                                                                                                                            
+                      template: openfl.federated.DataLoader                                                                                                     
+                    network:                                                                                                                                    
+                      settings:                                                                                                                                 
+                        agg_addr: localhost                                                                                                                     
+                        agg_port: 3002                                                                                                                          
+                        cert_folder: cert                                                                                                                       
+                        client_reconnect_interval: 5                                                                                                            
+                        disable_client_auth: false                                                                                                              
+                        hash_salt: auto                                                                                                                         
+                        tls: false                                                                                                                              
+                      template: openfl.federation.Network                                                                                                       
+                    task_runner:                                                                                                                                
+                      required_plugin_components:                                                                                                               
+                        framework_adapters: openfl.plugins.frameworks_adapters.keras_adapter.FrameworkAdapterPlugin                                             
+                      settings: {}                                                                                                                              
+                      template: openfl.federated.task.task_runner.CoreTaskRunner                                                                                
+                    tasks:                                                                                                                                      
+                      aggregated_model_validate:                                                                                                                
+                        function: validate                                                                                                                      
+                        kwargs:                                                                                                                                 
+                          apply: global                                                                                                                         
+                      localy_tuned_model_validate:                                                                                                              
+                        function: validate                                                                                                                      
+                        kwargs:                                                                                                                                 
+                          apply: local                                                                                                                          
+                      settings: {}                                                                                                                              
+                      train:                                                                                                                                    
+                        function: train                                                                                                                         
+                        kwargs: {}                                                                                                                              
+                                                                                                                                                                
+           INFO     🧿 Starting the Aggregator Service.                                                                                          director.py:232
+           INFO     Building 🡆 Object RandomGroupedAssigner from openfl.component Module.                                                            plan.py:170
+           INFO     Settings 🡆 {'task_groups': [{'name': 'train_and_validate', 'percentage': 1.0, 'tasks': ['train', 'localy_tuned_model_validate',  plan.py:173
+                    'aggregated_model_validate']}], 'authorized_cols': ['env_one', 'env_two'], 'rounds_to_train': 5, 'tasks':                                   
+                    {'aggregated_model_validate': {'function': 'validate', 'kwargs': {'apply': 'global'}, 'aggregation_type':                                   
+                    <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x169ca6400>}, 'localy_tuned_model_validate':            
+                    {'function': 'validate', 'kwargs': {'apply': 'local'}, 'aggregation_type':                                                                  
+                    <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x169ca6400>}, 'train': {'function': 'train',            
+                    'kwargs': {}, 'aggregation_type': <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at                        
+                    0x169ca6400>}}}                                                                                                                             
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           INFO     Building 🡆 Object NoCompressionPipeline from openfl.pipelines Module.                                                            plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           INFO     Building 🡆 Object Aggregator from openfl.component Module.                                                                       plan.py:170
+           INFO     Settings 🡆 {'best_state_path': 'save/best.pbuf', 'db_store_rounds': 1, 'init_state_path': 'save/init.pbuf', 'last_state_path':   plan.py:173
+                    'save/last.pbuf', 'rounds_to_train': 5, 'aggregator_uuid': 'aggregator_plan.yaml_32900c93', 'federation_uuid':                              
+                    'plan.yaml_32900c93', 'authorized_cols': ['env_one', 'env_two'], 'assigner':                                                                
+                    <openfl.component.assigner.random_grouped_assigner.RandomGroupedAssigner object at 0x169cb5fa0>, 'compression_pipeline':                    
+                    <openfl.pipelines.no_compression_pipeline.NoCompressionPipeline object at 0x169cb5820>, 'log_metric_callback': None}                        
+           INFO     Override 🡆 {'initial_tensor_dict': {'dense/kernel:0': array([[-0.11699007,  0.10376927,  0.09108351, ..., -0.11836253,           plan.py:175
+                            -0.1124026 ,  0.01707236],                                                                                                          
+                           [ 0.07409111,  0.04687712, -0.0966608 , ...,  0.08343874,                                                                            
+                            -0.11043856,  0.04554293],                                                                                                          
+                           [-0.09462436, -0.05296697,  0.05791694, ...,  0.1255366 ,                                                                            
+                            -0.06383856, -0.10589498],                                                                                                          
+                           ...,                                                                                                                                 
+                           [ 0.03931062, -0.02561953, -0.00141107, ..., -0.05288629,                                                                            
+                            -0.06371836, -0.00399945],                                                                                                          
+                           [-0.11693372, -0.07826214, -0.04118975, ..., -0.08167044,                                                                            
+                            -0.12594014,  0.04944308],                                                                                                          
+                           [ 0.01308298, -0.12137464, -0.10673548, ...,  0.04386212,                                                                            
+                             0.08651809,  0.07308252]], dtype=float32), 'dense/bias:0': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,              
+                    0., 0., 0., 0.,                                                                                                                             
+                           0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,                                                                  
+                           0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,                                                                  
+                           0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.], dtype=float32), 'dense_1/kernel:0': array([[ 0.0103865 ,                        
+                    0.15988125, -0.17110588, ...,  0.02703728,                                                                                                  
+                             0.13006426,  0.07927336],                                                                                                          
+                           [ 0.00665572,  0.11634593,  0.1741751 , ..., -0.20220691,                                                                            
+                             0.02601625,  0.06256942],                                                                                                          
+                           [ 0.20904882, -0.11905881, -0.01609211, ..., -0.16116485,                                                                            
+                            -0.17290738,  0.19716911],                                                                                                          
+                           ...,                                                                                                                                 
+                           [-0.1670245 , -0.03991821,  0.21082513, ...,  0.18550591,                                                                            
+                             0.18502219,  0.11482118],                                                                                                          
+                           [-0.11167145,  0.14433403, -0.14631547, ..., -0.00749385,                                                                            
+                            -0.13808408, -0.06471269],                                                                                                          
+                           [ 0.118019  , -0.02780068,  0.10517548, ..., -0.07501918,                                                                            
+                            -0.10528012, -0.07962386]], dtype=float32), 'dense_1/bias:0': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,            
+                    0., 0., 0., 0.,                                                                                                                             
+                           0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,                                                                  
+                           0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,                                                                  
+                           0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.], dtype=float32), 'predictions/kernel:0': array([[-0.02976662,                    
+                    -0.1112846 , -0.0281032 , -0.10204691,  0.14968795],                                                                                        
+                           [ 0.2801668 , -0.23177117, -0.16836932,  0.11593843,  0.12643921],                                                                   
+                           [-0.12597288, -0.08230264,  0.12151816, -0.04545115, -0.2749715 ],                                                                   
+                           [-0.06600751, -0.1435333 ,  0.03793836,  0.15817454,  0.08782509],                                                                   
+                           [-0.15124282, -0.1642125 ,  0.17876944,  0.2778501 ,  0.20721108],                                                                   
+                           [ 0.16251403, -0.22750676,  0.1053656 ,  0.1648565 ,  0.06532711],                                                                   
+                           [-0.21002537,  0.14684856,  0.27646172, -0.15247585,  0.08177063],                                                                   
+                           [-0.15737532,  0.19927934, -0.06959775,  0.21386826, -0.1934462 ],                                                                   
+                           [-0.26207417,  0.2179414 ,  0.13313311,  0.00645211,  0.16375872],                                                                   
+                           [ 0.14886999,  0.0245015 , -0.2603159 ,  0.1257863 ,  0.19200394],                                                                   
+                           [ 0.16820115, -0.05690558,  0.04981017,  0.29467064, -0.22223213],                                                                   
+                           [ 0.12959188,  0.29204983, -0.08605374, -0.01327029, -0.24302179],                                                                   
+                           [ 0.19306093, -0.27454522,  0.16585758,  0.21732491,  0.24234676],                                                                   
+                           [ 0.25345528,  0.15450233,  0.10708451, -0.02354133,  0.1319434 ],                                                                   
+                           [ 0.08126879,  0.24825937, -0.29001346, -0.08572084, -0.15453137],                                                                   
+                           [ 0.27899337,  0.23169786, -0.12978782,  0.03793189, -0.23314282],                                                                   
+                           [ 0.1307382 ,  0.06412432,  0.08390006, -0.15425226,  0.13240924],                                                                   
+                           [ 0.19484031, -0.17405488, -0.15846689, -0.16198632,  0.17864627],                                                                   
+                           [-0.03447324,  0.20115623, -0.07946692,  0.2747746 ,  0.13177058],                                                                   
+                           [ 0.01119724,  0.20836985,  0.11296055, -0.20061782, -0.23894235],                                                                   
+                           [-0.07542807, -0.09866519,  0.16861054, -0.0138579 , -0.11741878],                                                                   
+                           [-0.27681425, -0.12269269, -0.27905884,  0.10414097, -0.2572222 ],                                                                   
+                           [-0.2292952 , -0.04068583,  0.29404944,  0.16254365,  0.04570904],                                                                   
+                           [-0.00418895,  0.22390497, -0.0946373 ,  0.01705176,  0.0556168 ],                                                                   
+                           [-0.16158453,  0.23322046,  0.17657083,  0.27699858, -0.16849566],                                                                   
+                           [-0.05196759, -0.15412712,  0.13253775, -0.10173658, -0.05553934],                                                                   
+                           [ 0.03851753, -0.13919972,  0.27793467,  0.1864022 ,  0.16418901],                                                                   
+                           [-0.15776369, -0.04005989, -0.24584104,  0.20824689, -0.14635004],                                                                   
+                           [-0.16057824,  0.03522694, -0.2769144 ,  0.2265814 ,  0.10380313],                                                                   
+                           [-0.23885123, -0.10429963,  0.02404425,  0.0359132 ,  0.22373366],                                                                   
+                           [ 0.29319847, -0.09611098,  0.17437169,  0.21077794,  0.06736609],                                                                   
+                           [ 0.01264399, -0.24633473,  0.24677867, -0.25379586, -0.20133501],                                                                   
+                           [ 0.12424877,  0.17951503, -0.16555238, -0.20736718,  0.15066329],                                                                   
+                           [ 0.2733488 ,  0.12135744,  0.26058173,  0.01420671, -0.20613936],                                                                   
+                           [ 0.03954372, -0.07153349,  0.04581505, -0.15317082, -0.23337463],                                                                   
+                           [ 0.27370578,  0.2907151 , -0.06312245,  0.1447114 ,  0.18624106],                                                                   
+                           [ 0.06399873,  0.1512452 , -0.00569469, -0.04129609,  0.13038063],                                                                   
+                           [ 0.17490974,  0.02781227,  0.14006984, -0.15804513,  0.01162183],                                                                   
+                           [-0.03324261,  0.0149875 , -0.12854312, -0.25006586,  0.05569556],                                                                   
+                           [-0.13043694, -0.01806247, -0.22359657,  0.10333216, -0.16706677],                                                                   
+                           [ 0.07395405, -0.02319965, -0.11499238,  0.26964778,  0.2797683 ],                                                                   
+                           [-0.18005449, -0.06491004,  0.09222153, -0.27708992,  0.15975383],                                                                   
+                           [-0.19292504, -0.10475044,  0.2125119 , -0.24272516, -0.24865496],                                                                   
+                           [ 0.21880102, -0.07860343, -0.07643583,  0.16314489,  0.2461304 ],                                                                   
+                           [-0.23962376,  0.21546745,  0.16666925, -0.2188664 ,  0.28205413],                                                                   
+                           [ 0.2083261 ,  0.18466866,  0.23194283,  0.23703086,  0.24281442],                                                                   
+                           [-0.03640693, -0.19619094,  0.15823242, -0.0734586 ,  0.09095713],                                                                   
+                           [-0.15443176,  0.13199112, -0.18459752,  0.29296666,  0.0861744 ],                                                                   
+                           [-0.23595056, -0.08930109, -0.03448507, -0.18317622,  0.1941056 ],                                                                   
+                           [-0.2942065 ,  0.24746567,  0.25855976,  0.07911968, -0.27346265],                                                                   
+                           [ 0.12858129, -0.28182095,  0.16497988,  0.23840994,  0.25643605],                                                                   
+                           [ 0.13037872,  0.14026907,  0.10748935, -0.21127689,  0.05382866],                                                                   
+                           [ 0.22041738,  0.16134647,  0.1667515 ,  0.17728409, -0.26402164],                                                                   
+                           [ 0.10582998,  0.05822024,  0.22534674,  0.06959951, -0.27301085],                                                                   
+                           [-0.20877182,  0.14303946,  0.02136642, -0.16708596, -0.00113228],                                                                   
+                           [ 0.20810735,  0.2879573 ,  0.1084443 ,  0.23595381, -0.10336281],                                                                   
+                           [ 0.05498216, -0.17241837, -0.2814006 , -0.21034652,  0.02559891],                                                                   
+                           [ 0.03094903, -0.28654197, -0.06996833, -0.26838768, -0.1958319 ],                                                                   
+                           [-0.27186474,  0.16067323,  0.25289702, -0.22650379, -0.19530776],                                                                   
+                           [-0.01197454,  0.16011858,  0.28512132, -0.07111299, -0.14069541],                                                                   
+                           [-0.01443624, -0.2464861 ,  0.0813697 ,  0.28113538, -0.13703121],                                                                   
+                           [-0.04489496,  0.04817909,  0.21782786, -0.02840319, -0.14351116],                                                                   
+                           [-0.21906297, -0.28839904,  0.16752538, -0.00971177,  0.12337711],                                                                   
+                           [ 0.27355725, -0.17489687, -0.13489272, -0.04020795, -0.2505994 ]],                                                                  
+                          dtype=float32), 'predictions/bias:0': array([0., 0., 0., 0., 0.], dtype=float32)}}                                                    
+           INFO     Insecure port: 3002                                                                                                            server.py:325
+           INFO     Starting Aggregator gRPC Server                                                                                              director.py:244
+           INFO     Experiment Parkinson_experiment was prepared                                                                          director_server.py:187
+           INFO     Experiment Parkinson_experiment was prepared                                                                          director_server.py:187
+           INFO     Request StreamMetrics for Parkinson_experiment experiment has got!                                                    director_server.py:204
+           INFO     getting key                                                                                                                    server.py:153
+           INFO     getting key                                                                                                                    server.py:153
+[11:31:06] INFO     {"keys":[{"key_ID":0,"key":"ZF7Rwt1vxf7ElHH8UO8pLCgi0mO1EOdp6X__mSMPS2Q="}]}                                                   server.py:369
+           INFO     ZF7Rwt1vxf7ElHH8UO8pLCgi0mO1EOdp6X__mSMPS2Q=                                                                                   server.py:155
+           INFO     Sending tasks to collaborator env_two for round 0                                                                          aggregator.py:304
+[11:31:07] INFO     Collaborator env_two is sending task results for train, round 0                                                            aggregator.py:470
+           METRIC   Round 0, collaborator env_two train result train_acc:   0.45136088132858276                                                aggregator.py:514
+           INFO     Collaborator env_two is sending task results for localy_tuned_model_validate, round 0                                      aggregator.py:470
+           METRIC   Round 0, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4375                             aggregator.py:514
+           INFO     Collaborator env_two is sending task results for aggregated_model_validate, round 0                                        aggregator.py:470
+           METRIC   Round 0, collaborator env_two aggregated_model_validate result validation_accuracy:     0.171875                           aggregator.py:514
+           INFO     {"keys":[{"key_ID":0,"key":"03plWWUd0_LUUgdaGopMpQMnQvCqRgXFVZ3FqPeMBuQ="}]}                                                   server.py:369
+           INFO     03plWWUd0_LUUgdaGopMpQMnQvCqRgXFVZ3FqPeMBuQ=                                                                                   server.py:155
+           INFO     Sending tasks to collaborator env_one for round 0                                                                          aggregator.py:304
+[11:31:08] INFO     Collaborator env_one is sending task results for train, round 0                                                            aggregator.py:470
+           METRIC   Round 0, collaborator env_one train result train_acc:   0.4468246102333069                                                 aggregator.py:514
+           INFO     Collaborator env_one is sending task results for localy_tuned_model_validate, round 0                                      aggregator.py:470
+           METRIC   Round 0, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4401041567325592                 aggregator.py:514
+           INFO     Collaborator env_one is sending task results for aggregated_model_validate, round 0                                        aggregator.py:470
+           METRIC   Round 0, collaborator env_one aggregated_model_validate result validation_accuracy:     0.1432291716337204                 aggregator.py:514
+           METRIC   Round 0, aggregator: aggregated_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage    aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:     0.1576                                                                                      
+           METRIC   Round 0: saved the best model with score 0.157552                                                                          aggregator.py:807
+           METRIC   Round 0, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x169ca6400> aggregator.py:793
+                    train_acc:   0.4491                                                                                                                         
+           METRIC   Round 0, aggregator: localy_tuned_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage  aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:   0.4388                                                                                        
+           INFO     Saving round 1 model...                                                                                                    aggregator.py:841
+           INFO     Starting round 1...                                                                                                        aggregator.py:848
+           INFO     Sending tasks to collaborator env_one for round 1                                                                          aggregator.py:304
+           INFO     Collaborator env_one is sending task results for train, round 1                                                            aggregator.py:470
+           METRIC   Round 1, collaborator env_one train result train_acc:   0.46748992800712585                                                aggregator.py:514
+           INFO     Collaborator env_one is sending task results for localy_tuned_model_validate, round 1                                      aggregator.py:470
+           METRIC   Round 1, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4479166567325592                 aggregator.py:514
+           INFO     Collaborator env_one is sending task results for aggregated_model_validate, round 1                                        aggregator.py:470
+           METRIC   Round 1, collaborator env_one aggregated_model_validate result validation_accuracy:     0.4348958432674408                 aggregator.py:514
+[11:31:17] INFO     Sending tasks to collaborator env_two for round 1                                                                          aggregator.py:304
+           INFO     Collaborator env_two is sending task results for train, round 1                                                            aggregator.py:470
+           METRIC   Round 1, collaborator env_two train result train_acc:   0.47530242800712585                                                aggregator.py:514
+           INFO     Collaborator env_two is sending task results for localy_tuned_model_validate, round 1                                      aggregator.py:470
+           METRIC   Round 1, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4427083432674408                 aggregator.py:514
+           INFO     Collaborator env_two is sending task results for aggregated_model_validate, round 1                                        aggregator.py:470
+           METRIC   Round 1, collaborator env_two aggregated_model_validate result validation_accuracy:     0.4479166567325592                 aggregator.py:514
+           METRIC   Round 1, aggregator: aggregated_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage    aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:     0.4414                                                                                      
+           METRIC   Round 1: saved the best model with score 0.441406                                                                          aggregator.py:807
+           METRIC   Round 1, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x169ca6400> aggregator.py:793
+                    train_acc:   0.4714                                                                                                                         
+           METRIC   Round 1, aggregator: localy_tuned_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage  aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:   0.4453                                                                                        
+           INFO     Saving round 2 model...                                                                                                    aggregator.py:841
+           INFO     Starting round 2...                                                                                                        aggregator.py:848
+           INFO     Sending tasks to collaborator env_two for round 2                                                                          aggregator.py:304
+           INFO     Collaborator env_two is sending task results for train, round 2                                                            aggregator.py:470
+           METRIC   Round 2, collaborator env_two train result train_acc:   0.47530242800712585                                                aggregator.py:514
+           INFO     Collaborator env_two is sending task results for localy_tuned_model_validate, round 2                                      aggregator.py:470
+           METRIC   Round 2, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4479166567325592                 aggregator.py:514
+           INFO     Collaborator env_two is sending task results for aggregated_model_validate, round 2                                        aggregator.py:470
+           METRIC   Round 2, collaborator env_two aggregated_model_validate result validation_accuracy:     0.4505208432674408                 aggregator.py:514
+[11:31:18] INFO     Sending tasks to collaborator env_one for round 2                                                                          aggregator.py:304
+           INFO     Collaborator env_one is sending task results for train, round 2                                                            aggregator.py:470
+           METRIC   Round 2, collaborator env_one train result train_acc:   0.4667338728904724                                                 aggregator.py:514
+           INFO     Collaborator env_one is sending task results for localy_tuned_model_validate, round 2                                      aggregator.py:470
+           METRIC   Round 2, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4375                             aggregator.py:514
+           INFO     Collaborator env_one is sending task results for aggregated_model_validate, round 2                                        aggregator.py:470
+           METRIC   Round 2, collaborator env_one aggregated_model_validate result validation_accuracy:     0.4348958432674408                 aggregator.py:514
+           METRIC   Round 2, aggregator: aggregated_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage    aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:     0.4427                                                                                      
+           METRIC   Round 2: saved the best model with score 0.442708                                                                          aggregator.py:807
+           METRIC   Round 2, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x169ca6400> aggregator.py:793
+                    train_acc:   0.4710                                                                                                                         
+           METRIC   Round 2, aggregator: localy_tuned_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage  aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:   0.4427                                                                                        
+           INFO     Saving round 3 model...                                                                                                    aggregator.py:841
+           INFO     Starting round 3...                                                                                                        aggregator.py:848
+           INFO     Sending tasks to collaborator env_one for round 3                                                                          aggregator.py:304
+           INFO     Collaborator env_one is sending task results for train, round 3                                                            aggregator.py:470
+           METRIC   Round 3, collaborator env_one train result train_acc:   0.4672378897666931                                                 aggregator.py:514
+           INFO     Collaborator env_one is sending task results for localy_tuned_model_validate, round 3                                      aggregator.py:470
+           METRIC   Round 3, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4661458432674408                 aggregator.py:514
+           INFO     Collaborator env_one is sending task results for aggregated_model_validate, round 3                                        aggregator.py:470
+           METRIC   Round 3, collaborator env_one aggregated_model_validate result validation_accuracy:     0.4427083432674408                 aggregator.py:514
+[11:31:27] INFO     Sending tasks to collaborator env_two for round 3                                                                          aggregator.py:304
+           INFO     Collaborator env_two is sending task results for train, round 3                                                            aggregator.py:470
+           METRIC   Round 3, collaborator env_two train result train_acc:   0.4750503897666931                                                 aggregator.py:514
+           INFO     Collaborator env_two is sending task results for localy_tuned_model_validate, round 3                                      aggregator.py:470
+           METRIC   Round 3, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4661458432674408                 aggregator.py:514
+           INFO     Collaborator env_two is sending task results for aggregated_model_validate, round 3                                        aggregator.py:470
+           METRIC   Round 3, collaborator env_two aggregated_model_validate result validation_accuracy:     0.4375                             aggregator.py:514
+           METRIC   Round 3, aggregator: aggregated_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage    aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:     0.4401                                                                                      
+           METRIC   Round 3, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x169ca6400> aggregator.py:793
+                    train_acc:   0.4711                                                                                                                         
+           METRIC   Round 3, aggregator: localy_tuned_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage  aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:   0.4661                                                                                        
+           INFO     Saving round 4 model...                                                                                                    aggregator.py:841
+           INFO     Starting round 4...                                                                                                        aggregator.py:848
+           INFO     Sending tasks to collaborator env_two for round 4                                                                          aggregator.py:304
+[11:31:28] INFO     Collaborator env_two is sending task results for train, round 4                                                            aggregator.py:470
+           METRIC   Round 4, collaborator env_two train result train_acc:   0.47479838132858276                                                aggregator.py:514
+           INFO     Collaborator env_two is sending task results for localy_tuned_model_validate, round 4                                      aggregator.py:470
+           METRIC   Round 4, collaborator env_two localy_tuned_model_validate result validation_accuracy:   0.4401041567325592                 aggregator.py:514
+           INFO     Collaborator env_two is sending task results for aggregated_model_validate, round 4                                        aggregator.py:470
+           METRIC   Round 4, collaborator env_two aggregated_model_validate result validation_accuracy:     0.4583333432674408                 aggregator.py:514
+           INFO     Sending tasks to collaborator env_one for round 4                                                                          aggregator.py:304
+[11:31:29] INFO     Collaborator env_one is sending task results for train, round 4                                                            aggregator.py:470
+           METRIC   Round 4, collaborator env_one train result train_acc:   0.4667338728904724                                                 aggregator.py:514
+           INFO     Collaborator env_one is sending task results for localy_tuned_model_validate, round 4                                      aggregator.py:470
+           METRIC   Round 4, collaborator env_one localy_tuned_model_validate result validation_accuracy:   0.4713541567325592                 aggregator.py:514
+           INFO     Collaborator env_one is sending task results for aggregated_model_validate, round 4                                        aggregator.py:470
+           METRIC   Round 4, collaborator env_one aggregated_model_validate result validation_accuracy:     0.4375                             aggregator.py:514
+           METRIC   Round 4, aggregator: aggregated_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage    aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:     0.4479                                                                                      
+           METRIC   Round 4: saved the best model with score 0.447917                                                                          aggregator.py:807
+           METRIC   Round 4, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x169ca6400> aggregator.py:793
+                    train_acc:   0.4708                                                                                                                         
+           METRIC   Round 4, aggregator: localy_tuned_model_validate <openfl.component.aggregation_functions.weighted_average.WeightedAverage  aggregator.py:793
+                    object at 0x169ca6400> validation_accuracy:   0.4557                                                                                        
+           INFO     Saving round 5 model...                                                                                                    aggregator.py:841
+           INFO     Experiment Completed. Cleaning up...                                                                                       aggregator.py:846
+           INFO     Sending signal to collaborator env_one to shutdown...                                                                      aggregator.py:267
+           INFO     Request WaitExperiment has got!                                                                                       director_server.py:183
+           INFO     collaborator_name: "env_one"                                                                                          director_server.py:185
+                                                                                                                                                                
+[11:31:38] INFO     Sending signal to collaborator env_two to shutdown...                                                                      aggregator.py:267
+           INFO     Request WaitExperiment has got!                                                                                       director_server.py:183
+           INFO     collaborator_name: "env_two"                                                                                          director_server.py:185
+                                                                                                                                                                

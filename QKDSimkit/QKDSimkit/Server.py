@@ -195,6 +195,11 @@ async def filter_get_key(request: Request, call_next):
 
 
 def get_key_cli(id):
+    """ Synchronous wrapper for get_key
+
+    Returns:
+          keys: list of keys for the given ID
+    """
     keys = asyncio.run(getkey(id))
     logger.info(keys)
     return keys

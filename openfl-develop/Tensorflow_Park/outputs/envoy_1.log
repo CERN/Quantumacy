@@ -1,0 +1,274 @@
+[11:30:53] INFO     🧿 Starting the Envoy.                                                                                                           envoy.py:53
+[11:30:56] INFO     Send report AcknowledgeShard                                                                                           director_client.py:56
+           INFO     Shard accepted                                                                                                                  envoy.py:116
+           INFO     The health check sender is started.                                                                                              envoy.py:87
+           INFO     Send WaitExperiment request                                                                                            director_client.py:72
+           INFO     WaitExperiment response has received                                                                                   director_client.py:74
+[11:31:05] INFO     Request experiment Parkinson_experiment                                                                                director_client.py:84
+Requirement already satisfied: aiocache==0.11.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 1)) (0.11.1)
+Requirement already satisfied: aiomcache==0.6.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 2)) (0.6.0)
+Requirement already satisfied: aioredis==1.3.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 3)) (1.3.1)
+Requirement already satisfied: anyio==3.5.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 4)) (3.5.0)
+Requirement already satisfied: asgiref==3.4.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 5)) (3.4.1)
+Requirement already satisfied: async-timeout==4.0.2 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 6)) (4.0.2)
+Requirement already satisfied: bleach==4.1.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 7)) (4.1.0)
+Requirement already satisfied: blinker==1.4 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 8)) (1.4)
+Requirement already satisfied: certifi==2021.10.8 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 9)) (2021.10.8)
+Requirement already satisfied: cffi==1.15.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 10)) (1.15.0)
+Requirement already satisfied: charset-normalizer==2.0.10 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 11)) (2.0.10)
+Requirement already satisfied: click==8.0.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 12)) (8.0.3)
+Requirement already satisfied: commonmark==0.9.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 13)) (0.9.1)
+Requirement already satisfied: cryptography==36.0.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 14)) (36.0.1)
+Requirement already satisfied: dnspython==2.1.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 15)) (2.1.0)
+Requirement already satisfied: docutils==0.18.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 16)) (0.18.1)
+Requirement already satisfied: email-validator==1.1.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 17)) (1.1.3)
+Requirement already satisfied: fastapi==0.71.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 18)) (0.71.0)
+Requirement already satisfied: gast==0.3.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 19)) (0.3.3)
+Requirement already satisfied: google-pasta==0.2.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 20)) (0.2.0)
+Requirement already satisfied: grpcio==1.42.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 21)) (1.42.0)
+Requirement already satisfied: grpcio-tools==1.42.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 22)) (1.42.0)
+Requirement already satisfied: h11==0.12.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 23)) (0.12.0)
+Requirement already satisfied: hiredis==2.0.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 24)) (2.0.0)
+Requirement already satisfied: httptools==0.2.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 25)) (0.2.0)
+Requirement already satisfied: idna==3.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 26)) (3.3)
+Requirement already satisfied: itsdangerous==2.0.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 27)) (2.0.1)
+Requirement already satisfied: Jinja2==3.0.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 28)) (3.0.3)
+Requirement already satisfied: joblib==1.1.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 29)) (1.1.0)
+Requirement already satisfied: keyring==23.4.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 30)) (23.4.0)
+Requirement already satisfied: MarkupSafe==2.0.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 31)) (2.0.1)
+Requirement already satisfied: msgpack==1.0.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 32)) (1.0.3)
+Requirement already satisfied: orjson==3.6.5 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 33)) (3.6.5)
+Requirement already satisfied: packaging==21.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 34)) (21.3)
+Requirement already satisfied: pandas==1.3.5 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 35)) (1.3.5)
+Requirement already satisfied: pip==21.3.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 36)) (21.3.1)
+Requirement already satisfied: pkginfo==1.8.2 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 37)) (1.8.2)
+Requirement already satisfied: protobuf==3.19.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 38)) (3.19.1)
+Requirement already satisfied: pyasn1==0.4.8 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 39)) (0.4.8)
+Requirement already satisfied: pyasn1-modules==0.2.7 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 40)) (0.2.7)
+Requirement already satisfied: pycparser==2.21 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 41)) (2.21)
+Requirement already satisfied: pydantic==1.9.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 42)) (1.9.0)
+Requirement already satisfied: pyparsing==3.0.6 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 43)) (3.0.6)
+Requirement already satisfied: python-dotenv==0.19.2 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 44)) (0.19.2)
+Requirement already satisfied: python-multipart==0.0.5 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 45)) (0.0.5)
+Requirement already satisfied: PyYAML==5.4.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 46)) (5.4.1)
+Requirement already satisfied: readme-renderer==32.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 47)) (32.0)
+Requirement already satisfied: requests==2.27.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 48)) (2.27.1)
+Requirement already satisfied: requests-toolbelt==0.9.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 49)) (0.9.1)
+Requirement already satisfied: rfc3986==1.5.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 50)) (1.5.0)
+Requirement already satisfied: scikit-learn==1.0.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 51)) (1.0.1)
+Requirement already satisfied: setuptools==59.6.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 52)) (59.6.0)
+Requirement already satisfied: sklearn==0.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 53)) (0.0)
+Requirement already satisfied: sniffio==1.2.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 54)) (1.2.0)
+Requirement already satisfied: starlette==0.17.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 55)) (0.17.1)
+Requirement already satisfied: termcolor==1.1.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 56)) (1.1.0)
+Requirement already satisfied: threadpoolctl==3.0.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 57)) (3.0.0)
+Requirement already satisfied: twine==3.7.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 58)) (3.7.1)
+Requirement already satisfied: typing_extensions==4.0.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 59)) (4.0.1)
+Requirement already satisfied: ujson==4.3.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 60)) (4.3.0)
+Requirement already satisfied: urllib3==1.26.8 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 61)) (1.26.8)
+Requirement already satisfied: uvicorn==0.15.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 62)) (0.15.0)
+Requirement already satisfied: uvloop==0.16.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 63)) (0.16.0)
+Requirement already satisfied: watchgod==0.7 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 64)) (0.7)
+Requirement already satisfied: webencodings==0.5.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 65)) (0.5.1)
+Requirement already satisfied: websockets==10.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 66)) (10.1)
+Requirement already satisfied: wheel==0.37.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from -r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 67)) (0.37.0)
+Requirement already satisfied: six>=1.9.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from bleach==4.1.0->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 7)) (1.16.0)
+Requirement already satisfied: importlib-metadata>=3.6 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from keyring==23.4.0->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 30)) (4.8.2)
+Requirement already satisfied: python-dateutil>=2.7.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from pandas==1.3.5->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 35)) (2.8.2)
+Requirement already satisfied: pytz>=2017.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from pandas==1.3.5->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 35)) (2021.3)
+Requirement already satisfied: numpy>=1.20.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from pandas==1.3.5->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 35)) (1.21.4)
+Requirement already satisfied: Pygments>=2.5.1 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from readme-renderer==32.0->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 47)) (2.10.0)
+Requirement already satisfied: scipy>=1.1.0 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from scikit-learn==1.0.1->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 51)) (1.7.3)
+Requirement already satisfied: colorama>=0.4.3 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from twine==3.7.1->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 58)) (0.4.4)
+Requirement already satisfied: tqdm>=4.14 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from twine==3.7.1->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 58)) (4.62.3)
+Requirement already satisfied: zipp>=0.5 in /opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.9/site-packages (from importlib-metadata>=3.6->keyring==23.4.0->-r /Users/gabrielemorello/PycharmProjects/Quantumacy1/openfl-develop/Tensorflow_Park/envoy_folder/Parkinson_experiment/requirements.txt (line 30)) (3.6.0)
+           INFO     FL-Plan hash is 32900c93e3fdc23b0b6cbc725e6e6bb345155bd15256189e92cda7558beca23e02282ebfc753c4d466e39c881a06faf8                 plan.py:231
+           INFO     FL-Plan hash is 32900c93e3fdc23b0b6cbc725e6e6bb345155bd15256189e92cda7558beca23e02282ebfc753c4d466e39c881a06faf8                 plan.py:231
+           INFO     Parsing Federated Learning Plan : SUCCESS : plan/plan.yaml.                                                                      plan.py:141
+           INFO     aggregator:                                                                                                                      plan.py:145
+                      settings:                                                                                                                                 
+                        best_state_path: save/best.pbuf                                                                                                         
+                        db_store_rounds: 1                                                                                                                      
+                        init_state_path: save/init.pbuf                                                                                                         
+                        last_state_path: save/last.pbuf                                                                                                         
+                        rounds_to_train: 5                                                                                                                      
+                      template: openfl.component.Aggregator                                                                                                     
+                    api_layer:                                                                                                                                  
+                      required_plugin_components:                                                                                                               
+                        serializer_plugin: openfl.plugins.interface_serializer.cloudpickle_serializer.CloudpickleSerializer                                     
+                      settings:                                                                                                                                 
+                        dataloader_interface_file: loader_obj.pkl                                                                                               
+                        model_interface_file: model_obj.pkl                                                                                                     
+                        tasks_interface_file: tasks_obj.pkl                                                                                                     
+                    assigner:                                                                                                                                   
+                      settings:                                                                                                                                 
+                        task_groups:                                                                                                                            
+                        - name: train_and_validate                                                                                                              
+                          percentage: 1.0                                                                                                                       
+                          tasks:                                                                                                                                
+                          - train                                                                                                                               
+                          - localy_tuned_model_validate                                                                                                         
+                          - aggregated_model_validate                                                                                                           
+                      template: openfl.component.RandomGroupedAssigner                                                                                          
+                    collaborator:                                                                                                                               
+                      settings:                                                                                                                                 
+                        db_store_rounds: 1                                                                                                                      
+                        delta_updates: false                                                                                                                    
+                        opt_treatment: CONTINUE_GLOBAL                                                                                                          
+                      template: openfl.component.Collaborator                                                                                                   
+                    data_loader:                                                                                                                                
+                      settings:                                                                                                                                 
+                        train_bs: 64                                                                                                                            
+                        valid_bs: 64                                                                                                                            
+                      template: openfl.federated.DataLoader                                                                                                     
+                    network:                                                                                                                                    
+                      settings:                                                                                                                                 
+                        agg_addr: localhost                                                                                                                     
+                        agg_port: 3002                                                                                                                          
+                        cert_folder: cert                                                                                                                       
+                        client_reconnect_interval: 5                                                                                                            
+                        disable_client_auth: false                                                                                                              
+                        hash_salt: auto                                                                                                                         
+                        tls: false                                                                                                                              
+                      template: openfl.federation.Network                                                                                                       
+                    task_runner:                                                                                                                                
+                      required_plugin_components:                                                                                                               
+                        framework_adapters: openfl.plugins.frameworks_adapters.keras_adapter.FrameworkAdapterPlugin                                             
+                      settings: {}                                                                                                                              
+                      template: openfl.federated.task.task_runner.CoreTaskRunner                                                                                
+                    tasks:                                                                                                                                      
+                      aggregated_model_validate:                                                                                                                
+                        function: validate                                                                                                                      
+                        kwargs:                                                                                                                                 
+                          apply: global                                                                                                                         
+                      localy_tuned_model_validate:                                                                                                              
+                        function: validate                                                                                                                      
+                        kwargs:                                                                                                                                 
+                          apply: local                                                                                                                          
+                      settings: {}                                                                                                                              
+                      train:                                                                                                                                    
+                        function: train                                                                                                                         
+                        kwargs: {}                                                                                                                              
+                                                                                                                                                                
+Data = {}
+           INFO     🧿 Starting a Collaborator Service.                                                                                             envoy.py:101
+           INFO     Building 🡆 Object CloudpickleSerializer from openfl.plugins.interface_serializer.cloudpickle_serializer Module.                  plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           INFO     Building 🡆 Object CoreTaskRunner from openfl.federated.task.task_runner Module.                                                  plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {'required_plugin_components': {'framework_adapters':                                                                 plan.py:175
+                    'openfl.plugins.frameworks_adapters.keras_adapter.FrameworkAdapterPlugin'}}                                                                 
+           INFO     Building 🡆 Object FrameworkAdapterPlugin from openfl.plugins.frameworks_adapters.keras_adapter Module.                           plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           INFO     Building 🡆 Object NoCompressionPipeline from openfl.pipelines Module.                                                            plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           INFO     Building 🡆 Object Collaborator from openfl.component Module.                                                                     plan.py:170
+           INFO     Settings 🡆 {'db_store_rounds': 1, 'delta_updates': False, 'opt_treatment': 'CONTINUE_GLOBAL', 'collaborator_name': 'env_one',    plan.py:173
+                    'aggregator_uuid': 'aggregator_plan.yaml_32900c93', 'federation_uuid': 'plan.yaml_32900c93', 'task_runner':                                 
+                    <openfl.federated.task.task_runner.CoreTaskRunner object at 0x15f3bc6d0>, 'compression_pipeline':                                           
+                    <openfl.pipelines.no_compression_pipeline.NoCompressionPipeline object at 0x15f51cc40>, 'task_config':                                      
+                    {'aggregated_model_validate': {'function': 'validate', 'kwargs': {'apply': 'global'}}, 'localy_tuned_model_validate':                       
+                    {'function': 'validate', 'kwargs': {'apply': 'local'}}, 'settings': {}, 'train': {'function': 'train', 'kwargs': {}}}, 'client':            
+                    <openfl.transport.grpc.client.CollaboratorGRPCClient object at 0x15f5197c0>}                                                                
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           INFO     Waiting for tasks...                                                                                                     collaborator.py:153
+           INFO     asking key                                                                                                                     client.py:288
+           INFO     getting key                                                                                                                    client.py:290
+[11:31:07] INFO     {"keys":[{"key_ID":0,"key":"03plWWUd0_LUUgdaGopMpQMnQvCqRgXFVZ3FqPeMBuQ="}]}                                                   client.py:280
+           INFO     Received the following tasks: ['train', 'localy_tuned_model_validate', 'aggregated_model_validate']                      collaborator.py:118
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Training loss (for one batch) at step 0: 2496.2339
+Seen so far: 64 samples
+Training acc over epoch: 0.4468
+[11:31:08] WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           METRIC   Round 0, collaborator env_one is sending metric for task train: train_acc       0.4468246102333069                       collaborator.py:365
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.4401
+           METRIC   Round 0, collaborator env_one is sending metric for task localy_tuned_model_validate: validation_accuracy                collaborator.py:365
+                    0.4401041567325592                                                                                                                          
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.1432
+           METRIC   Round 0, collaborator env_one is sending metric for task aggregated_model_validate: validation_accuracy                  collaborator.py:365
+                    0.1432291716337204                                                                                                                          
+           INFO     Waiting for tasks...                                                                                                     collaborator.py:153
+           INFO     Received the following tasks: ['train', 'localy_tuned_model_validate', 'aggregated_model_validate']                      collaborator.py:118
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Training loss (for one batch) at step 0: nan
+Seen so far: 64 samples
+Training acc over epoch: 0.4675
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           METRIC   Round 1, collaborator env_one is sending metric for task train: train_acc       0.46748992800712585                      collaborator.py:365
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.4479
+           METRIC   Round 1, collaborator env_one is sending metric for task localy_tuned_model_validate: validation_accuracy                collaborator.py:365
+                    0.4479166567325592                                                                                                                          
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.4349
+           METRIC   Round 1, collaborator env_one is sending metric for task aggregated_model_validate: validation_accuracy                  collaborator.py:365
+                    0.4348958432674408                                                                                                                          
+           INFO     Waiting for tasks...                                                                                                     collaborator.py:153
+[11:31:18] INFO     Waiting for tasks...                                                                                                     collaborator.py:153
+           INFO     Received the following tasks: ['train', 'localy_tuned_model_validate', 'aggregated_model_validate']                      collaborator.py:118
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Training loss (for one batch) at step 0: nan
+Seen so far: 64 samples
+Training acc over epoch: 0.4667
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           METRIC   Round 2, collaborator env_one is sending metric for task train: train_acc       0.4667338728904724                       collaborator.py:365
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.4375
+           METRIC   Round 2, collaborator env_one is sending metric for task localy_tuned_model_validate: validation_accuracy       0.4375   collaborator.py:365
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.4349
+           METRIC   Round 2, collaborator env_one is sending metric for task aggregated_model_validate: validation_accuracy                  collaborator.py:365
+                    0.4348958432674408                                                                                                                          
+           INFO     Waiting for tasks...                                                                                                     collaborator.py:153
+           INFO     Received the following tasks: ['train', 'localy_tuned_model_validate', 'aggregated_model_validate']                      collaborator.py:118
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Training loss (for one batch) at step 0: nan
+Seen so far: 64 samples
+Training acc over epoch: 0.4672
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           METRIC   Round 3, collaborator env_one is sending metric for task train: train_acc       0.4672378897666931                       collaborator.py:365
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.4661
+           METRIC   Round 3, collaborator env_one is sending metric for task localy_tuned_model_validate: validation_accuracy                collaborator.py:365
+                    0.4661458432674408                                                                                                                          
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.4427
+           METRIC   Round 3, collaborator env_one is sending metric for task aggregated_model_validate: validation_accuracy                  collaborator.py:365
+                    0.4427083432674408                                                                                                                          
+           INFO     Waiting for tasks...                                                                                                     collaborator.py:153
+[11:31:28] INFO     Waiting for tasks...                                                                                                     collaborator.py:153
+           INFO     Received the following tasks: ['train', 'localy_tuned_model_validate', 'aggregated_model_validate']                      collaborator.py:118
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Training loss (for one batch) at step 0: nan
+Seen so far: 64 samples
+Training acc over epoch: 0.4667
+[11:31:29] WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           METRIC   Round 4, collaborator env_one is sending metric for task train: train_acc       0.4667338728904724                       collaborator.py:365
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.4714
+           METRIC   Round 4, collaborator env_one is sending metric for task localy_tuned_model_validate: validation_accuracy                collaborator.py:365
+                    0.4713541567325592                                                                                                                          
+           INFO     Using Interactive Python API                                                                                             collaborator.py:198
+Validation acc: 0.4375
+           METRIC   Round 4, collaborator env_one is sending metric for task aggregated_model_validate: validation_accuracy 0.4375           collaborator.py:365
+           INFO     Waiting for tasks...                                                                                                     collaborator.py:153
+           INFO     End of Federation reached. Exiting...                                                                                    collaborator.py:125
+           INFO     Send WaitExperiment request                                                                                            director_client.py:72
+           INFO     WaitExperiment response has received                                                                                   director_client.py:74

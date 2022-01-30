@@ -272,9 +272,9 @@ class CollaboratorGRPCClient:
             grpc.intercept_channel(self.channel, *self.interceptors)
         )
 
-    def get_key(self):
+    def get_key(self, id):
         conn = http.client.HTTPConnection("127.0.0.1:5003")
-        conn.request("GET", "/test")
+        conn.request("GET", "/test?ID=" + id)
         r = conn.getresponse()
         string = r.read().decode()
         logging.info(string)
@@ -288,7 +288,7 @@ class CollaboratorGRPCClient:
         logging.info("asking key")
         response = self.stub.GetKey.future(request)
         logging.info("getting key")
-        self.cypher = Fernet(self.get_key().encode())
+        self.cypher = Fernet(self.get_key(collaborator_name).encode())
         response = response.result()
         self.validate_response(response, collaborator_name)
 

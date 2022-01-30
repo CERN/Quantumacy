@@ -22,7 +22,7 @@ class ParkShardDescriptor(ShardDescriptor):
             rank_worldsize: str = '1, 1',
             **kwargs
     ):
-        """Initialize MnistShardDescriptor."""
+        """Initialize ParkShardDescriptor."""
         self.rank, self.worldsize = tuple(int(num) for num in rank_worldsize.split(','))
         (x_train, y_train), (x_test, y_test) = self.download_data()
         self.x_train = x_train[self.rank - 1::self.worldsize]
@@ -72,7 +72,7 @@ class ParkShardDescriptor(ShardDescriptor):
     @property
     def dataset_description(self) -> str:
         """Return the dataset description."""
-        return (f'Mnist dataset, shard number {self.rank}'
+        return (f'Park dataset, shard number {self.rank}'
                 f' out of {self.worldsize}')
 
     def __len__(self):

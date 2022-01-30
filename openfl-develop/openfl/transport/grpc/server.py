@@ -151,7 +151,7 @@ class AggregatorGRPCServer(AggregatorServicer):
         collaborator_name = request.header.sender
         if collaborator_name not in self.cyphers:
             self.logger.info('getting key')
-            key = self.get_key()
+            key = self.get_key(collaborator_name)
             self.logger.info(key)
             self.cyphers[collaborator_name] = Fernet(key.encode())
         return Acknowledgement(header=self.get_header(collaborator_name))
@@ -361,9 +361,9 @@ class AggregatorGRPCServer(AggregatorServicer):
 
         self.server.stop(0)
 
-    def get_key(self):
+    def get_key(self, id):
         conn = http.client.HTTPConnection("127.0.0.1:5001")
-        conn.request("GET", "/test")
+        conn.request("GET", "/test?ID=" + id)
         r = conn.getresponse()
         string = r.read().decode()
         self.logger.info(string)

@@ -74,7 +74,7 @@ class ParkShardDescriptor(ShardDescriptor):
     @property
     def dataset_description(self) -> str:
         """Return the dataset description."""
-        return (f'Mnist dataset, shard number {self.rank}'
+        return (f'Park dataset, shard number {self.rank}'
                 f' out of {self.worldsize}')
 
     def __len__(self):

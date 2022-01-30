@@ -17,6 +17,7 @@ from QKDSimkit.core.sender import Sender
 
 logger = logging.getLogger("QKDSimkit_logger")
 
+
 def import_key(channel_address: str, ID: str, size: int = 256):
     """Alice's procedure to agree on a shared key
 
