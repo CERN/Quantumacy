@@ -18,6 +18,7 @@ $ pip install QKDSimkit
 ```
 
 * Download, install and run Redis 
+
 ```
 $ wget https://download.redis.io/releases/redis-6.2.6.tar.gz
 $ tar xzf redis-6.2.6.tar.gz
@@ -25,7 +26,7 @@ $ cd redis-6.2.6
 $ make
 $ src/redis-server
 ```
-
+Redis is a requirement for QKDSimkit server and QKDSimkit p2p
 
 ### Executing
 
@@ -44,6 +45,15 @@ $ QKDSimkit server local -n 0.5 -e True
 $ QKDSimkit server -a [host:port] external -ca [host:port]
 ```
 
+### Additional commands
+* Add a user
+```
+$ QKDSimkit server add_user <token>
+```
+* Retrieve keys from server
+```
+$ QKDSimkit server retrieve
+```
 ### Help
 
 For more options please check
@@ -51,12 +61,14 @@ For more options please check
 $ QKDSimkit server -h
 $ QKDSimkit server local -h
 $ QKDSimkit server external -h
+$ QKDSimkit server add_user -h
+$ QKDSimkit server retrieve -hW
 ```
 
 ## Client
 
 
-### Installing
+### Installation
 * Create a conda environment (optional but recommended)
 ```
 $ conda create -n Quantumacy python=3.8.10
@@ -71,19 +83,37 @@ $ pip install QKDSimkit
 
 * Run with the most basic configuration
 ```
-QKDSimkit client [server_host:port] [channel_host:port]
+$ QKDSimkit client [server_host:port] [channel_host:port]
 ```
 * If you want to specify the number of keys use and their size use:
 ```
-QKDSimkit client [server_host:port] [channel_host:port] -n [num_keys] -s [size]
+$ QKDSimkit client [server_host:port] [channel_host:port] -n [num_keys] -s [size]
 ```
 
 ### Help
 
 For more options please check
 ```
-python client -h
+$ python client -h
 ```
+
+#P2P
+
+* Run the channel
+```
+$ QKDSimkit channel -a <hostname>:<port>
+```
+* Run Alice
+```
+$ QKDSimkit p2p alice -c <channel_address> -a <hostname>:<port>
+```
+* Run Bob
+```
+$ QKDSimkit p2p bob -c <channel_address> -a <hostname>:<port>
+```
+### Notes
+
+You can use the channel also for "QKDSimkit server" using the argument "external" instead of "local"
 
 ## Authors
 
@@ -98,7 +128,8 @@ Gabriele Morello [[email]](mailto:gabriele.morello@cern.ch)
 This project is licensed under the MIT License - see the LICENSE file for details
 
 ## Version History
-
+* 0.0.5
+* 0.0.2
 * 0.0.1
     * Initial Release
     

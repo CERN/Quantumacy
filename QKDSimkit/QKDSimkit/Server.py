@@ -141,7 +141,7 @@ async def root(hashed: str):
 
 @app.get("/proof")
 async def root(number: int, size: int, hashed: str, hash_proof: str, background_tasks: BackgroundTasks):
-    """Chacek handshake and starts alice
+    """Checks handshake and starts alice
 
     Args:
         number (int): number of keys
@@ -164,7 +164,7 @@ async def root(number: int, size: int, hashed: str, hash_proof: str, background_
 
 @app.get("/get_key")
 async def getkey(password: Optional[str] = None):
-    """Retrieves key from server
+    """Retrieves keys from server
 
     Args:
         ID (str): hashed token
