@@ -52,7 +52,7 @@ $ QKDSimkit server add_user <token>
 ```
 * Retrieve keys from server
 ```
-$ QKDSimkit server retrieve
+$ QKDSimkit server retrieve -i <token>
 ```
 ### Help
 
@@ -62,7 +62,7 @@ $ QKDSimkit server -h
 $ QKDSimkit server local -h
 $ QKDSimkit server external -h
 $ QKDSimkit server add_user -h
-$ QKDSimkit server retrieve -hW
+$ QKDSimkit server retrieve -h
 ```
 
 ## Client
@@ -71,7 +71,7 @@ $ QKDSimkit server retrieve -hW
 ### Installation
 * Create a conda environment (optional but recommended)
 ```
-$ conda create -n Quantumacy python=3.8.10
+$ conda create -n Quantumacy python=3.8
 $ conda activate Quantumacy
 ```
 * Install requirements
@@ -97,7 +97,7 @@ For more options please check
 $ python client -h
 ```
 
-#P2P
+# P2P
 
 * Run the channel
 ```
@@ -111,10 +111,8 @@ $ QKDSimkit p2p alice -c <channel_address> -a <hostname>:<port>
 ```
 $ QKDSimkit p2p bob -c <channel_address> -a <hostname>:<port>
 ```
-### Notes
 
-You can use the channel also for "QKDSimkit server" using the argument "external" instead of "local"
-
+* Check http://[address]/docs to access FastAPI documentation and to know more about http request parameters
 ## Authors
 
 Contributor names and contact info:
