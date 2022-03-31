@@ -137,6 +137,7 @@ Gabriele Morello [[email]](mailto:gabriele.morello@cern.ch)
 This project is licensed under the MIT License - see the LICENSE file for details
 
 ## Version History
+* 0.0.6
 * 0.0.5
 * 0.0.2
 * 0.0.1
