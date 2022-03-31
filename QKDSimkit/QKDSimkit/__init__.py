@@ -5,12 +5,13 @@
 #
 # (C) Copyright 2021 CERN.
 
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+            'format': '%(asctime)s [%(levelname)s] %(name)s - %(module)s:%(lineno)d : %(message)s'
         },
     },
     'handlers': {

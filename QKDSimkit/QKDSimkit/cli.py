@@ -36,10 +36,10 @@ def cli():
     channels = server.add_subparsers(title='Action', dest='action',
                                      help='Choose a possible action')
     parser_k = channels.add_parser('retrieve', help="Retrieve keys")
-    parser_k.add_argument('-i', '--identifier', type=str, default=None,
+    parser_k.add_argument('-t', '--token', type=str, default=None,
                           help='Specify an identifier to retrieve a specific set of keys')
     parser_u = channels.add_parser('add_user', help='Register a new user with a token')
-    parser_u.add_argument('token', help='URL-safe base64-encoded 32-byte token')
+    parser_u.add_argument('token', help='Specify a token to identify a client')
     parser_l = channels.add_parser('local', help='Run the channel on this machine')
     parser_l.add_argument('-ca', '--channel_address', default=':5000', type=str,
                           help='Bind socket to this address (default: %(default)s)')

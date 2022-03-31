@@ -29,30 +29,29 @@ $ src/redis-server
 Redis is a requirement for QKDSimkit server and QKDSimkit p2p
 
 ### Executing
-
-* Run with the most basic configuration: channel will run on the same machine as the server
+* Run the server and the channel on the same machine, it will start both the server and the channel, the default addresses are 127.0.0.1:5002 for server and 127.0.0.1:5000 for channel
 ```
 $ QKDSimkit server local
 ```
 
-* Run with custom channel settings (noise, eavesdropper)
+* It is possible to run the channel with custom settings adding noise (-n) and simulating an eavesdropper (-e)
 ```
 $ QKDSimkit server local -n 0.5 -e True
 ```
 
-* Run server using an external channel
+* In case you want to share an already existing channel with other servers or with a peer to peer infrastructure you can use this command to connect the server to an external channel:
 ```
 $ QKDSimkit server -a [host:port] external -ca [host:port]
 ```
 
 ### Additional commands
-* Add a user
+* Add a user: specify a token, it can be useful for multiple clients
 ```
 $ QKDSimkit server add_user <token>
 ```
-* Retrieve keys from server
+* Retrieve keys from server it is possible to specify a token (-t) to retrieve a specific set of keys
 ```
-$ QKDSimkit server retrieve -i <token>
+$ QKDSimkit server retrieve 
 ```
 ### Help
 
@@ -67,7 +66,6 @@ $ QKDSimkit server retrieve -h
 
 ## Client
 
-
 ### Installation
 * Create a conda environment (optional but recommended)
 ```
@@ -81,13 +79,23 @@ $ pip install QKDSimkit
 
 ### Executing
 
-* Run with the most basic configuration
+* Run client
 ```
 $ QKDSimkit client [server_host:port] [channel_host:port]
 ```
-* If you want to specify the number of keys use and their size use:
+
+* It is possible to specify the number of keys (-n) and their size (-s):
 ```
 $ QKDSimkit client [server_host:port] [channel_host:port] -n [num_keys] -s [size]
+```
+
+* To handle multiple clients it is possible to run the client with a pre shared token
+```
+$ QKDSimkit client -t [token] [server_host:port] [channel_host:port] 
+```
+* If you are using a token remember to add the same token in the server running in the server machine:
+```
+$ QKDSimkit server add_user [token]
 ```
 
 ### Help
@@ -98,21 +106,24 @@ $ python client -h
 ```
 
 # P2P
+The peer to peer mode provides two servers (Alice and Bob) to simulate a synchronous exchange, there are three components: the channel, Alice and Bob
 
-* Run the channel
+* Use the following command to run the channel, you can use this channel also in the Server - Client architecture and similarly it is possible to use custom settings like noise (-n) and eavesdropper (-e)
 ```
-$ QKDSimkit channel -a <hostname>:<port>
+$ QKDSimkit channel -a [hostname:port]
 ```
 * Run Alice
 ```
-$ QKDSimkit p2p alice -c <channel_address> -a <hostname>:<port>
+$ QKDSimkit p2p alice -c [channel_address] -a [hostname:port]
 ```
 * Run Bob
 ```
-$ QKDSimkit p2p bob -c <channel_address> -a <hostname>:<port>
+$ QKDSimkit p2p bob -c [channel_address] -a [hostname:port]
 ```
 
-* Check http://[address]/docs to access FastAPI documentation and to know more about http request parameters
+* You can use http requests to Alice and Bob to start the exchange and retrieve keys.  
+Check http://[address]/docs to access FastAPI documentation and to know more about http request parameters
+
 ## Authors
 
 Contributor names and contact info:
