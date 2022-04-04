@@ -35,7 +35,7 @@ def get_key(alice_address: str, channel_address: str, password: str, number: int
         token = generate_token(password)
         hashed = core.utils.hash_token(token)
         params = urllib.parse.urlencode({'hashed': hashed})
-        conn = http.client.HTTPConnection(f"{alice_address}", timeout=2*number)
+        conn = http.client.HTTPConnection(f"{alice_address}", timeout=100*number)
         conn.request("GET", f"/hello?{params}")
         r = conn.getresponse()
         if r.status != 200:

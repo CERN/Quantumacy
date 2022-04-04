@@ -1,7 +1,7 @@
 # Copyright (C) 2020-2021 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-"""Park Shard Descriptor."""
+"""Mnist Shard Descriptor."""
 
 import logging
 import os
@@ -14,15 +14,15 @@ from openfl.interface.interactive_api.shard_descriptor import ShardDescriptor
 logger = logging.getLogger(__name__)
 
 
-class ParkShardDescriptor(ShardDescriptor):
-    """Park Shard descriptor class."""
+class MnistShardDescriptor(ShardDescriptor):
+    """Mnist Shard descriptor class."""
 
     def __init__(
             self,
             rank_worldsize: str = '1, 1',
             **kwargs
     ):
-        """Initialize ParkShardDescriptor."""
+        """Initialize MnistShardDescriptor."""
         self.rank, self.worldsize = tuple(int(num) for num in rank_worldsize.split(','))
         (x_train, y_train), (x_test, y_test) = self.download_data()
         self.x_train = x_train[self.rank - 1::self.worldsize]
@@ -44,13 +44,25 @@ class ParkShardDescriptor(ShardDescriptor):
         return len(self.x_test)
 
     def download_data(self):
-        """Download prepared dataset."""
-        local_file_path = 'data/'
-        x_train = np.genfromtxt(local_file_path + "train.csv", delimiter=",")
-        y_train = np.genfromtxt(local_file_path + "train_labels.csv", delimiter=",")[:, 0]
-        x_test = np.genfromtxt(local_file_path + "test.csv", delimiter=",")
-        y_test = np.genfromtxt(local_file_path + "test_labels.csv", delimiter=",")[:, 0]
-        return (x_train, y_train), (x_test, y_test)
+        def preprocess(x):
+            x = x.astype(np.float32) / 255  # gray scale to floating point
+            x = np.expand_dims(x, axis=3)
+            return x
+
+        base_path = '/Users/gabrielemorello/Datasets/__myprojects/livinglab/CheXpert/'
+
+        x_train = np.load(base_path + 'train_img.npy')
+        x_train = preprocess(x_train)
+        y_train = np.load(base_path + 'train_labels.npy')
+        y_train = np.asarray(y_train).astype('float32').reshape((-1, 1))
+
+        x_val = np.load(base_path + 'valid_img.npy')
+        x_val = preprocess(x_val)
+
+        y_val = np.load(base_path + 'valid_labels.npy')
+        y_val = np.asarray(y_val).astype('float32').reshape((-1, 1))
+
+        return (x_train, y_train), (x_val, y_val)
 
     def __getitem__(self, index: int):
         """Return an item by the index."""
@@ -62,7 +74,7 @@ class ParkShardDescriptor(ShardDescriptor):
     @property
     def sample_shape(self):
         """Return the sample shape info."""
-        return ['312']
+        return ['128', '128', '1']
 
     @property
     def target_shape(self):
@@ -72,7 +84,7 @@ class ParkShardDescriptor(ShardDescriptor):
     @property
     def dataset_description(self) -> str:
         """Return the dataset description."""
-        return (f'Park dataset, shard number {self.rank}'
+        return (f'Mnist dataset, shard number {self.rank}'
                 f' out of {self.worldsize}')
 
     def __len__(self):

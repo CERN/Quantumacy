@@ -1,0 +1,63 @@
+{'env_one': {'shard_info': node_info {
+  name: "env_one"
+}
+shard_description: "Mnist dataset, shard number 1 out of 2"
+sample_shape: "128"
+sample_shape: "128"
+sample_shape: "1"
+target_shape: "1"
+, 'is_online': True, 'is_experiment_running': False, 'last_updated': '2022-03-30 16:17:25', 'current_time': '2022-03-30 16:17:33', 'valid_duration': seconds: 120
+}, 'env_two': {'shard_info': node_info {
+  name: "env_two"
+}
+shard_description: "Mnist dataset, shard number 2 out of 2"
+sample_shape: "128"
+sample_shape: "128"
+sample_shape: "1"
+target_shape: "1"
+, 'is_online': True, 'is_experiment_running': False, 'last_updated': '2022-03-30 16:17:32', 'current_time': '2022-03-30 16:17:33', 'valid_duration': seconds: 120
+}}
+Metal device set to: Apple M1 Pro
+
+systemMemory: 16.00 GB
+maxCacheSize: 5.33 GB
+
+2022-03-30 16:17:34.614835: I tensorflow/core/common_runtime/pluggable_device/pluggable_device_factory.cc:305] Could not identify NUMA node of platform GPU ID 0, defaulting to 0. Your kernel may not have been built with NUMA support.
+2022-03-30 16:17:34.614945: I tensorflow/core/common_runtime/pluggable_device/pluggable_device_factory.cc:271] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 0 MB memory) -> physical PluggableDevice (device: 0, name: METAL, pci bus id: <undefined>)
+[16:17:34] INFO     Building 🡆 Object CloudpickleSerializer from openfl.plugins.interface_serializer.cloudpickle_serializer Module.                  plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           INFO     Building 🡆 Object FrameworkAdapterPlugin from openfl.plugins.frameworks_adapters.keras_adapter Module.                           plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/site-packages/_distutils_hack/__init__.py:30: UserWarning: Setuptools is replacing distutils.
+  warnings.warn("Setuptools is replacing distutils.")
+[16:17:35] INFO     Starting experiment!                                                                                                       experiment.py:155
+           INFO     FL-Plan hash is cb2b58f99f70066bfd63cad085340da1bbd8342f74170643df6f642cf1ebea122e0a34ede65a184965730ea7d99a848b                 plan.py:231
+           INFO     FL-Plan hash is cb2b58f99f70066bfd63cad085340da1bbd8342f74170643df6f642cf1ebea122e0a34ede65a184965730ea7d99a848b                 plan.py:231
+           INFO     Building 🡆 Object CoreTaskRunner from openfl.federated.task.task_runner Module.                                                  plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {'required_plugin_components': {'framework_adapters':                                                                 plan.py:175
+                    'openfl.plugins.frameworks_adapters.keras_adapter.FrameworkAdapterPlugin'}}                                                                 
+           INFO     Building 🡆 Object FrameworkAdapterPlugin from openfl.plugins.frameworks_adapters.keras_adapter Module.                           plan.py:170
+           INFO     Settings 🡆 {}                                                                                                                    plan.py:173
+           INFO     Override 🡆 {}                                                                                                                    plan.py:175
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           WARNING  tried to remove tensor: __opt_state_needed not present in the tensor dict                                                       utils.py:163
+           INFO     SetNewExperiment                                                                                                      director_client.py:166
+           INFO     Experiment was accepted and launched.                                                                                      experiment.py:169
+[16:17:45] METRIC   Round 0, collaborator env_one train result train_acc:   1.0                                                                 experiment.py:90
+[16:18:05] METRIC   Round 0, collaborator env_two train result train_acc:   0.9658120274543762                                                  experiment.py:90
+           METRIC   Round 0, collaborator Aggregator train result train_acc:        0.9829059839248657                                          experiment.py:90
+[16:18:10] METRIC   Round 1, collaborator env_two train result train_acc:   0.9743590354919434                                                  experiment.py:90
+[16:18:15] METRIC   Round 1, collaborator env_one train result train_acc:   0.9914530515670776                                                  experiment.py:90
+           METRIC   Round 1, collaborator Aggregator train result train_acc:        0.9829060435295105                                          experiment.py:90
+[16:18:20] METRIC   Round 2, collaborator env_one train result train_acc:   1.0                                                                 experiment.py:90
+[16:18:30] METRIC   Round 2, collaborator env_two train result train_acc:   0.9743590354919434                                                  experiment.py:90
+           METRIC   Round 2, collaborator Aggregator train result train_acc:        0.9871795177459717                                          experiment.py:90
+[16:18:40] METRIC   Round 3, collaborator env_two train result train_acc:   0.9743590354919434                                                  experiment.py:90
+           METRIC   Round 3, collaborator env_one train result train_acc:   1.0                                                                 experiment.py:90
+           METRIC   Round 3, collaborator Aggregator train result train_acc:        0.9871795177459717                                          experiment.py:90
+[16:18:45] METRIC   Round 4, collaborator env_one train result train_acc:   1.0                                                                 experiment.py:90
+[16:19:00] METRIC   Round 4, collaborator env_two train result train_acc:   1.0                                                                 experiment.py:90
+           METRIC   Round 4, collaborator Aggregator train result train_acc:        1.0                                                         experiment.py:90

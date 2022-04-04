@@ -166,7 +166,6 @@ def train(model, train_dataset, optimizer, device, loss_fn=loss_fn, warmup=False
     # Reset training metrics at the end of each epoch
     train_acc_metric.reset_states()
 
-        
     return {'train_acc': train_acc,}
 
 
@@ -191,7 +190,7 @@ fl_experiment = FLExperiment(federation=federation, experiment_name=experiment_n
 fl_experiment.start(model_provider=MI, 
                    task_keeper=TI,
                    data_loader=fed_dataset,
-                   rounds_to_train=1,
+                   rounds_to_train=5,
                    opt_treatment='CONTINUE_GLOBAL')
 
 fl_experiment.stream_metrics()

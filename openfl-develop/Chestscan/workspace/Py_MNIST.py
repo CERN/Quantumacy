@@ -125,63 +125,67 @@ class MnistFedDataset(DataInterface):
         """
         return self.shard_descriptor.get_test_size()
 
-fed_dataset = MnistFedDataset(train_bs=64, valid_bs=512)
+fed_dataset = MnistFedDataset(train_bs=64, valid_bs=64)
 
 TI = TaskInterface()
 
 import time
 import tensorflow as tf
-from layers import train_acc_metric, val_acc_metric, loss_fn
+from layers import train_acc_metric, val_acc_metric, loss
 
 @TI.register_fl_task(model='model', data_loader='train_dataset', \
                      device='device', optimizer='optimizer')     
-def train(model, train_dataset, optimizer, device, loss_fn=loss_fn, warmup=False):
+def train(model, train_dataset, optimizer, device, loss_fn=loss, warmup=False):
     start_time = time.time()
-
     # Iterate over the batches of the dataset.
-    for step, (x_batch_train, y_batch_train) in enumerate(train_dataset):
-        with tf.GradientTape() as tape:
-            logits = model(x_batch_train, training=True)
-            loss_value = loss_fn(y_batch_train, logits)
-        grads = tape.gradient(loss_value, model.trainable_weights)
-        optimizer.apply_gradients(zip(grads, model.trainable_weights))
+    model.compile(optimizer='SGD', loss=loss_fn, metrics=["accuracy"],)
+    hist = model.fit(
+        train_dataset.shard_descriptor.x_train, train_dataset.shard_descriptor.y_train, epochs=1, batch_size=64,
+        validation_data=(train_dataset.shard_descriptor.x_test, train_dataset.shard_descriptor.y_test),
+    )
+    # for step, (x_batch_train, y_batch_train) in enumerate(train_dataset):
+    #     with tf.GradientTape() as tape:
+    #         logits = model(x_batch_train, training=True)
+    #         loss_value = loss_fn(y_batch_train, logits)
+    #     grads = tape.gradient(loss_value, model.trainable_weights)
+    #     optimizer.apply_gradients(zip(grads, model.trainable_weights))
+    #
+    #     # Update training metric.
+    #     train_acc_metric.update_state(y_batch_train, logits)
+    #
+    #     # Log every 200 batches.
+    #     if step % 200 == 0:
+    #         print(
+    #             "Training loss (for one batch) at step %d: %.4f"
+    #             % (step, float(loss_value[1]))
+    #         )
+    #         print("Seen so far: %d samples" % ((step + 1) * 64))
+    #     if warmup:
+    #         break
+    #
+    # # Display metrics at the end of each epoch.
+    # train_acc = train_acc_metric.result()
+    # print("Training acc over epoch: %.4f" % (float(train_acc),))
+    #
+    # # Reset training metrics at the end of each epoch
+    # train_acc_metric.reset_states()
 
-        # Update training metric.
-        train_acc_metric.update_state(y_batch_train, logits)
-
-        # Log every 200 batches.
-        if step % 200 == 0:
-            print(
-                "Training loss (for one batch) at step %d: %.4f"
-                % (step, float(loss_value))
-            )
-            print("Seen so far: %d samples" % ((step + 1) * 64))
-        if warmup:
-            break
-
-    # Display metrics at the end of each epoch.
-    train_acc = train_acc_metric.result()
-    print("Training acc over epoch: %.4f" % (float(train_acc),))
-
-    # Reset training metrics at the end of each epoch
-    train_acc_metric.reset_states()
-
-        
+    train_acc = hist.history['val_accuracy'][-1]
     return {'train_acc': train_acc,}
 
 
-@TI.register_fl_task(model='model', data_loader='val_dataset', device='device')     
-def validate(model, val_dataset, device):
-    # Run a validation loop at the end of each epoch.
-    for x_batch_val, y_batch_val in val_dataset:
-        val_logits = model(x_batch_val, training=False)
-        # Update val metrics
-        val_acc_metric.update_state(y_batch_val, val_logits)
-    val_acc = val_acc_metric.result()
-    val_acc_metric.reset_states()
-    print("Validation acc: %.4f" % (float(val_acc),))
-            
-    return {'validation_accuracy': val_acc,}
+# @TI.register_fl_task(model='model', data_loader='val_dataset', device='device')
+# def validate(model, val_dataset, device):
+#     # Run a validation loop at the end of each epoch.
+#     for x_batch_val, y_batch_val in val_dataset:
+#         val_logits = model(x_batch_val, training=False)
+#         # Update val metrics
+#         val_acc_metric.update_state(y_batch_val, val_logits)
+#     val_acc = val_acc_metric.result()
+#     val_acc_metric.reset_states()
+#     print("Validation acc: %.4f" % (float(val_acc),))
+#
+#     return {'validation_accuracy': val_acc,}
 
 # create an experimnet in federation
 experiment_name = 'mnist_experiment'
@@ -191,7 +195,7 @@ fl_experiment = FLExperiment(federation=federation, experiment_name=experiment_n
 fl_experiment.start(model_provider=MI, 
                    task_keeper=TI,
                    data_loader=fed_dataset,
-                   rounds_to_train=1,
+                   rounds_to_train=5,
                    opt_treatment='CONTINUE_GLOBAL')
 
 fl_experiment.stream_metrics()

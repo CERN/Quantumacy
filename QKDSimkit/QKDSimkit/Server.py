@@ -26,51 +26,94 @@ from fastapi.responses import Response
 from threading import Thread
 from typing import Optional
 
+from aioredlock import Aioredlock
+
+
 from QKDSimkit.Channel import start_channel
 from QKDSimkit.core.qexceptions import cacheerror
 from QKDSimkit.core.utils import generate_token
 
 logger = logging.getLogger("QKDSimkit")
 
-
 app = FastAPI()
 
-cache = Cache(Cache.REDIS, endpoint="localhost", port=6379, namespace="main")
+cache = Cache(Cache.REDIS, endpoint="localhost", port=6379, namespace="QKDSimkit_server")
 
-origins = [
-    "*"
-]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+redis_lock = Aioredlock([('localhost', 6379)], retry_count=10, retry_delay_max=5, retry_delay_min=1)
+
+origins = ["*"]
+
+app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"],)
+
+
+# def add_user(password: str, loop):
+#     """Saves a token and its hash in memory"""
+#     try:
+#         token = generate_token(password)
+#         lock = loop.run_until_complete(redis_lock.lock('users'))
+#         users = loop.run_until_complete(cache.get('users'))
+#         if not users:
+#             users = {}
+#         hashed = core.utils.hash_token(token)
+#         users[hashed] = token
+#         loop.run_until_complete(cache.set('users', users))
+#         loop.run_until_complete(redis_lock.unlock(lock))
+#     except Exception as e:
+#         raise cacheerror("Failed to add user in cache: " + str(e))
 
 
 async def add_user(password: str):
     """Saves a token and its hash in memory"""
     try:
         token = generate_token(password)
+        lock = await redis_lock.lock('users')
         users = await cache.get('users')
         if not users:
             users = {}
         hashed = core.utils.hash_token(token)
         users[hashed] = token
         await cache.set('users', users)
+        await redis_lock.unlock(lock)
     except Exception as e:
         raise cacheerror("Failed to add user in cache: " + str(e))
 
 
-async def add_channel(address: str):
-    """Saves an address in memory"""
+# def cache_set(key: str, value, loop):
+#     try:
+#         lock = loop.run_until_complete(redis_lock.lock(key))
+#         loop.run_until_complete(cache.set(key, value))
+#         loop.run_until_complete(redis_lock.unlock(lock))
+#     except Exception as e:
+#         logger.error("Failed to set cache: " + str(e))
+
+
+async def cache_set(key: str, value):
     try:
-        await cache.set('address', address)
-    except Exception:
-        raise cacheerror("Failed to add channel in cache")
+        lock = await redis_lock.lock(key)
+        await cache.set(key, value)
+        await redis_lock.unlock(lock)
+    except Exception as e:
+        logger.error("Failed to set cache: " + str(e))
 
 
+# def cache_get(key: str, loop):
+#     try:
+#         lock = loop.run_until_complete(redis_lock.lock(key))
+#         value = loop.run_until_complete(cache.get(key))
+#         loop.run_until_complete(redis_lock.unlock(lock))
+#         return value
+#     except ZeroDivisionError as e:
+#         logger.error("Failed to get cache: " + str(e))
+
+
+async def cache_get(key: str):
+    try:
+        lock = await redis_lock.lock(key)
+        value = await cache.get(key)
+        await redis_lock.unlock(lock)
+        return value
+    except ZeroDivisionError as e:
+        logger.error("Failed to get cache: " + str(e))
 
 async def start_alice(number: int, size: int, ID: str):
     """Imports keys from an alice node, saves keys in memory
@@ -81,14 +124,8 @@ async def start_alice(number: int, size: int, ID: str):
         ID (str): identifier (hash of token)
     """
     try:
-        id_keys_map = await cache.get('id_keys')
-        if not id_keys_map:
-            id_keys_map = {}
-    except Exception:
-        logger.error("Failed to retrieve key map from cache")
-        sys.exit()
-    try:
-        address = await cache.get('address')
+        address = await cache_get('address')
+        logger.error(address)
         if not address:
             raise Exception
     except Exception:
@@ -102,14 +139,19 @@ async def start_alice(number: int, size: int, ID: str):
                 print("Can't exchange a safe key")
             if isinstance(res, bytes):
                 key_list.append(res.decode())
-        id_keys_map[ID] = key_list
+        try:
+            lock_alice = await redis_lock.lock('alice')
+            id_keys_map = await cache_get('id_keys')
+            if not id_keys_map:
+                id_keys_map = {}
+            id_keys_map[ID] = key_list
+            await cache_set('id_keys', id_keys_map)
+            await redis_lock.lock(lock_alice)
+        except Exception:
+            logger.error("Failed to update key map in cache")
+            sys.exit()
     except Exception as e:
         logger.error("Alice failed to exchange key " + str(e))
-        return
-    try:
-        await cache.set('id_keys', id_keys_map)
-    except Exception:
-        logger.error("Failed to set key map in cache")
         sys.exit()
 
 
@@ -124,24 +166,31 @@ async def root(hashed: str):
         message (str): test message for handshake
     """
     try:
-        users = await cache.get('users')
+        # loop = asyncio.get_running_loop()
+        # users = cache_get('users', loop)
+        users = await cache_get('users')
+
         if hashed not in users.keys():
             return Response(status_code=404, content='Provided ID does not match any user')
         r = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(512))
-        map_hash_r = await cache.get('proof')
+        #lock_aut = loop.run_until_complete(redis_lock.lock("auth"))
+        lock_aut = await redis_lock.lock("auth")
+        map_hash_r = await cache_get('proof')
         if not map_hash_r:
             map_hash_r = {}
         map_hash_r[hashed] = core.utils.hash_token(r)
-        await cache.set('proof', map_hash_r)
+        await cache_set('proof', map_hash_r)
+        #loop.run_until_complete(redis_lock.unlock(lock_aut))
+        await redis_lock.unlock(lock_aut)
         response = core.utils.encrypt(users[hashed], r)
         return response
-    except Exception:
-        logger.error("Error while validating request")
+    except ZeroDivisionError as e:
+        logger.error("Error while validating request " + str(e))
 
 
 @app.get("/proof")
 async def root(number: int, size: int, hashed: str, hash_proof: str, background_tasks: BackgroundTasks):
-    """Chacek handshake and starts alice
+    """Checks handshake and starts alice
 
     Args:
         number (int): number of keys
@@ -151,10 +200,10 @@ async def root(number: int, size: int, hashed: str, hash_proof: str, background_
         background_tasks: background tasks
     """
     try:
-        users = await cache.get('users')
-        map_hash_r = await cache.get('proof')
-    except Exception:
-        logger.error("Failed to retrieve data from cache")
+        users = await cache_get('users')
+        map_hash_r = await cache_get('proof')
+    except Exception as e:
+        logger.error("Failed to retrieve data from cache: " + str(e))
         return Response(status_code=500, content='Internal server error')
     if hashed in users.keys() and hash_proof == map_hash_r[hashed]:
         background_tasks.add_task(start_alice, number, size, hashed)
@@ -164,15 +213,15 @@ async def root(number: int, size: int, hashed: str, hash_proof: str, background_
 
 @app.get("/get_key")
 async def getkey(password: Optional[str] = None):
-    """Retrieves key from server
+    """Retrieves keys from server
 
     Args:
-        ID (str): hashed token
+        password (str): hashed token
     """
     try:
-        id_keys_map = await cache.get('id_keys')
-    except Exception:
-        logger.error("Failed to retrieve key map from cache")
+        id_keys_map = await cache_get('id_keys')
+    except Exception as e:
+        logger.error("Failed to retrieve key map from cache: " + str(e))
         return Response(status_code=404, content="No keys available")
     if password is None:
         return id_keys_map
@@ -195,6 +244,11 @@ async def filter_get_key(request: Request, call_next):
 
 
 def get_key_cli(id):
+    """ Synchronous wrapper for get_key
+
+    Returns:
+          keys: list of keys for the given ID
+    """
     keys = asyncio.run(getkey(id))
     logger.info(keys)
     return keys
@@ -210,8 +264,11 @@ def start_server_and_channel(channel_address: str, noise: float, eve: bool, addr
         address (str): where to bind this server
     """
     try:
+        # loop = asyncio.new_event_loop()
+        # add_user('token', loop)
+        # cache_set('address', channel_address, loop)
         asyncio.run(add_user('token'))
-        asyncio.run(add_channel(channel_address))
+        asyncio.run(cache_set('address', channel_address))
     except cacheerror as ce:
         logger.error(str(ce))
         sys.exit()
@@ -221,7 +278,7 @@ def start_server_and_channel(channel_address: str, noise: float, eve: bool, addr
     time.sleep(0.5)
     if _thread.is_alive():
         try:
-            uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
+            uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]), workers=1)
         except Exception as e:
             logger.error("Error on while running server: " + str(e))
             sys.exit()
@@ -236,12 +293,12 @@ def start_server(channel_address, address):
     """
     try:
         asyncio.run(add_user('token'))
-        asyncio.run(add_channel(channel_address))
+        asyncio.run(cache_set('address', channel_address))
     except cacheerror as ce:
         logger.error(str(ce))
         sys.exit()
     try:
         uvicorn.run('QKDSimkit.Server:app', host=address.split(':')[0], port=int(address.split(':')[1]))
-    except Exception:
-        logger.error("Error on while running server")
+    except Exception as e:
+        logger.error("Error on while running server: " + str(e))
         sys.exit()

@@ -1,0 +1,17 @@
+[16:17:35] INFO     Starting experiment!                                                                                                       experiment.py:155
+           INFO     Experiment was accepted and launched.                                                                                      experiment.py:169
+[16:17:45] METRIC   Round 0, collaborator env_one train result train_acc:   1.0                                                                 experiment.py:90
+[16:18:05] METRIC   Round 0, collaborator env_two train result train_acc:   0.9658120274543762                                                  experiment.py:90
+           METRIC   Round 0, collaborator Aggregator train result train_acc:        0.9829059839248657                                          experiment.py:90
+[16:18:10] METRIC   Round 1, collaborator env_two train result train_acc:   0.9743590354919434                                                  experiment.py:90
+[16:18:15] METRIC   Round 1, collaborator env_one train result train_acc:   0.9914530515670776                                                  experiment.py:90
+           METRIC   Round 1, collaborator Aggregator train result train_acc:        0.9829060435295105                                          experiment.py:90
+[16:18:20] METRIC   Round 2, collaborator env_one train result train_acc:   1.0                                                                 experiment.py:90
+[16:18:30] METRIC   Round 2, collaborator env_two train result train_acc:   0.9743590354919434                                                  experiment.py:90
+           METRIC   Round 2, collaborator Aggregator train result train_acc:        0.9871795177459717                                          experiment.py:90
+[16:18:40] METRIC   Round 3, collaborator env_two train result train_acc:   0.9743590354919434                                                  experiment.py:90
+           METRIC   Round 3, collaborator env_one train result train_acc:   1.0                                                                 experiment.py:90
+           METRIC   Round 3, collaborator Aggregator train result train_acc:        0.9871795177459717                                          experiment.py:90
+[16:18:45] METRIC   Round 4, collaborator env_one train result train_acc:   1.0                                                                 experiment.py:90
+[16:19:00] METRIC   Round 4, collaborator env_two train result train_acc:   1.0                                                                 experiment.py:90
+           METRIC   Round 4, collaborator Aggregator train result train_acc:        1.0                                                         experiment.py:90

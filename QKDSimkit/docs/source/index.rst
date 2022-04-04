@@ -15,7 +15,7 @@ Instructions
 .. toctree::
 
    readme_link
-   README_legacy
+   readme_legacy_link
 
 Indices and tables
 ==================
