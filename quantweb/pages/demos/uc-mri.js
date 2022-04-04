@@ -23,6 +23,8 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import Parallax from "components/Parallax/Parallax.js";
 
+import GetMRIImage from "pages/demos/GetMRIImage.js";
+
 import styles from "styles/jss/nextjs-material-kit/pages/profilePage.js";
 
 import profile from "public/img/demos/MRI_classification.png";
@@ -39,7 +41,7 @@ export default function UseCaseMRIPage(props) {
   );
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
 
-  const urlImageList = "http://olvm-livinglab-02:7000/images";
+  const urlImageList = "/demos/mri-images";
   const [imageListAvailable, setImageListAvailable] = React.useState(false);
   const [imageListHTML, setImageListHTML] = React.useState("");
 
@@ -47,8 +49,12 @@ export default function UseCaseMRIPage(props) {
   const [executed, setExecuted] = React.useState(false);
   const [qkdHTML, setHTML] = React.useState("");
 
+  const [selectedEnabled, setSelectedEnabled] = React.useState("F0");
+
   const showImages = () => {
     var parser = new DOMParser();
+
+    setImageListAvailable(true);
 
     fetch(urlImageList)
     .then(function (response) {
@@ -56,14 +62,11 @@ export default function UseCaseMRIPage(props) {
     })
     .then(function (data) {
       var htmlDoc = parser.parseFromString(data, 'text/html');
-      setImageListHTML( htmlDoc.getElementById("result").innerHTML );
-      //setHTML( data );
+      //setImageListHTML( htmlDoc.getElementById("result").innerHTML );
       }.bind(this))
     .catch(function (err) {
       setImageListHTML( err.stack );
     });
-
-    setImageListAvailable(true);
 
   };
 
@@ -142,7 +145,17 @@ export default function UseCaseMRIPage(props) {
                 <Collapse in={imageListAvailable}>
                   <Card>
                     <CardBody >
-                      <div dangerouslySetInnerHTML={ { __html: setImageListHTML} } />
+                      <div id="images">
+                        <div className={classes.title}>
+                          <h3>Select an image</h3>
+                        </div>
+                        <br/>
+                        <GridContainer>
+                          <GridItem xs={12} sm={2}>
+                            <GetMRIImage/>
+                          </GridItem>
+                          </GridContainer>
+                      </div>
                     </CardBody>
                   </Card>
                 </Collapse>
