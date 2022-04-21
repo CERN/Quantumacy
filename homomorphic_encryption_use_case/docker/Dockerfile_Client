@@ -1,0 +1,35 @@
+# ----------------------------------------------------------------------------
+# Created By  : José Cabrero-Holgueras
+# Created Date: 01/2022
+# Copyright: CERN
+# License: MIT
+# version ='1.0'
+# ---------------------------------------------------------------------------
+
+FROM jcabrero/he_quantumacy_base:latest
+
+ARG USER=none
+ARG GROUP=none
+ARG UID=none
+ARG GID=none
+ARG PW=docker
+ARG ENV_NAME=anacondo
+
+## Installation of QKD HE Use Case
+COPY --chown=${USER}:${GROUP} ./src /home/${USER}/qkd
+
+
+RUN cd /home/${USER}/qkd && \
+ls -l && \
+id -u --name && \
+go mod tidy && \
+go mod vendor && \
+make build && \
+rm -r cmd vendor internal test Makefile README.md go.mod go.sum
+
+WORKDIR /home/${USER}/qkd/
+
+ENV PYPATH=/home/${USER}/anaconda3/envs/${ENV_NAME}/bin/python3
+
+#CMD bash -c "$PYPATH ./client.py"
+CMD ["bash", "-c", "$PYPATH ./client.py"]
