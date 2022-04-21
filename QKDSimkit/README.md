@@ -105,7 +105,7 @@ For more options please check
 $ python client -h
 ```
 
-# P2P
+## P2P
 The peer to peer mode provides two servers (Alice and Bob) to simulate a synchronous exchange, there are three components: the channel, Alice and Bob
 
 * Use the following command to run the channel, you can use this channel also in the Server - Client architecture and similarly it is possible to use custom settings like noise (-n) and eavesdropper (-e)
