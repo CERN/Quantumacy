@@ -48,8 +48,8 @@ class MnistShardDescriptor(ShardDescriptor):
             x = x.astype(np.float32) / 255  # gray scale to floating point
             x = np.expand_dims(x, axis=3)
             return x
-
-        base_path = '/Users/gabrielemorello/Datasets/__myprojects/livinglab/CheXpert/'
+        # TODO: insert path of dataset
+        base_path = ''
 
         x_train = np.load(base_path + 'train_img.npy')
         x_train = preprocess(x_train)

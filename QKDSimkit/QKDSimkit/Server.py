@@ -46,26 +46,14 @@ origins = ["*"]
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"],)
 
 
-# def add_user(password: str, loop):
-#     """Saves a token and its hash in memory"""
-#     try:
-#         token = generate_token(password)
-#         lock = loop.run_until_complete(redis_lock.lock('users'))
-#         users = loop.run_until_complete(cache.get('users'))
-#         if not users:
-#             users = {}
-#         hashed = core.utils.hash_token(token)
-#         users[hashed] = token
-#         loop.run_until_complete(cache.set('users', users))
-#         loop.run_until_complete(redis_lock.unlock(lock))
-#     except Exception as e:
-#         raise cacheerror("Failed to add user in cache: " + str(e))
+async def add_user(token: str):
+    """Saves a token and its hash in memory
 
-
-async def add_user(password: str):
-    """Saves a token and its hash in memory"""
+    Args:
+        token (str): token representing a user
+    """
     try:
-        token = generate_token(password)
+        token = generate_token(token)
         lock = await redis_lock.lock('users')
         users = await cache.get('users')
         if not users:
@@ -78,16 +66,13 @@ async def add_user(password: str):
         raise cacheerror("Failed to add user in cache: " + str(e))
 
 
-# def cache_set(key: str, value, loop):
-#     try:
-#         lock = loop.run_until_complete(redis_lock.lock(key))
-#         loop.run_until_complete(cache.set(key, value))
-#         loop.run_until_complete(redis_lock.unlock(lock))
-#     except Exception as e:
-#         logger.error("Failed to set cache: " + str(e))
-
-
 async def cache_set(key: str, value):
+    '''Save a value in cahce
+
+    Args:
+         key (str): key
+         value: value
+    '''
     try:
         lock = await redis_lock.lock(key)
         await cache.set(key, value)
@@ -96,17 +81,12 @@ async def cache_set(key: str, value):
         logger.error("Failed to set cache: " + str(e))
 
 
-# def cache_get(key: str, loop):
-#     try:
-#         lock = loop.run_until_complete(redis_lock.lock(key))
-#         value = loop.run_until_complete(cache.get(key))
-#         loop.run_until_complete(redis_lock.unlock(lock))
-#         return value
-#     except ZeroDivisionError as e:
-#         logger.error("Failed to get cache: " + str(e))
-
-
 async def cache_get(key: str):
+    '''Retrieve a value from cache
+
+    Args:
+        key (str): key
+    '''
     try:
         lock = await redis_lock.lock(key)
         value = await cache.get(key)

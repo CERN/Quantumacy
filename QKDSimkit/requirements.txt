@@ -1,5 +1,6 @@
-cryptography
+cryptography==36.0.1
 fastapi[all]
 aiocache[redis,memcached]
 aioredis==1.3.1
-msgpack
+aioredlock==0.7.3
+msgpack==1.0.3

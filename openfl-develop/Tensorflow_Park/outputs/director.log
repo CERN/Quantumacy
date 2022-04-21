@@ -1,7 +1,7 @@
-[16:17:22] INFO     🧿 Starting the Director Service.                                                                                             director.py:47
+[14:51:45] INFO     🧿 Starting the Director Service.                                                                                             director.py:47
            INFO     Sample shape: ['128', '128', '1'], target shape: ['1']                                                                        director.py:53
            INFO     Starting server on localhost:50051                                                                                     director_server.py:99
-[16:17:25] INFO     AcknowledgeShard request has got: node_info {                                                                         director_server.py:105
+[14:51:50] INFO     AcknowledgeShard request has got: node_info {                                                                         director_server.py:105
                       name: "env_one"                                                                                                                           
                     }                                                                                                                                           
                     shard_description: "Mnist dataset, shard number 1 out of 2"                                                                                 
@@ -14,20 +14,7 @@
            INFO     Request WaitExperiment has got!                                                                                       director_server.py:183
            INFO     collaborator_name: "env_one"                                                                                          director_server.py:185
                                                                                                                                                                 
-[16:17:32] INFO     AcknowledgeShard request has got: node_info {                                                                         director_server.py:105
-                      name: "env_two"                                                                                                                           
-                    }                                                                                                                                           
-                    shard_description: "Mnist dataset, shard number 2 out of 2"                                                                                 
-                    sample_shape: "128"                                                                                                                         
-                    sample_shape: "128"                                                                                                                         
-                    sample_shape: "1"                                                                                                                           
-                    target_shape: "1"                                                                                                                           
-                                                                                                                                                                
-           INFO     Request was accepted                                                                                                          director.py:62
-           INFO     Request WaitExperiment has got!                                                                                       director_server.py:183
-           INFO     collaborator_name: "env_two"                                                                                          director_server.py:185
-                                                                                                                                                                
-[16:17:33] INFO     Request GetDatasetInfo has got!                                                                                       director_server.py:193
+[14:51:58] INFO     Request GetDatasetInfo has got!                                                                                       director_server.py:193
            INFO     Shard registry: {'env_one': {'shard_info': node_info {                                                                       director.py:193
                       name: "env_one"                                                                                                                           
                     }                                                                                                                                           
@@ -36,17 +23,8 @@
                     sample_shape: "128"                                                                                                                         
                     sample_shape: "1"                                                                                                                           
                     target_shape: "1"                                                                                                                           
-                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1648649845.602305}, 'env_two':                  
-                    {'shard_info': node_info {                                                                                                                  
-                      name: "env_two"                                                                                                                           
-                    }                                                                                                                                           
-                    shard_description: "Mnist dataset, shard number 2 out of 2"                                                                                 
-                    sample_shape: "128"                                                                                                                         
-                    sample_shape: "128"                                                                                                                         
-                    sample_shape: "1"                                                                                                                           
-                    target_shape: "1"                                                                                                                           
-                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1648649852.9485161}}                            
-[16:17:34] INFO     Shard registry: {'env_one': {'shard_info': node_info {                                                                       director.py:193
+                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1648731110.478566}}                             
+[14:52:00] INFO     Shard registry: {'env_one': {'shard_info': node_info {                                                                       director.py:193
                       name: "env_one"                                                                                                                           
                     }                                                                                                                                           
                     shard_description: "Mnist dataset, shard number 1 out of 2"                                                                                 
@@ -54,18 +32,9 @@
                     sample_shape: "128"                                                                                                                         
                     sample_shape: "1"                                                                                                                           
                     target_shape: "1"                                                                                                                           
-                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1648649845.602305}, 'env_two':                  
-                    {'shard_info': node_info {                                                                                                                  
-                      name: "env_two"                                                                                                                           
-                    }                                                                                                                                           
-                    shard_description: "Mnist dataset, shard number 2 out of 2"                                                                                 
-                    sample_shape: "128"                                                                                                                         
-                    sample_shape: "128"                                                                                                                         
-                    sample_shape: "1"                                                                                                                           
-                    target_shape: "1"                                                                                                                           
-                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1648649852.9485161}}                            
-[16:17:35] INFO     SetNewExperiment request has got <grpc._cython.cygrpc._MessageReceiver object at 0x17d694e50>                         director_server.py:113
-           INFO     New experiment mnist_experiment for collaborators ['env_one', 'env_two']                                                      director.py:93
+                    , 'is_online': True, 'is_experiment_running': False, 'valid_duration': 120, 'last_updated': 1648731110.478566}}                             
+           INFO     SetNewExperiment request has got <grpc._cython.cygrpc._MessageReceiver object at 0x168266b80>                         director_server.py:113
+           INFO     New experiment mnist_experiment for collaborators ['env_one']                                                                 director.py:93
            INFO     Send response                                                                                                         director_server.py:137
            INFO     FL-Plan hash is cb2b58f99f70066bfd63cad085340da1bbd8342f74170643df6f642cf1ebea122e0a34ede65a184965730ea7d99a848b                 plan.py:231
            INFO     FL-Plan hash is cb2b58f99f70066bfd63cad085340da1bbd8342f74170643df6f642cf1ebea122e0a34ede65a184965730ea7d99a848b                 plan.py:231
@@ -128,8 +97,8 @@
            INFO     🧿 Starting the Aggregator Service.                                                                                          director.py:232
            INFO     Building 🡆 Object RandomGroupedAssigner from openfl.component Module.                                                            plan.py:170
            INFO     Settings 🡆 {'task_groups': [{'name': 'train_and_validate', 'percentage': 1.0, 'tasks': ['train']}], 'authorized_cols':           plan.py:173
-                    ['env_one', 'env_two'], 'rounds_to_train': 5, 'tasks': {'train': {'function': 'train', 'kwargs': {}, 'aggregation_type':                    
-                    <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x179dfa100>}}}                                          
+                    ['env_one'], 'rounds_to_train': 5, 'tasks': {'train': {'function': 'train', 'kwargs': {}, 'aggregation_type':                               
+                    <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x168240df0>}}}                                          
            INFO     Override 🡆 {}                                                                                                                    plan.py:175
            INFO     Building 🡆 Object NoCompressionPipeline from openfl.pipelines Module.                                                            plan.py:170
            INFO     Settings 🡆 {}                                                                                                                    plan.py:173
@@ -137,82 +106,49 @@
            INFO     Building 🡆 Object Aggregator from openfl.component Module.                                                                       plan.py:170
            INFO     Settings 🡆 {'best_state_path': 'save/best.pbuf', 'db_store_rounds': 1, 'init_state_path': 'save/init.pbuf', 'last_state_path':   plan.py:173
                     'save/last.pbuf', 'rounds_to_train': 5, 'aggregator_uuid': 'aggregator_plan.yaml_cb2b58f9', 'federation_uuid':                              
-                    'plan.yaml_cb2b58f9', 'authorized_cols': ['env_one', 'env_two'], 'assigner':                                                                
-                    <openfl.component.assigner.random_grouped_assigner.RandomGroupedAssigner object at 0x17d694b20>, 'compression_pipeline':                    
-                    <openfl.pipelines.no_compression_pipeline.NoCompressionPipeline object at 0x17d69bd30>, 'log_metric_callback': None}                        
-           INFO     Override 🡆 {'initial_tensor_dict': {'dense/kernel:0': array([[-0.00103499],                                                      plan.py:175
-                           [ 0.0032057 ],                                                                                                                       
-                           [-0.00141465],                                                                                                                       
+                    'plan.yaml_cb2b58f9', 'authorized_cols': ['env_one'], 'assigner':                                                                           
+                    <openfl.component.assigner.random_grouped_assigner.RandomGroupedAssigner object at 0x168240dc0>, 'compression_pipeline':                    
+                    <openfl.pipelines.no_compression_pipeline.NoCompressionPipeline object at 0x168240f70>, 'log_metric_callback': None}                        
+           INFO     Override 🡆 {'initial_tensor_dict': {'dense/kernel:0': array([[ 0.00605654],                                                      plan.py:175
+                           [-0.01490679],                                                                                                                       
+                           [ 0.01110882],                                                                                                                       
                            ...,                                                                                                                                 
-                           [-0.01615808],                                                                                                                       
-                           [ 0.00451817],                                                                                                                       
-                           [-0.00668467]], dtype=float32), 'dense/bias:0': array([0.], dtype=float32)}}                                                         
+                           [ 0.0106455 ],                                                                                                                       
+                           [-0.00810834],                                                                                                                       
+                           [-0.01736839]], dtype=float32), 'dense/bias:0': array([0.], dtype=float32)}}                                                         
            INFO     Insecure port: 3002                                                                                                            server.py:325
            INFO     Starting Aggregator gRPC Server                                                                                              director.py:244
            INFO     Experiment mnist_experiment was prepared                                                                              director_server.py:187
-           INFO     Experiment mnist_experiment was prepared                                                                              director_server.py:187
            INFO     Request StreamMetrics for mnist_experiment experiment has got!                                                        director_server.py:204
-[16:17:36] INFO     getting key                                                                                                                    server.py:153
-[16:17:37] INFO     {"keys":[{"key_ID":0,"key":"LFJhXMZApa5J4onuOQpUFHTkIzP1667dbCIWA0TOj2A="}]}                                                   server.py:369
-           INFO     LFJhXMZApa5J4onuOQpUFHTkIzP1667dbCIWA0TOj2A=                                                                                   server.py:155
-           INFO     Sending tasks to collaborator env_one for round 0                                                                          aggregator.py:304
-[16:17:43] INFO     Collaborator env_one is sending task results for train, round 0                                                            aggregator.py:470
-           METRIC   Round 0, collaborator env_one train result train_acc:   1.0                                                                aggregator.py:514
-[16:17:51] INFO     getting key                                                                                                                    server.py:153
-[16:17:52] INFO     {"keys":[{"key_ID":0,"key":"GduyYLwAwRbML2RIpHfG2tqkte6nEODN24zJoJ3ET8w="}]}                                                   server.py:369
-           INFO     GduyYLwAwRbML2RIpHfG2tqkte6nEODN24zJoJ3ET8w=                                                                                   server.py:155
-           INFO     Sending tasks to collaborator env_two for round 0                                                                          aggregator.py:304
-[16:18:00] INFO     Collaborator env_two is sending task results for train, round 0                                                            aggregator.py:470
-           METRIC   Round 0, collaborator env_two train result train_acc:   0.9658120274543762                                                 aggregator.py:514
-           METRIC   Round 0, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x179dfa100> aggregator.py:793
-                    train_acc:   0.9829                                                                                                                         
-           INFO     Saving round 1 model...                                                                                                    aggregator.py:841
-           INFO     Starting round 1...                                                                                                        aggregator.py:848
-           INFO     Sending tasks to collaborator env_two for round 1                                                                          aggregator.py:304
-[16:18:03] INFO     Sending tasks to collaborator env_one for round 1                                                                          aggregator.py:304
-[16:18:06] INFO     Collaborator env_two is sending task results for train, round 1                                                            aggregator.py:470
-           METRIC   Round 1, collaborator env_two train result train_acc:   0.9743590354919434                                                 aggregator.py:514
-[16:18:12] INFO     Collaborator env_one is sending task results for train, round 1                                                            aggregator.py:470
-           METRIC   Round 1, collaborator env_one train result train_acc:   0.9914530515670776                                                 aggregator.py:514
-           METRIC   Round 1, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x179dfa100> aggregator.py:793
-                    train_acc:   0.9829                                                                                                                         
-           INFO     Saving round 2 model...                                                                                                    aggregator.py:841
-           INFO     Starting round 2...                                                                                                        aggregator.py:848
-           INFO     Sending tasks to collaborator env_one for round 2                                                                          aggregator.py:304
-[16:18:16] INFO     Sending tasks to collaborator env_two for round 2                                                                          aggregator.py:304
-[16:18:17] INFO     Collaborator env_one is sending task results for train, round 2                                                            aggregator.py:470
-           METRIC   Round 2, collaborator env_one train result train_acc:   1.0                                                                aggregator.py:514
-[16:18:25] INFO     Collaborator env_two is sending task results for train, round 2                                                            aggregator.py:470
-           METRIC   Round 2, collaborator env_two train result train_acc:   0.9743590354919434                                                 aggregator.py:514
-           METRIC   Round 2, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x179dfa100> aggregator.py:793
-                    train_acc:   0.9872                                                                                                                         
-           INFO     Saving round 3 model...                                                                                                    aggregator.py:841
-           INFO     Starting round 3...                                                                                                        aggregator.py:848
-           INFO     Sending tasks to collaborator env_two for round 3                                                                          aggregator.py:304
-[16:18:27] INFO     Sending tasks to collaborator env_one for round 3                                                                          aggregator.py:304
-[16:18:36] INFO     Collaborator env_two is sending task results for train, round 3                                                            aggregator.py:470
-           METRIC   Round 3, collaborator env_two train result train_acc:   0.9743590354919434                                                 aggregator.py:514
-[16:18:38] INFO     Collaborator env_one is sending task results for train, round 3                                                            aggregator.py:470
-           METRIC   Round 3, collaborator env_one train result train_acc:   1.0                                                                aggregator.py:514
-           METRIC   Round 3, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x179dfa100> aggregator.py:793
-                    train_acc:   0.9872                                                                                                                         
-           INFO     Saving round 4 model...                                                                                                    aggregator.py:841
-           INFO     Starting round 4...                                                                                                        aggregator.py:848
-           INFO     Sending tasks to collaborator env_one for round 4                                                                          aggregator.py:304
-[16:18:44] INFO     Collaborator env_one is sending task results for train, round 4                                                            aggregator.py:470
-           METRIC   Round 4, collaborator env_one train result train_acc:   1.0                                                                aggregator.py:514
-[16:18:46] INFO     Sending tasks to collaborator env_two for round 4                                                                          aggregator.py:304
-[16:18:55] INFO     Collaborator env_two is sending task results for train, round 4                                                            aggregator.py:470
-           METRIC   Round 4, collaborator env_two train result train_acc:   1.0                                                                aggregator.py:514
-           METRIC   Round 4, aggregator: train <openfl.component.aggregation_functions.weighted_average.WeightedAverage object at 0x179dfa100> aggregator.py:793
-                    train_acc:   1.0000                                                                                                                         
-           INFO     Saving round 5 model...                                                                                                    aggregator.py:841
-           INFO     Experiment Completed. Cleaning up...                                                                                       aggregator.py:846
-           INFO     Sending signal to collaborator env_two to shutdown...                                                                      aggregator.py:267
-           INFO     Request WaitExperiment has got!                                                                                       director_server.py:183
-           INFO     collaborator_name: "env_two"                                                                                          director_server.py:185
-                                                                                                                                                                
-[16:19:04] INFO     Sending signal to collaborator env_one to shutdown...                                                                      aggregator.py:267
+[14:52:02] INFO     getting key                                                                                                                    server.py:153
+           ERROR    Exception calling application: [Errno 61] Connection refused                                                                  _server.py:453
+                    Traceback (most recent call last):                                                                                                          
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/site-packages/grpc/_server.py", line 443, in                        
+                    _call_behavior                                                                                                                              
+                        response_or_iterator = behavior(argument, context)                                                                                      
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/site-packages/openfl/transport/grpc/server.py", line                
+                    154, in GetKey                                                                                                                              
+                        key = self.get_key(collaborator_name)                                                                                                   
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/site-packages/openfl/transport/grpc/server.py", line                
+                    366, in get_key                                                                                                                             
+                        conn.request("GET", "/test?ID=" + id)                                                                                                   
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/http/client.py", line 1256, in request                              
+                        self._send_request(method, url, body, headers, encode_chunked)                                                                          
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/http/client.py", line 1302, in _send_request                        
+                        self.endheaders(body, encode_chunked=encode_chunked)                                                                                    
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/http/client.py", line 1251, in endheaders                           
+                        self._send_output(message_body, encode_chunked=encode_chunked)                                                                          
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/http/client.py", line 1011, in _send_output                         
+                        self.send(msg)                                                                                                                          
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/http/client.py", line 951, in send                                  
+                        self.connect()                                                                                                                          
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/http/client.py", line 922, in connect                               
+                        self.sock = self._create_connection(                                                                                                    
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/socket.py", line 808, in create_connection                          
+                        raise err                                                                                                                               
+                      File "/opt/homebrew/Caskroom/miniforge/base/envs/openfl/lib/python3.8/socket.py", line 796, in create_connection                          
+                        sock.connect(sa)                                                                                                                        
+                    ConnectionRefusedError: [Errno 61] Connection refused                                                                                       
            INFO     Request WaitExperiment has got!                                                                                       director_server.py:183
            INFO     collaborator_name: "env_one"                                                                                          director_server.py:185
                                                                                                                                                                 

@@ -5,23 +5,14 @@ A modified BB84 protocol utilizing emulated photons for Quantum Key Distribution
 Considering that we don't have an access to Quantum Computer yet, we will utilize emulated photons for key distribution. A protocol is modified - the common attacking methods such as eavesdropping can be avoided by the channel (classical server in this case) controlling pulses. Emulated photons in this case are in ideal environment, thus we use perfect single photon source. 
 
 ## Example
-Quantum channel is initiated. Both **Bob** (receiver) and **Alice** (sender) known the ip address of this quantum channel.
-
-**input:**
+* Quantum channel is initiated. Both **Bob** (receiver) and **Alice** (sender) known the ip address of the quantum channel.
 
 ```python
 from channel import public_channel
 public_channel.initiate_server()
 ```
 
-**server output:**
-```
-initiated the channel on xxx.xxx.x.xxx:xxxx, waiting for clients...
-```
-
-Bob starts listening to quantum channel.
-
-**input:**
+* Bob starts listening to quantum channel.
 
 ```python
 from receiver import receiver
@@ -30,15 +21,7 @@ bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
 bob.listen_quantum()
 ```
 
-**server output:**
-
-```
-xxx.xxx.x.xxx:xxxx has connected.
-```
-
-Alice sends a photon pulse to Bob.
-
-**input:**
+* Alice sends a photon pulse to Bob.
 
 ```python
 from sender import sender
@@ -48,123 +31,61 @@ photon_pulse = alice.create_photon_pulse()
 alice.send_photon_pulse(photon_pulse)
 ```
 
-**server output:**
+* Alice and Bob reset their sockets.
 
-```
-xxx.xxx.x.xxx:xxxx has connected.
-xxx.xxx.x.xxx:xxxx: qpulse:170
-xxx.xxx.x.xxx:xxxx: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-```
-
-Alice and Bob reset their sockets.
-
-**input:**
 ```python
 bob.reset_socket()
 ```
-
-**input 2:**
-
 ```python
 alice.reset_socket()
 ```
 
-After quantum channel is closed, classical channel is initiated. Both Bob and Alice known the ip address of this classical channel.
+* After the quantum channel is closed, a classical channel is initiated. Both Bob and Alice known the address of this classical channel.
 
-**input:**
-
-```python
-from channel import public_channel
-public_channel.initiate_server()
-```
-
-Bob listens to public classical channel.
-
-**input:**
+* Bob sends his basis to Alice over public classical channel and then listens for their shared basis.
 
 ```python
-bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.listen_classical()
+bob.send('bob-other_bases', repr(bob.bases))
+bob.listen_for('alice', 'reconciled_key')
 ```
 
-Alice sends her basis to Bob over public classical channel.
-
-**input:**
+* Alice listens to Bob's bases, generates a key with its matching bases and sends it.
 
 ```python
-alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-alice.send_classical_bits(alice.bases)
+alice.listen_for('bob', 'other_bases')
+alice.generate_reconciled_key()
+alice.send('alice-reconciled_key', repr(alice.reconciled_key))
 ```
 
-Alice listens to public classical channel.
-
-**input:**
+* Alice creates a key sends half of it to Bob, then waits for Bob's half
 
 ```python
-alice.reset_socket()
-alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-alice.listen_classical()
+alice.create_keys()
+alice.send('alice-other_sub_key', repr(alice.sub_shared_key))
+alice.listen_for('bob', 'other_sub_key')
 ```
 
-Bob sends his randomly measured basis over public classical channel.
+* Bob creates his key and listen Alice's half then he sends a half of his key.
 
 ```python
-bob.reset_socket()
-bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.send_classical_bits(bob.bases)
+bob.create_keys()
+bob.listen_for('alice', 'other_sub_key')
+bob.send('bob-other_sub_key', repr(bob.sub_shared_key))
 ```
 
-Alice & Bob validate their shared bases, whether or not they are similar enough, then they can notify each other.
-
-**input 1:**
+* Alice & Bob validate their shared bases, then they notify each other.
 
 ```python
-decision = alice.validate()
+alice.decision = alice.validate()
+alice.send('alice-other_decision', repr(alice.decision))
+alice.listen_for('bob', 'other_decision')
 ```
-
-**input 2:**
 
 ```python
-decision = bob.validate()
+bob.decision = bob.validate()
+bob.listen_for('alice', 'other_decision')
+bob.send('bob-other_decision', repr(bob.decision))
 ```
 
-Finally, Alice & Bob exchange their decisions on classical public channel.
 
-
-Bob listens to public classical channel.
-
-**input:**
-
-```python
-bob.reset_socket()
-bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.listen_classical()
-```
-
-Alice sends her decision to Bob over public classical channel.
-
-**input:**
-```python
-alice.reset_socket()
-alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-alice.send_classical_bits(decision)
-```
-
-Alice listens to public classical channel.
-
-**input:**
-
-```python
-alice.reset_socket()
-alice.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-alice.listen_classical()
-```
-
-Bob sends his decision over public classical channel.
-```python
-bob.reset_socket()
-bob.connect_to_channel('xxx.xxx.x.xxx', xxxx)
-bob.send_classical_bits()
-```
-
-If both of the users decide to use the key, Alice and Bob will have identical keys and then they can use some symmetric algorithm such as OTP (One Time Pad) or AES (Advanced Encryption Sequence) to communicate. Otherwise, this process is repeated.
+If either Alice and Bob successfully validate the key, they have identical keys and they can use some symmetric algorithm such as OTP (One Time Pad) or AES (Advanced Encryption Sequence) to communicate. Otherwise, this process is repeated.
