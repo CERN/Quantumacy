@@ -1,7 +1,7 @@
 # Copyright (C) 2020-2021 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-"""Mnist Shard Descriptor."""
+"""Chest Shard Descriptor."""
 
 import logging
 import os
@@ -14,8 +14,8 @@ from openfl.interface.interactive_api.shard_descriptor import ShardDescriptor
 logger = logging.getLogger(__name__)
 
 
-class MnistShardDescriptor(ShardDescriptor):
-    """Mnist Shard descriptor class."""
+class ChestShardDescriptor(ShardDescriptor):
+    """Chest Shard descriptor class."""
 
     def __init__(
             self,
@@ -48,8 +48,8 @@ class MnistShardDescriptor(ShardDescriptor):
             x = x.astype(np.float32) / 255  # gray scale to floating point
             x = np.expand_dims(x, axis=3)
             return x
-
-        base_path = '/Users/gabrielemorello/Datasets/__myprojects/livinglab/CheXpert/'
+        # TODO: insert your path
+        base_path = ''
 
         x_train = np.load(base_path + 'train_img.npy')
         x_train = preprocess(x_train)
@@ -84,7 +84,7 @@ class MnistShardDescriptor(ShardDescriptor):
     @property
     def dataset_description(self) -> str:
         """Return the dataset description."""
-        return (f'Mnist dataset, shard number {self.rank}'
+        return (f'Chest scan dataset, shard number {self.rank}'
                 f' out of {self.worldsize}')
 
     def __len__(self):

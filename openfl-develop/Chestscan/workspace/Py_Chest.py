@@ -64,7 +64,7 @@ class DataGenerator(Sequence):
         np.random.shuffle(self.indices)
 
 
-class MnistFedDataset(DataInterface):
+class ChestFedDataset(DataInterface):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -125,7 +125,7 @@ class MnistFedDataset(DataInterface):
         """
         return self.shard_descriptor.get_test_size()
 
-fed_dataset = MnistFedDataset(train_bs=64, valid_bs=64)
+fed_dataset = ChestFedDataset(train_bs=64, valid_bs=64)
 
 TI = TaskInterface()
 
@@ -188,7 +188,7 @@ def train(model, train_dataset, optimizer, device, loss_fn=loss, warmup=False):
 #     return {'validation_accuracy': val_acc,}
 
 # create an experimnet in federation
-experiment_name = 'mnist_experiment'
+experiment_name = 'chest_experiment'
 fl_experiment = FLExperiment(federation=federation, experiment_name=experiment_name)
 
 # The following command zips the workspace and python requirements to be transfered to collaborator nodes
