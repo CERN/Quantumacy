@@ -71,6 +71,7 @@ def get_key(alice_address: str, channel_address: str, password: str, number: int
 
 def start_client(alice_address, channel_address, number, size, password, show_keys):
     """Wrapper for get_key()
+
     Args:
         alice_address (str): address of server
         channel_address (str): address of channel

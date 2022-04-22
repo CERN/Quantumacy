@@ -65,7 +65,8 @@ def decrypt(token: bytes, message: str) -> str:
 
 
 def hash_token(token: str):
-    """hash a string
+    """Hash a string
+
     Args:
         token (str): message
     Returns: hash (str)
@@ -76,7 +77,7 @@ def hash_token(token: str):
 
 
 def generate_token(password):
-    """Generates a com"""
+    """Generates a common token"""
     salt = b'1234567890123456'
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),

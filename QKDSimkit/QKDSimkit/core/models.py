@@ -59,6 +59,7 @@ class Photon(object):
 
     def set_bit_from_measurement(self) -> int:
         """Set bits according to settings of polarization and basis.
+
         Returns:
             bit: return a bit for each case
         """

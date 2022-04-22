@@ -21,6 +21,7 @@ logger = logging.getLogger("QKDSimkit")
 
 def start_channel(address: str, noise: float, eve: bool):
     """Starts channel
+
     Args:
         address (str): where to bind the channel
         noise (float): ratio of noise in channel

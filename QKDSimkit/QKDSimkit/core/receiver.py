@@ -58,6 +58,7 @@ class Receiver(Node):
         for the received message has been already sent or if the received message is an acknowledgement itself for a
         previously sent message, it sends a new acknowledgment in the first case and it sends again the message in the
         other case, if the message is new and the header is correct it sends an acknowledgement and it saves it
+
         Args:
             header (str): unique identifier of the message that has to be received
         Returns:
@@ -103,6 +104,7 @@ class Receiver(Node):
         checks if an acknowledgment for the received header has been already sent or if the message for the requested
         header has been already sent, it sends a new acknowledgement in the first case and it sends again the message in
         the other case, it sends the expected message if the header is correct, the sent message is saved in a list
+
         Args:
             header (str): unique identifier
             message (str): message
