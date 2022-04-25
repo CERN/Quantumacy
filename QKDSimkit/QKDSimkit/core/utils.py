@@ -14,6 +14,8 @@ from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
+"""Set of functions"""
+
 
 def validate(shared_key: list, other_shared_key: list) -> float:
     """It compares two keys to find differences
