@@ -4,13 +4,10 @@
 QKDSimkit.core package
 ======================
 
-Submodules
-----------
-
 alice module
 ------------
 
-.. automodule:: QKDSimkit.core.alice
+.. automodule:: core.alice
     :members:
     :undoc-members:
     :show-inheritance:
@@ -18,7 +15,7 @@ alice module
 bob module
 ----------
 
-.. automodule:: QKDSimkit.core.bob
+.. automodule:: core.bob
     :members:
     :undoc-members:
     :show-inheritance:
@@ -26,7 +23,7 @@ bob module
 channel module
 --------------
 
-.. automodule:: QKDSimkit.core.channel
+.. automodule:: core.channel
     :members:
     :undoc-members:
     :show-inheritance:
@@ -34,7 +31,7 @@ channel module
 channel\_features module
 ------------------------
 
-.. automodule:: QKDSimkit.core.channel_features
+.. automodule:: core.channel_features
     :members:
     :undoc-members:
     :show-inheritance:
@@ -42,7 +39,7 @@ channel\_features module
 models module
 -------------
 
-.. automodule:: QKDSimkit.core.models
+.. automodule:: core.models
     :members:
     :undoc-members:
     :show-inheritance:
@@ -50,7 +47,7 @@ models module
 node module
 -----------
 
-.. automodule:: QKDSimkit.core.node
+.. automodule:: core.node
     :members:
     :undoc-members:
     :show-inheritance:
@@ -58,7 +55,7 @@ node module
 qexceptions module
 ------------------
 
-.. automodule:: QKDSimkit.core.qexceptions
+.. automodule:: core.qexceptions
     :members:
     :undoc-members:
     :show-inheritance:
@@ -66,7 +63,7 @@ qexceptions module
 receiver module
 ---------------
 
-.. automodule:: QKDSimkit.core.receiver
+.. automodule:: core.receiver
     :members:
     :undoc-members:
     :show-inheritance:
@@ -74,7 +71,7 @@ receiver module
 sender module
 -------------
 
-.. automodule:: QKDSimkit.core.sender
+.. automodule:: core.sender
     :members:
     :undoc-members:
     :show-inheritance:
@@ -82,7 +79,7 @@ sender module
 utils module
 ------------
 
-.. automodule:: QKDSimkit.core.utils
+.. automodule:: core.utils
     :members:
     :undoc-members:
     :show-inheritance:
@@ -91,7 +88,7 @@ utils module
 Module contents
 ---------------
 
-.. automodule:: QKDSimkit.core
+.. automodule:: core
     :members:
     :undoc-members:
     :show-inheritance:
