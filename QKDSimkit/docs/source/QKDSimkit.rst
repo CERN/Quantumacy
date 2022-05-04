@@ -16,7 +16,7 @@ Channel module
 --------------
 
 .. automodule:: Channel
-    :members:
+    :members: start_channel, manage_args
     :undoc-members:
     :show-inheritance:
 
