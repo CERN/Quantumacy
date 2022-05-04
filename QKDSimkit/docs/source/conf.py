@@ -20,6 +20,10 @@
 #
 import os
 import sys
+
+
+sys.path.insert(0, os.path.abspath("."))
+sys.path.insert(0, os.path.abspath("../"))
 sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('../../QKDSimkit'))
 
@@ -31,7 +35,7 @@ copyright = '2021, Gabriele Morello'
 author = 'Gabriele Morello'
 
 # The short X.Y version
-version = ''
+version = '0.0.7'
 # The full version, including alpha/beta/rc tags
 release = ''
 

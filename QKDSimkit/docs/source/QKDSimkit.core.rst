@@ -7,7 +7,7 @@ QKDSimkit.core package
 alice module
 ------------
 
-.. automodule:: core.alice
+.. automodule:: QKDSimkit.core.alice
     :members:
     :undoc-members:
     :show-inheritance:
@@ -15,7 +15,7 @@ alice module
 bob module
 ----------
 
-.. automodule:: core.bob
+.. automodule:: QKDSimkit.core.bob
     :members:
     :undoc-members:
     :show-inheritance:
@@ -23,7 +23,7 @@ bob module
 channel module
 --------------
 
-.. automodule:: core.channel
+.. automodule:: QKDSimkit.core.channel
     :members:
     :undoc-members:
     :show-inheritance:
@@ -39,7 +39,7 @@ channel\_features module
 models module
 -------------
 
-.. automodule:: core.models
+.. automodule:: QKDSimkit.core.models
     :members:
     :undoc-members:
     :show-inheritance:
@@ -47,7 +47,7 @@ models module
 node module
 -----------
 
-.. automodule:: core.node
+.. automodule:: QKDSimkit.core.node
     :members:
     :undoc-members:
     :show-inheritance:
@@ -55,7 +55,7 @@ node module
 qexceptions module
 ------------------
 
-.. automodule:: core.qexceptions
+.. automodule:: QKDSimkit.core.qexceptions
     :members:
     :undoc-members:
     :show-inheritance:
@@ -63,7 +63,7 @@ qexceptions module
 receiver module
 ---------------
 
-.. automodule:: core.receiver
+.. automodule:: QKDSimkit.core.receiver
     :members:
     :undoc-members:
     :show-inheritance:
@@ -71,7 +71,7 @@ receiver module
 sender module
 -------------
 
-.. automodule:: core.sender
+.. automodule:: QKDSimkit.core.sender
     :members:
     :undoc-members:
     :show-inheritance:
@@ -79,7 +79,7 @@ sender module
 utils module
 ------------
 
-.. automodule:: core.utils
+.. automodule:: QKDSimkit.core.utils
     :members:
     :undoc-members:
     :show-inheritance:
@@ -88,7 +88,7 @@ utils module
 Module contents
 ---------------
 
-.. automodule:: core
+.. automodule:: QKDSimkit.core
     :members:
     :undoc-members:
     :show-inheritance:
