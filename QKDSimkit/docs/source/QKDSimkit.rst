@@ -15,15 +15,15 @@ Subpackages
 Channel module
 --------------
 
-.. automodule:: Channel
-    :members: start_channel, manage_args
+.. automodule:: QKDSimkit.Channel
+    :members:
     :undoc-members:
     :show-inheritance:
 
 Client module
 -------------
 
-.. automodule:: Client
+.. automodule:: QKDSimkit.Client
     :members:
     :undoc-members:
     :show-inheritance:
@@ -31,7 +31,7 @@ Client module
 Server module
 -------------
 
-.. automodule:: Server
+.. automodule:: QKDSimkit.Server
     :members:
     :undoc-members:
     :show-inheritance:
@@ -39,7 +39,7 @@ Server module
 p2p\_servers module
 -------------------
 
-.. automodule:: p2p_servers
+.. automodule:: QKDSimkit.p2p_servers
     :members:
     :undoc-members:
     :show-inheritance:
@@ -48,7 +48,7 @@ p2p\_servers module
 cli module
 ----------
 
-.. automodule:: cli
+.. automodule:: QKDSimkit.cli
     :members:
     :undoc-members:
     :show-inheritance:
