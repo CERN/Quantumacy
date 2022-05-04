@@ -53,6 +53,7 @@ $ QKDSimkit server add_user <token>
 ```
 $ QKDSimkit server retrieve 
 ```
+
 ### Help
 
 For more options please check
