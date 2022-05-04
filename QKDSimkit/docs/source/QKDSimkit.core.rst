@@ -7,7 +7,7 @@ QKDSimkit.core package
 alice module
 ------------
 
-.. automodule:: QKDSimkit.core.alice
+.. automodule:: alice
     :members:
     :undoc-members:
     :show-inheritance:
