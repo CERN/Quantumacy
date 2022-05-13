@@ -12,7 +12,7 @@ $ conda create -n Quantumacy python=3.8.10
 $ conda activate Quantumacy
 ```
 
-* install requirements
+* Install requirements
 ```
 $ pip install QKDSimkit
 ```
@@ -26,10 +26,10 @@ $ cd redis-6.2.6
 $ make
 $ src/redis-server
 ```
-Redis is a requirement for QKDSimkit server and QKDSimkit p2p
+Redis is a requirement for the QKDSimkit server and QKDSimkit p2p
 
 ### Executing
-* Run the server and the channel on the same machine, it will start both the server and the channel, the default addresses are 127.0.0.1:5002 for server and 127.0.0.1:5000 for channel
+* Run the server and the channel on the same machine, it will start both the server and the channel, the default addresses are 127.0.0.1:5002 for the server and 127.0.0.1:5000 for the channel
 ```
 $ QKDSimkit server local
 ```
@@ -49,7 +49,7 @@ $ QKDSimkit server -a [host:port] external -ca [host:port]
 ```
 $ QKDSimkit server add_user <token>
 ```
-* Retrieve keys from server it is possible to specify a token (-t) to retrieve a specific set of keys
+* Retrieve keys from the server it is possible to specify a token (-t) to retrieve a specific set of keys
 ```
 $ QKDSimkit server retrieve 
 ```
@@ -94,7 +94,7 @@ $ QKDSimkit client [server_host:port] [channel_host:port] -n [num_keys] -s [size
 ```
 $ QKDSimkit client -t [token] [server_host:port] [channel_host:port] 
 ```
-* If you are using a token remember to add the same token in the server running in the server machine:
+* If you are using a token remember to add the same token to the server running on the server machine:
 ```
 $ QKDSimkit server add_user [token]
 ```
@@ -109,7 +109,7 @@ $ python client -h
 ## P2P
 The peer to peer mode provides two servers (Alice and Bob) to simulate a synchronous exchange, there are three components: the channel, Alice and Bob
 
-* Use the following command to run the channel, you can use this channel also in the Server - Client architecture and similarly it is possible to use custom settings like noise (-n) and eavesdropper (-e)
+* Use the following command to run the channel, you can use this channel also in the Server-Client architecture and similarly it is possible to use custom settings like noise (-n) and eavesdropper (-e)
 ```
 $ QKDSimkit channel -a [hostname:port]
 ```
@@ -122,8 +122,8 @@ $ QKDSimkit p2p alice -c [channel_address] -a [hostname:port]
 $ QKDSimkit p2p bob -c [channel_address] -a [hostname:port]
 ```
 
-* You can use http requests to Alice and Bob to start the exchange and retrieve keys.  
-Check http://[address]/docs to access FastAPI documentation and to know more about http request parameters
+* You can use HTTP requests to Alice and Bob to start the exchange and retrieve keys.  
+Check http://[address]/docs to access FastAPI documentation and to know more about HTTP request parameters
 
 ## Authors
 
