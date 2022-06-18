@@ -432,7 +432,7 @@ export default function UseCaseHCPage(props) {
                         <GridContainer>
                           <GridItem xs={12} sm={12} md={6}>
                               <br/>
-                              <p style={{textAlign:'right'}}><strong>Age</strong></p>
+                              <p style={{textAlign:'right'}}><strong>Age (40-79)</strong></p>
                           </GridItem>
                           <GridItem xs={12} sm={12} md={6}>
                             <br/>
@@ -458,7 +458,7 @@ export default function UseCaseHCPage(props) {
                         <GridContainer>
                           <GridItem xs={12} sm={12} md={6}>
                               <br/>
-                              <p style={{textAlign:'right'}}><strong>Total cholesterol</strong></p>
+                              <p style={{textAlign:'right'}}><strong>Total cholesterol (130-320)</strong></p>
                           </GridItem>
                           <GridItem xs={12} sm={12} md={6}>
                             <br/>
@@ -484,7 +484,7 @@ export default function UseCaseHCPage(props) {
                         <GridContainer>
                           <GridItem xs={12} sm={12} md={6}>
                               <br/>
-                              <p style={{textAlign:'right'}}><strong>HDL cholesterol</strong></p>
+                              <p style={{textAlign:'right'}}><strong>HDL cholesterol (20-100)</strong></p>
                           </GridItem>
                           <GridItem xs={12} sm={12} md={6}>
                             <br/>
@@ -510,7 +510,7 @@ export default function UseCaseHCPage(props) {
                         <GridContainer>
                           <GridItem xs={12} sm={12} md={6}>
                               <br/>
-                              <p style={{textAlign:'right'}}><strong>Systolic blood pressure</strong></p>
+                              <p style={{textAlign:'right'}}><strong>Systolic blood pressure (90-200)</strong></p>
                           </GridItem>
                           <GridItem xs={12} sm={12} md={6}>
                             <br/>

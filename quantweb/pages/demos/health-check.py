@@ -117,11 +117,11 @@ elif (arg_ethnicity == "White" or arg_ethnicity == "Other") and (arg_sex == "Mal
 # (C_Do you smoke cigarettes? * Do you smoke cigarettes?) + 
 # (C_Age_Do you smoke cigarettes? * ln(Age) * Do you smoke cigarettes?) + (C_Do you have diabetes? * Do you have diabetes?)
 
-ClearTerms =  (CAge * log(55)) + (CSqAge * (log(55))**2) + (CTotalChol * log(180)) + (CAgeTotalChol * log(55) * log(180)) + \
-  (CHDLChol * log(50)) + (CAgeHDLChol * log(55) * log(50)) + (0 * COnHypertensionMeds * log(130)) + \
-  (0 * CAgeOnHypertensionMeds * log(55) * log(130)) + (1 * COffHypertensionMeds * log(130)) + \
-  (1 * CAgeOffHypertensionMeds * log(55) * log(130)) + (0 * CSmoker) + (CAgeSmoker * log(55) * 0) + (CDiabetes * 0)
-print(ClearTerms)
+#ClearTerms =  (CAge * log(55)) + (CSqAge * (log(55))**2) + (CTotalChol * log(180)) + (CAgeTotalChol * log(55) * log(180)) + \
+#  (CHDLChol * log(50)) + (CAgeHDLChol * log(55) * log(50)) + (0 * COnHypertensionMeds * log(130)) + \
+#  (0 * CAgeOnHypertensionMeds * log(55) * log(130)) + (1 * COffHypertensionMeds * log(130)) + \
+#  (1 * CAgeOffHypertensionMeds * log(55) * log(130)) + (0 * CSmoker) + (CAgeSmoker * log(55) * 0) + (CDiabetes * 0)
+#print(ClearTerms)
 
 poly = EvaProgram("Polynomial", vec_size=4096)
 with poly:
