@@ -20,8 +20,9 @@ export default function QKDClient({ data }) {
 export async function getServerSideProps() {
   // exec script
   const command = "QKDSimkit";
-  const args = ["client", "188.184.195.118:5002", "188.184.195.118:5000"];
-  //const command = "QKDSimkit client -h";
+  const args = ["client", "188.184.195.170:5002", "188.184.195.170:5000"];
+  //const args = ["client", "188.184.195.118:5002", "188.184.195.118:5000"];
+  //const args = ["client", "188.184.195.58:5002", "188.184.195.58:5000"];
   var data = ""
   var exec = require('child_process').spawnSync;
 

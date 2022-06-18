@@ -43,6 +43,7 @@ export default function UseCaseMRIPage(props) {
 
   const urlImageList = "/demos/mri-images";
   const [imageListAvailable, setImageListAvailable] = React.useState(false);
+  const [encryptImageAvailable, setEncryptImageAvailable] = React.useState(false);
   const [imageListHTML, setImageListHTML] = React.useState("");
 
   const url = "/demos/mri-client";
@@ -68,6 +69,12 @@ export default function UseCaseMRIPage(props) {
       setImageListHTML( err.stack );
     });
 
+  };
+
+  const submitImage = () => {
+
+    //htmlDoc.getElementById("F0");
+    setEncryptImageAvailable(true);
   };
 
   const executeTask = () => {
@@ -154,7 +161,37 @@ export default function UseCaseMRIPage(props) {
                           <GridItem xs={12} sm={2}>
                             <GetMRIImage/>
                           </GridItem>
-                          </GridContainer>
+                          <GridItem xs={12} sm={12} md={8}>
+                            <center>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <Button color="primary" round onClick={submitImage}>
+                                Submit
+                              </Button>
+                            </center>
+                          </GridItem>
+                        </GridContainer>
+                      </div>
+                      <div>
+                        <Collapse in={encryptImageAvailable}>
+                          <h4>
+                            Encrypted image!!
+                          </h4>
+                        </Collapse>
+                        <p>&nbsp;</p>
                       </div>
                     </CardBody>
                   </Card>
