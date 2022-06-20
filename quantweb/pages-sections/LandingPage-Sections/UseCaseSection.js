@@ -21,9 +21,9 @@ const useStyles = makeStyles(styles);
 import case1 from "public/img/demos/qkd.jpg";
 import case2 from "public/img/demos/health-check.jpg";
 import case3 from "public/img/demos/MRI_classification.png";
-import case4 from "public/img/demos/FL.png";
-import case5 from "public/img/demos/Parkinson.png";
-import case6 from "public/img/demos/BlockChain.png";
+import case4 from "public/img/demos/FL WIP.png";
+import case5 from "public/img/demos/Parkinson WIP.png";
+import case6 from "public/img/demos/BlockChain WIP.png";
 
 export default function UseCaseSection() {
   const classes = useStyles();
@@ -116,7 +116,7 @@ export default function UseCaseSection() {
           <GridItem xs={12} sm={12} md={4}>
             <Card plain>
               <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
-                <a href="/uc-hcs">
+                <a href="#">
                   <img src={case4} alt="..." className={imageClasses} />
                 </a>
               </GridItem>
@@ -139,7 +139,7 @@ export default function UseCaseSection() {
           <GridItem xs={12} sm={12} md={4}>
             <Card plain>
               <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
-                <a href="/uc-fl">
+                <a href="#">
                   <img src={case5} alt="Parkinson" className={imageClasses} />
                 </a>
               </GridItem>
@@ -162,7 +162,7 @@ export default function UseCaseSection() {
           <GridItem xs={12} sm={12} md={4}>
             <Card plain>
               <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
-                <a href="/uc-mri">
+                <a href="#">
                   <img src={case6} alt="..." className={imageClasses} />
                 </a>
               </GridItem>
