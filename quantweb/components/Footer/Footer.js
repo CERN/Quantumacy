@@ -33,23 +33,23 @@ export default function Footer(props) {
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
               <a
-                href="https://www.creative-tim.com/?ref=njsmk-footer"
+                href="https://quantumacy.cern.ch/about"
                 className={classes.block}
                 target="_blank"
               >
-                Creative Tim
+                Quantumacy
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               <a
-                href="https://www.creative-tim.com/presentation?ref=njsmk-footer"
+                href="https://quantum.cern"
                 className={classes.block}
                 target="_blank"
               >
-                About us
+                CERN Quantum Technology Initiative
               </a>
             </ListItem>
-            <ListItem className={classes.inlineBlock}>
+            {/* <ListItem className={classes.inlineBlock}>
               <a
                 href="http://blog.creative-tim.com/?ref=njsmk-footer"
                 className={classes.block}
@@ -66,20 +66,18 @@ export default function Footer(props) {
               >
                 Licenses
               </a>
-            </ListItem>
+            </ListItem> */}
           </List>
         </div>
         <div className={classes.right}>
-          &copy; {1900 + new Date().getYear()} , made with{" "}
-          <Favorite className={classes.icon} /> by{" "}
+          &copy; {1900 + new Date().getYear()},&nbsp; 
           <a
-            href="https://www.creative-tim.com?ref=njsmk-footer"
+            href="https://home.cern"
             className={aClasses}
             target="_blank"
           >
-            Creative Tim
+            CERN
           </a>{" "}
-          for a better web.
         </div>
       </div>
     </footer>
