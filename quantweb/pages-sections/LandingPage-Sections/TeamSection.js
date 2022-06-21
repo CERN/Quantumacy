@@ -42,7 +42,7 @@ export default function TeamSection() {
               <h4 className={classes.cardTitle}>
                 Alberto Di Meglio
                 <br />
-                <small className={classes.smallTitle}>Project Manager</small>
+                <small className={classes.smallTitle}>Project Manager - CERN</small>
               </h4>
               <CardBody>
                 <p className={classes.description}>
@@ -86,7 +86,7 @@ export default function TeamSection() {
               <h4 className={classes.cardTitle}>
                 Jose Cabrero Holgueras
                 <br />
-                <small className={classes.smallTitle}>Privacy-Preseving Technologies</small>
+                <small className={classes.smallTitle}>Privacy-Preseving Technologies - CERN</small>
               </h4>
               <CardBody>
                 <p className={classes.description}>
@@ -126,7 +126,7 @@ export default function TeamSection() {
               <h4 className={classes.cardTitle}>
                 Gabriele Morello
                 <br />
-                <small className={classes.smallTitle}>Software Engineering</small>
+                <small className={classes.smallTitle}>Software Engineering - CERN</small>
               </h4>
               <CardBody>
                 <p className={classes.description}>
@@ -156,6 +156,91 @@ export default function TeamSection() {
             <Card plain>
               <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
                 <img
+                  src="/img/faces/dm.jpg"
+                  alt="..."
+                  className={imageClasses}
+                />
+              </GridItem>
+              <h4 className={classes.cardTitle}>
+                David Manset
+                <br />
+                <small className={classes.smallTitle}>CEO - Be-ys Research</small>
+              </h4>
+              <CardBody>
+                <p className={classes.description}>
+                  David is the CEO of Be ys Research. Specialised in deeptechs and personal data protection, Dr. David Manset holds
+                  a Habilitation thesis to conduct research (HDR) from Paris 1 Pantheon Sorbonne and a D.Phil. in Model Driven
+                  Engineering of Distributed Computing Systems, from the University of the West of England in Bristol.
+                </p>
+              </CardBody>
+              <CardFooter className={classes.justifyCenter}>
+              </CardFooter>
+            </Card>
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <Card plain>
+              <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
+                <img
+                  src="/img/faces/mk.jpg"
+                  alt="..."
+                  className={imageClasses}
+                />
+              </GridItem>
+              <h4 className={classes.cardTitle}>
+                Mirko Koscina
+                <br />
+                <small className={classes.smallTitle}>Cryptography and Blocchain - Be-ys Pay</small>
+              </h4>
+              <CardBody>
+                <p className={classes.description}>
+                  Dr Mirko Koscina currently occupies the CEO position at Be ys Pay. Mirkoholds a PhD from ENS-Paris,
+                  he is a researcher in cryptography and blockchain and a believer in sharing knowledge.
+                </p>
+              </CardBody>
+              <CardFooter className={classes.justifyCenter}>
+              </CardFooter>
+            </Card>
+          </GridItem>
+          <GridItem xs={12} sm={12} md={4}>
+            <Card plain>
+              <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
+                <img
+                  src="/img/faces/ok.jpg"
+                  alt="..."
+                  className={imageClasses}
+                />
+              </GridItem>
+              <h4 className={classes.cardTitle}>
+                Octavio Perez-Kempner
+                <br />
+                <small className={classes.smallTitle}>Research Engineer - Be-ys Research</small>
+              </h4>
+              <CardBody>
+                <p className={classes.description}>
+                  Octavio is a Research Engineer at Be ys Research and PhD student at ENS-Paris working at the Information Security Group,
+                  Computer Science Department. Octavio Perez-Kempner specialises in partial credentials sharing, blockchain and the use
+                  of Zero Knowledge Proof.
+                </p>
+              </CardBody>
+              <CardFooter className={classes.justifyCenter}>
+              <Button
+                  justIcon
+                  color="transparent"
+                  className={classes.margin5}
+                  href="https://www.linkedin.com/in/gabriele-morello"
+                  target="_blank"
+                >
+                  <i className={classes.socials + " fab fa-linkedin"} />
+                </Button>
+              </CardFooter>
+            </Card>
+          </GridItem>
+        </GridContainer>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={4}>
+            <Card plain>
+              <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
+                <img
                   src="/img/faces/avatar-male.png"
                   alt="..."
                   className={imageClasses}
@@ -164,31 +249,14 @@ export default function TeamSection() {
               <h4 className={classes.cardTitle}>
                 Hanyul Ryu
                 <br />
-                <small className={classes.smallTitle}>Software Engineering</small>
+                <small className={classes.smallTitle}>Software Engineering - SNUBH</small>
               </h4>
               <CardBody>
                 <p className={classes.description}>
-                  You can write here details about one of your team members. You
-                  can give more details about what they do. Feel free to add
-                  some <a href="#pablo">links</a> for people to be able to
-                  follow them outside the site.
+                  Hanyul is a machine learning and privacy data expert at the Seoul National University Bundang Hospital.
                 </p>
               </CardBody>
               <CardFooter className={classes.justifyCenter}>
-                <Button
-                  justIcon
-                  color="transparent"
-                  className={classes.margin5}
-                      >
-                  <i className={classes.socials + " fab fa-twitter"} />
-                </Button>
-                <Button
-                  justIcon
-                  color="transparent"
-                  className={classes.margin5}
-                >
-                  <i className={classes.socials + " fab fa-linkedin"} />
-                </Button>
               </CardFooter>
             </Card>
           </GridItem>
@@ -204,31 +272,15 @@ export default function TeamSection() {
               <h4 className={classes.cardTitle}>
                 Sofia Vallecorsa
                 <br />
-                <small className={classes.smallTitle}>AI and Quantum Technologies</small>
+                <small className={classes.smallTitle}>AI and Quantum Technologies - CERN</small>
               </h4>
               <CardBody>
                 <p className={classes.description}>
-                  You can write here details about one of your team members. You
-                  can give more details about what they do. Feel free to add
-                  some <a href="#pablo">links</a> for people to be able to
-                  follow them outside the site.
+                  Sofia is the AI and Quantum Computing Lead in the CERN IT Innovation unit. She holds a PhDin Particle Physics and
+                  a is an international expert in ML/DL/QML for physics applications.
                 </p>
               </CardBody>
               <CardFooter className={classes.justifyCenter}>
-                <Button
-                  justIcon
-                  color="transparent"
-                  className={classes.margin5}
-                >
-                  <i className={classes.socials + " fab fa-twitter"} />
-                </Button>
-                <Button
-                  justIcon
-                  color="transparent"
-                  className={classes.margin5}
-                >
-                  <i className={classes.socials + " fab fa-linkedin"} />
-                </Button>
               </CardFooter>
             </Card>
           </GridItem>
