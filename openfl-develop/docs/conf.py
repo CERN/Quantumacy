@@ -3,56 +3,24 @@
 # Copyright (C) 2020-2021 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
-
-# Configuration file for the Sphinx documentation builder.
-#
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# http://www.sphinx-doc.org/en/master/config
-
-# -- Path setup --------------------------------------------------------------
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
 import os
 import sys
 from datetime import datetime
 
+# -- Path setup --------------------------------------------------------------
+# If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+
 sys.path.insert(0, os.path.abspath('../'))
-
-# -- General configuration ---------------------------------------------------
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-# import sphinx_rtd_theme # NOQA:E800
-# import sphinxcontrib.napoleon # NOQA:E800
-
-extensions = [
-    'sphinx_rtd_theme',
-    'sphinx.ext.autosectionlabel',
-    'sphinx.ext.napoleon',
-    'sphinx-prompt',
-    'sphinx_substitution_extensions',
-    'sphinx.ext.ifconfig',
-    'sphinxcontrib.kroki'
-]
 
 # -- Project information -----------------------------------------------------
 
-# This will replace the |variables| within the rST documents automatically
-
 PRODUCT_VERSION = 'Intel'
-# PRODUCT_VERSION = "OFL" # NOQA:E800
-
-# tags.add(PRODUCT_VERSION) # NOQA:E800
 
 if PRODUCT_VERSION == 'Intel':
-
     project = 'OpenFL'
-    copyright = f'{datetime.now().year}, Intel' # NOQA
+    copyright = f'{datetime.now().year}, Intel'  # NOQA
     author = 'Intel Corporation'
     version = f'{datetime.now().year}.{datetime.now().month}'
     release = version
@@ -64,11 +32,8 @@ if PRODUCT_VERSION == 'Intel':
     .. |productZip| replace:: openfl.zip
     .. |productDir| replace:: openfl
     .. |productWheel| replace:: openfl
-
     '''
-
 else:
-
     project = 'Open Federated Learning'
     author = 'FeTS'
     master_doc = 'index'
@@ -81,9 +46,20 @@ else:
     .. |productZip| replace:: OpenFederatedLearning.zip
     .. |productDir| replace:: OpenFederatedLearning
     .. |productWheel| replace:: openfl
-
     .. _Makefile: https://github.com/IntelLabs/OpenFederatedLearning/blob/master/Makefile
     '''
+
+# -- General configuration ---------------------------------------------------
+
+extensions = [
+    'sphinx_rtd_theme',
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.napoleon',
+    'sphinx-prompt',
+    'sphinx_substitution_extensions',
+    'sphinx.ext.ifconfig',
+    'sphinxcontrib.kroki'
+]
 
 napoleon_google_docstring = True
 
@@ -97,9 +73,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'tutorials/*', 'graveyar
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
 html_theme = 'sphinx_rtd_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
